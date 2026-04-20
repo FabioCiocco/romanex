@@ -10,16 +10,11 @@ import {
 const router = Router();
 
 const CATEGORIE = [
-  { id: "immobili", nome: "Immobili", icona: "Home" },
-  { id: "veicoli", nome: "Veicoli", icona: "Car" },
-  { id: "elettronica", nome: "Elettronica", icona: "Laptop" },
-  { id: "lavoro", nome: "Lavoro", icona: "Briefcase" },
-  { id: "abbigliamento", nome: "Abbigliamento", icona: "Shirt" },
-  { id: "arredamento", nome: "Arredamento", icona: "Sofa" },
-  { id: "sport", nome: "Sport & Hobby", icona: "Bike" },
-  { id: "servizi", nome: "Servizi", icona: "Wrench" },
-  { id: "animali", nome: "Animali", icona: "Dog" },
-  { id: "altro", nome: "Altro", icona: "Package" },
+  { id: "appartamenti", nome: "Appartamenti", icona: "Home", descrizione: "Stanze e appartamenti in affitto vicino all'università" },
+  { id: "libri", nome: "Libri di Testo", icona: "BookOpen", descrizione: "Compra e vendi libri universitari usati" },
+  { id: "ripetizioni", nome: "Ripetizioni", icona: "GraduationCap", descrizione: "Tutor e lezioni private per ogni materia" },
+  { id: "consigli", nome: "Consigli", icona: "Lightbulb", descrizione: "Consigli su università, esami e vita da studente" },
+  { id: "gruppi-studio", nome: "Gruppi Studio", icona: "Users", descrizione: "Trova compagni per studiare insieme" },
 ];
 
 router.get("/", async (req, res) => {

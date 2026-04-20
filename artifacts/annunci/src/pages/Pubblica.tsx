@@ -12,15 +12,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, MapPin, Tag, Type, Loader2 } from "lucide-react";
+import { ImagePlus, MapPin, Tag, Edit3, Loader2 } from "lucide-react";
+import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
+import { CategoryIcon } from "@/components/CategoryIcon";
+import { useState } from "react";
 
 const formSchema = z.object({
   titolo: z.string().min(5, "Il titolo deve avere almeno 5 caratteri").max(100, "Il titolo non può superare i 100 caratteri"),
   descrizione: z.string().min(20, "La descrizione deve avere almeno 20 caratteri").max(2000, "La descrizione è troppo lunga"),
   prezzo: z.coerce.number().min(0, "Il prezzo non può essere negativo").nullable().optional(),
   categoria: z.string().min(1, "Seleziona una categoria"),
-  citta: z.string().min(2, "Inserisci una città valida"),
-  contatto: z.string().min(5, "Inserisci un contatto valido (es. numero di telefono o email)"),
+  citta: z.string().min(2, "Inserisci la tua città o polo universitario"),
+  contatto: z.string().min(5, "Inserisci un contatto valido (email universitaria o cellulare)"),
   immagineUrl: z.string().url("Inserisci un URL immagine valido").nullable().optional().or(z.literal("")),
 });
 
@@ -30,8 +33,9 @@ export default function Pubblica() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [selectedCat, setSelectedCat] = useState<string>("");
   
-  const { data: categorie } = useListCategorie();
+  const { data: dbCategorie } = useListCategorie();
   const createAnnuncio = useCreateAnnuncio();
 
   const form = useForm<FormValues>({
@@ -47,10 +51,36 @@ export default function Pubblica() {
     },
   });
 
+  const catConfig = getCategoryConfig(selectedCat.toLowerCase().replace(/\s+/g, '-'));
+  const showPrice = catConfig ? catConfig.hasPrice : true;
+
+  // Custom labels based on category
+  const getCustomLabels = () => {
+    if (selectedCat.includes("Appartamenti")) {
+      return { title: "Titolo Annuncio (es. Stanza singola in Bovisa)", desc: "Descrivi la casa, chi ci vive, spese incluse..." };
+    }
+    if (selectedCat.includes("Libri")) {
+      return { title: "Titolo del Libro e Autore", desc: "Condizioni, sottolineature, edizione..." };
+    }
+    if (selectedCat.includes("Ripetizioni")) {
+      return { title: "Materia e livello", desc: "Le tue competenze, metodo di studio, disponibilità..." };
+    }
+    if (selectedCat.includes("Consigli")) {
+      return { title: "L'argomento del tuo post", desc: "Di cosa vuoi parlare? Condividi la tua esperienza." };
+    }
+    if (selectedCat.includes("Gruppi")) {
+      return { title: "Cosa stiamo studiando?", desc: "Quale esame? Dove vi trovate? Chi state cercando?" };
+    }
+    return { title: "Titolo", desc: "Descrizione dettagliata" };
+  };
+
+  const labels = getCustomLabels();
+
   const onSubmit = (data: FormValues) => {
     // Convert empty string to null for immagineUrl
     const payload = {
       ...data,
+      prezzo: showPrice ? data.prezzo : null, // force null if price shouldn't exist
       immagineUrl: data.immagineUrl === "" ? null : data.immagineUrl
     };
 
@@ -58,8 +88,8 @@ export default function Pubblica() {
       onSuccess: (newAnnuncio) => {
         queryClient.invalidateQueries({ queryKey: getListAnnunciQueryKey() });
         toast({
-          title: "Annuncio pubblicato!",
-          description: "Il tuo annuncio è ora visibile a tutti.",
+          title: "Post pubblicato!",
+          description: "Visibile da subito in bacheca.",
         });
         setLocation(`/annunci/${newAnnuncio.id}`);
       },
@@ -77,57 +107,62 @@ export default function Pubblica() {
     <Layout>
       <div className="container mx-auto px-4 md:px-6 py-12 max-w-4xl">
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Pubblica un annuncio</h1>
-          <p className="text-xl text-muted-foreground">
-            Compila il modulo per mettere in vendita il tuo oggetto. È facile, veloce e gratuito.
+          <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">Crea un Post</h1>
+          <p className="text-xl text-muted-foreground font-medium">
+            Scrivi sulla bacheca di CampusBoard. Gratis, sempre.
           </p>
         </div>
 
-        <Card className="border-border shadow-xl">
-          <CardHeader className="bg-muted/30 border-b pb-6">
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Type className="w-5 h-5 text-primary" />
-              Dettagli dell'annuncio
+        <Card className="border-border shadow-xl rounded-3xl overflow-hidden">
+          <CardHeader className="bg-muted/50 border-b pb-6 px-8 pt-8">
+            <CardTitle className="text-2xl font-display flex items-center gap-3">
+              <Edit3 className="w-6 h-6 text-primary" />
+              Cosa vuoi condividere?
             </CardTitle>
-            <CardDescription className="text-base">
-              Fornisci informazioni chiare e dettagliate per attrarre più acquirenti.
+            <CardDescription className="text-base font-medium">
+              Scegli la sezione giusta in modo che i tuoi colleghi possano trovarti facilmente.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-8">
+          <CardContent className="p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="titolo"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel className="text-base">Titolo dell'annuncio *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Es. Bicicletta da corsa usata pochissimo" className="h-12 text-lg" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
+                {/* Category Selection - Highlighted */}
+                <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
                   <FormField
                     control={form.control}
                     name="categoria"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base">Categoria *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormLabel className="text-base font-bold text-foreground">Scegli la sezione *</FormLabel>
+                        <Select 
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                            setSelectedCat(val);
+                          }} 
+                          defaultValue={field.value}
+                        >
                           <FormControl>
-                            <SelectTrigger className="h-12">
-                              <SelectValue placeholder="Seleziona categoria" />
+                            <SelectTrigger className="h-14 text-lg bg-background rounded-xl font-medium">
+                              <SelectValue placeholder="In quale bacheca vuoi pubblicare?" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            {categorie?.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.nome}>
-                                {cat.nome}
+                          <SelectContent className="rounded-xl">
+                            {CATEGORIES.map((cat) => (
+                              <SelectItem key={cat.id} value={cat.name} className="py-3 cursor-pointer">
+                                <div className="flex items-center gap-3 font-medium text-base">
+                                  <cat.icon className={`w-5 h-5 ${cat.colorClass.replace('cat-', 'text-')}`} />
+                                  {cat.name}
+                                </div>
+                              </SelectItem>
+                            ))}
+                            {/* Fallback for DB categories not in our constants */}
+                            {dbCategorie?.filter(dbCat => !CATEGORIES.find(c => c.name === dbCat.nome)).map(cat => (
+                               <SelectItem key={cat.id} value={cat.nome} className="py-3 cursor-pointer">
+                                <div className="flex items-center gap-3 font-medium text-base">
+                                  <CategoryIcon name={cat.nome} className="w-5 h-5 text-muted-foreground" />
+                                  {cat.nome}
+                                </div>
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -136,30 +171,48 @@ export default function Pubblica() {
                       </FormItem>
                     )}
                   />
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <FormField
                     control={form.control}
-                    name="prezzo"
+                    name="titolo"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base">Prezzo (€)</FormLabel>
+                      <FormItem className={showPrice ? "md:col-span-1" : "md:col-span-2"}>
+                        <FormLabel className="text-base font-bold">{labels.title} *</FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                            <Input 
-                              type="number" 
-                              placeholder="0.00" 
-                              className="pl-10 h-12 text-lg" 
-                              {...field} 
-                              value={field.value === null ? '' : field.value}
-                            />
-                          </div>
+                          <Input placeholder="Scrivi qui..." className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                         </FormControl>
-                        <FormDescription>Lascia vuoto per "Su richiesta"</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+                  {showPrice && (
+                    <FormField
+                      control={form.control}
+                      name="prezzo"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-base font-bold">Richiesta (€)</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                              <Input 
+                                type="number" 
+                                placeholder="0.00" 
+                                className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background font-medium" 
+                                {...field} 
+                                value={field.value === null ? '' : field.value}
+                              />
+                            </div>
+                          </FormControl>
+                          <FormDescription className="font-medium">Vuoto = "Da concordare"</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </div>
 
                 <FormField
@@ -167,11 +220,11 @@ export default function Pubblica() {
                   name="descrizione"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-base">Descrizione *</FormLabel>
+                      <FormLabel className="text-base font-bold">{labels.desc} *</FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="Descrivi l'oggetto in dettaglio: condizioni, anno di acquisto, motivi della vendita..." 
-                          className="min-h-[150px] resize-y text-base p-4" 
+                          placeholder="Più dettagli fornisci, più sarà utile agli altri studenti..." 
+                          className="min-h-[160px] resize-y text-lg p-5 rounded-xl bg-muted/50 border-border focus-visible:bg-background leading-relaxed" 
                           {...field} 
                         />
                       </FormControl>
@@ -180,17 +233,17 @@ export default function Pubblica() {
                   )}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border">
                   <FormField
                     control={form.control}
                     name="citta"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base">Città *</FormLabel>
+                        <FormLabel className="text-base font-bold">Città / Polo *</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                            <Input placeholder="Es. Roma" className="pl-10 h-12 text-lg" {...field} />
+                            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                            <Input placeholder="Es. Milano Bovisa" className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -203,56 +256,55 @@ export default function Pubblica() {
                     name="contatto"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base">Recapito telefonico o Email *</FormLabel>
+                        <FormLabel className="text-base font-bold">Contatto *</FormLabel>
                         <FormControl>
-                          <Input placeholder="Es. 333 1234567 oppure mario@email.it" className="h-12 text-lg" {...field} />
+                          <Input placeholder="Email o Telefono" className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                         </FormControl>
-                        <FormDescription>Come vuoi essere contattato?</FormDescription>
+                        <FormDescription className="font-medium">Come possono scriverti?</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
 
-                <div className="pt-6 border-t">
+                <div className="pt-2">
                   <FormField
                     control={form.control}
                     name="immagineUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base">Immagine (URL opzionale)</FormLabel>
+                        <FormLabel className="text-base font-bold">Immagine (URL opzionale)</FormLabel>
                         <FormControl>
                           <div className="relative">
-                            <ImagePlus className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                            <ImagePlus className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
                             <Input 
                               placeholder="https://..." 
-                              className="pl-10 h-12 text-lg" 
+                              className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" 
                               {...field} 
                               value={field.value || ''}
                             />
                           </div>
                         </FormControl>
-                        <FormDescription>Aggiungi un'immagine per attirare più visite. Inserisci l'URL diretto all'immagine.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
 
-                <div className="pt-8 flex justify-end">
+                <div className="pt-10 flex justify-end">
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full md:w-auto h-14 px-10 text-lg rounded-xl"
+                    className="w-full md:w-auto h-16 px-12 text-lg font-bold rounded-2xl shadow-xl hover:-translate-y-1 transition-transform"
                     disabled={createAnnuncio.isPending}
                   >
                     {createAnnuncio.isPending ? (
                       <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Pubblicazione in corso...
+                        <Loader2 className="mr-3 h-6 w-6 animate-spin" />
+                        Pubblicazione...
                       </>
                     ) : (
-                      "Pubblica Annuncio"
+                      "Appendi in Bacheca"
                     )}
                   </Button>
                 </div>

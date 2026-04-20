@@ -354,12 +354,15 @@ components:
           type: string
         icona:
           type: string
+        descrizione:
+          type: string
         count:
           type: integer
       required:
         - id
         - nome
         - icona
+        - descrizione
         - count
 
     SiteStats:

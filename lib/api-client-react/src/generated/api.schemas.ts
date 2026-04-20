@@ -65,6 +65,7 @@ export interface Categoria {
   id: string;
   nome: string;
   icona: string;
+  descrizione: string;
   count: number;
 }
 

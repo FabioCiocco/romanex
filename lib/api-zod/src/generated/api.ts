@@ -168,6 +168,7 @@ export const ListCategorieResponseItem = zod.object({
   id: zod.string(),
   nome: zod.string(),
   icona: zod.string(),
+  descrizione: zod.string(),
   count: zod.number(),
 });
 export const ListCategorieResponse = zod.array(ListCategorieResponseItem);

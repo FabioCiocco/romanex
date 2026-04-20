@@ -4,12 +4,14 @@ import { useParams, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Phone, Mail, Share2, Heart, AlertCircle, ChevronLeft, Calendar } from "lucide-react";
+import { MapPin, Clock, Phone, Mail, Share2, Heart, AlertCircle, ChevronLeft, Calendar, MessageCircle } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { getCategoryConfig } from "@/lib/constants";
+import { CategoryIcon } from "@/components/CategoryIcon";
 
 export default function AnnuncioDetail() {
   const params = useParams();
@@ -26,19 +28,19 @@ export default function AnnuncioDetail() {
 
   const getPlaceholderImage = (category: string) => {
     const cats: Record<string, string> = {
-      motori: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80",
-      immobili: "https://images.unsplash.com/photo-1560518883-ce09059eebff?auto=format&fit=crop&w=1200&q=80",
-      elettronica: "https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=1200&q=80",
-      lavoro: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80",
-      servizi: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80",
+      appartamenti: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+      libri: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&w=1200&q=80",
+      ripetizioni: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80",
+      consigli: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=1200&q=80",
+      "gruppi-studio": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
     };
     
-    const normalized = (category || "").toLowerCase();
+    const normalized = (category || "").toLowerCase().replace(/\s+/g, '-');
     for (const [key, value] of Object.entries(cats)) {
       if (normalized.includes(key)) return value;
     }
     
-    return "https://images.unsplash.com/photo-1513584684374-8bab748fbf90?auto=format&fit=crop&w=1200&q=80";
+    return "https://images.unsplash.com/photo-1519452310189-dd9e772186df?auto=format&fit=crop&w=1200&q=80";
   };
 
   const handleShare = () => {
@@ -60,24 +62,24 @@ export default function AnnuncioDetail() {
     setIsFavorite(!isFavorite);
     toast({
       title: isFavorite ? "Rimosso dai preferiti" : "Aggiunto ai preferiti",
-      description: isFavorite ? "L'annuncio è stato rimosso dai tuoi preferiti." : "Troverai questo annuncio nella tua lista preferiti.",
+      description: isFavorite ? "L'annuncio è stato rimosso dai preferiti." : "Salvato per dopo. Lo troverai nella tua area personale.",
     });
   };
 
   if (error) {
     return (
       <Layout>
-        <div className="container mx-auto px-4 py-12">
-          <Alert variant="destructive" className="max-w-2xl mx-auto">
+        <div className="container mx-auto px-4 py-20">
+          <Alert variant="destructive" className="max-w-2xl mx-auto rounded-2xl">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Annuncio non trovato</AlertTitle>
             <AlertDescription>
-              L'annuncio che stai cercando non esiste o è stato rimosso.
+              L'annuncio che stai cercando non esiste o è stato chiuso.
             </AlertDescription>
           </Alert>
           <div className="text-center mt-8">
             <Link href="/annunci">
-              <Button>Torna alla ricerca</Button>
+              <Button size="lg" className="rounded-full">Torna alla bacheca</Button>
             </Link>
           </div>
         </div>
@@ -85,26 +87,29 @@ export default function AnnuncioDetail() {
     );
   }
 
+  const categoryConfig = annuncio ? getCategoryConfig(annuncio.categoria.toLowerCase().replace(/\s+/g, '-')) : null;
+  const hasPrice = categoryConfig?.hasPrice ?? true;
+
   return (
     <Layout>
-      <div className="bg-muted/30 border-b">
-        <div className="container mx-auto px-4 md:px-6 py-4">
-          <Link href="/annunci" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+      <div className="bg-muted/30 border-b sticky top-[64px] z-40 backdrop-blur supports-[backdrop-filter]:bg-muted/30">
+        <div className="container mx-auto px-4 md:px-6 py-3">
+          <Link href="/annunci" className="inline-flex items-center text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
             <ChevronLeft className="w-4 h-4 mr-1" />
-            Torna agli annunci
+            Indietro
           </Link>
         </div>
       </div>
 
       <div className="container mx-auto px-4 md:px-6 py-8">
-        {isLoading || !annuncio ? (
+        {isLoading || !annuncio || !categoryConfig ? (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
-              <Skeleton className="w-full aspect-[4/3] rounded-2xl" />
+              <Skeleton className="w-full aspect-[4/3] md:aspect-[16/9] rounded-3xl" />
               <div className="space-y-4">
-                <Skeleton className="h-10 w-3/4" />
+                <Skeleton className="h-12 w-3/4" />
                 <Skeleton className="h-6 w-1/4" />
-                <div className="space-y-2 pt-4">
+                <div className="space-y-2 pt-6">
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-5/6" />
@@ -112,8 +117,8 @@ export default function AnnuncioDetail() {
               </div>
             </div>
             <div className="space-y-6">
-              <Skeleton className="h-[300px] w-full rounded-2xl" />
-              <Skeleton className="h-[200px] w-full rounded-2xl" />
+              <Skeleton className="h-[300px] w-full rounded-3xl" />
+              <Skeleton className="h-[200px] w-full rounded-3xl" />
             </div>
           </div>
         ) : (
@@ -122,74 +127,92 @@ export default function AnnuncioDetail() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Image Gallery */}
-              <div className="relative rounded-3xl overflow-hidden bg-muted border aspect-[4/3] md:aspect-[16/9]">
+              <div className="relative rounded-3xl overflow-hidden bg-muted border border-border/50 shadow-sm aspect-[4/3] md:aspect-[16/9]">
                 <img 
                   src={annuncio.immagineUrl || getPlaceholderImage(annuncio.categoria)} 
                   alt={annuncio.titolo}
                   className="w-full h-full object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                
                 {annuncio.inEvidenza && (
-                  <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground border-none px-3 py-1 shadow-lg text-sm">
+                  <Badge className="absolute top-4 left-4 bg-secondary text-secondary-foreground border-none px-4 py-1.5 shadow-lg text-sm font-bold tracking-wide uppercase">
                     In Evidenza
                   </Badge>
                 )}
+                
                 <div className="absolute top-4 right-4 flex gap-2">
-                  <Button variant="secondary" size="icon" className="rounded-full shadow-lg bg-background/80 backdrop-blur hover:bg-background" onClick={handleShare}>
+                  <Button variant="secondary" size="icon" className="rounded-full shadow-xl bg-white/90 text-foreground hover:bg-white transition-transform hover:scale-105" onClick={handleShare}>
                     <Share2 className="w-4 h-4" />
                   </Button>
-                  <Button variant="secondary" size="icon" className="rounded-full shadow-lg bg-background/80 backdrop-blur hover:bg-background" onClick={handleFavorite}>
+                  <Button variant="secondary" size="icon" className="rounded-full shadow-xl bg-white/90 text-foreground hover:bg-white transition-transform hover:scale-105" onClick={handleFavorite}>
                     <Heart className={`w-4 h-4 ${isFavorite ? "fill-red-500 text-red-500" : ""}`} />
                   </Button>
                 </div>
               </div>
 
-              {/* Title & Mobile Price */}
-              <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
+              {/* Title Header */}
+              <div className="space-y-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge variant="outline" className={`border-none ${categoryConfig.colorClass.replace('cat-', 'bg-')} bg-opacity-20 text-foreground px-3 py-1 font-bold flex items-center gap-1.5`}>
+                    <CategoryIcon name={annuncio.categoria} className="w-3.5 h-3.5" />
                     {annuncio.categoria}
                   </Badge>
-                  <span className="text-sm text-muted-foreground flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" />
+                  <span className="text-sm font-medium text-muted-foreground flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
                     Pubblicato {formatDistanceToNow(new Date(annuncio.createdAt), { addSuffix: true, locale: it })}
                   </span>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
+                <h1 className="text-3xl md:text-5xl font-bold font-display text-foreground leading-tight tracking-tight">
                   {annuncio.titolo}
                 </h1>
                 
-                {/* Price shown here on mobile, hidden on desktop */}
-                <div className="lg:hidden mt-4">
-                  <p className="text-3xl font-bold text-primary">
-                    {annuncio.prezzo !== null && annuncio.prezzo !== undefined
-                      ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
-                      : 'Contatta il venditore'}
-                  </p>
+                {/* Price shown here on mobile */}
+                <div className="lg:hidden mt-4 bg-card border rounded-2xl p-4 shadow-sm flex justify-between items-center">
+                  {hasPrice ? (
+                     <div className="space-y-1">
+                       <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Richiesta</p>
+                       <p className="text-3xl font-display font-bold text-primary">
+                         {annuncio.prezzo !== null && annuncio.prezzo !== undefined
+                           ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
+                           : 'Da concordare'}
+                       </p>
+                     </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-secondary font-display font-bold text-2xl">
+                      <MessageCircle className="w-6 h-6" />
+                      Post Community
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Description */}
-              <div className="space-y-4 pt-6 border-t">
-                <h2 className="text-2xl font-semibold">Descrizione</h2>
-                <div className="prose prose-slate max-w-none text-foreground/80 leading-relaxed whitespace-pre-wrap">
+              <div className="space-y-4 pt-8 border-t">
+                <h2 className="text-2xl font-bold font-display">Informazioni</h2>
+                <div className="prose prose-slate max-w-none text-foreground/80 leading-relaxed whitespace-pre-wrap font-medium text-lg">
                   {annuncio.descrizione}
                 </div>
               </div>
               
               {/* Additional Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t">
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50">
-                  <MapPin className="w-5 h-5 text-primary mt-0.5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t">
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-muted/50 border border-border/50">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <MapPin className="w-6 h-6" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground font-medium">Luogo</p>
-                    <p className="text-foreground font-medium">{annuncio.citta}</p>
+                    <p className="text-sm font-bold text-muted-foreground">Posizione</p>
+                    <p className="text-foreground font-bold text-lg">{annuncio.citta}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50">
-                  <Calendar className="w-5 h-5 text-primary mt-0.5" />
+                <div className="flex items-center gap-4 p-5 rounded-2xl bg-muted/50 border border-border/50">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <Calendar className="w-6 h-6" />
+                  </div>
                   <div>
-                    <p className="text-sm text-muted-foreground font-medium">Data di inserimento</p>
-                    <p className="text-foreground font-medium">{format(new Date(annuncio.createdAt), 'dd MMMM yyyy', { locale: it })}</p>
+                    <p className="text-sm font-bold text-muted-foreground">Inserito il</p>
+                    <p className="text-foreground font-bold text-lg">{format(new Date(annuncio.createdAt), 'dd MMMM yyyy', { locale: it })}</p>
                   </div>
                 </div>
               </div>
@@ -197,51 +220,73 @@ export default function AnnuncioDetail() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Sticky container for desktop */}
-              <div className="sticky top-24 space-y-6">
+              <div className="sticky top-28 space-y-6">
                 
-                {/* Price & Action Card */}
-                <div className="bg-card border rounded-2xl p-6 shadow-xl shadow-primary/5">
-                  <div className="hidden lg:block mb-6 pb-6 border-b">
-                    <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider mb-2">Prezzo</p>
-                    <p className="text-4xl font-bold text-primary">
-                      {annuncio.prezzo !== null && annuncio.prezzo !== undefined
-                        ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
-                        : 'Su richiesta'}
-                    </p>
+                {/* Contact Card */}
+                <div className="bg-card border rounded-3xl p-6 shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10" />
+                  
+                  <div className="hidden lg:block mb-8 pb-6 border-b">
+                    {hasPrice ? (
+                      <div className="space-y-2">
+                        <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Richiesta</p>
+                        <p className="text-5xl font-display font-bold text-primary">
+                          {annuncio.prezzo !== null && annuncio.prezzo !== undefined
+                            ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
+                            : 'Info'}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-secondary font-display font-bold text-3xl">
+                        <MessageCircle className="w-8 h-8" />
+                        Community
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Contatta l'inserzionista</h3>
+                  <div className="space-y-5">
+                    <h3 className="font-bold text-xl font-display">Contatta lo studente</h3>
+                    <p className="text-sm text-muted-foreground font-medium mb-4">
+                      Scrivi o chiama per maggiori informazioni. Ricorda di menzionare CampusBoard!
+                    </p>
                     
                     <div className="space-y-3">
-                      <Button className="w-full h-12 text-base gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white">
-                        <Phone className="w-5 h-5" />
-                        Mostra numero
+                      <Button className="w-full h-14 text-base font-bold gap-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
+                        <MessageCircle className="w-5 h-5" />
+                        Scrivi messaggio
                       </Button>
                       
-                      <Button variant="outline" className="w-full h-12 text-base gap-2 border-primary/20 text-primary hover:bg-primary/5">
-                        <Mail className="w-5 h-5" />
-                        Invia messaggio
+                      <Button variant="outline" className="w-full h-14 text-base font-bold gap-3 rounded-xl border-border hover:bg-muted transition-colors">
+                        <Phone className="w-5 h-5" />
+                        Mostra contatto
                       </Button>
                     </div>
                     
-                    <div className="pt-4 mt-4 border-t text-sm text-center text-muted-foreground">
-                      <p>Riferimento annuncio: <span className="font-mono text-foreground">{annuncio.id}</span></p>
+                    <div className="pt-4 mt-6 border-t text-xs font-medium text-center text-muted-foreground">
+                      <p>ID Post: <span className="font-mono bg-muted px-1 py-0.5 rounded text-foreground">{annuncio.id}</span></p>
                     </div>
                   </div>
                 </div>
 
                 {/* Safety tips */}
-                <div className="bg-accent/10 border border-accent/20 rounded-2xl p-6">
-                  <div className="flex items-center gap-2 text-accent-foreground font-semibold mb-3">
+                <div className="bg-accent/5 border border-accent/20 rounded-3xl p-6">
+                  <div className="flex items-center gap-2 text-accent-foreground font-bold mb-4 font-display text-lg">
                     <AlertCircle className="w-5 h-5" />
-                    Consigli per la sicurezza
+                    Consigli Campus
                   </div>
-                  <ul className="text-sm text-foreground/80 space-y-2 list-disc list-inside pl-2">
-                    <li>Incontra il venditore in un luogo pubblico.</li>
-                    <li>Verifica l'oggetto prima di pagare.</li>
-                    <li>Non inviare pagamenti in anticipo.</li>
+                  <ul className="text-sm text-foreground/80 font-medium space-y-3">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
+                      Incontratevi in università o in un bar del campus.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
+                      Verifica il libro/oggetto prima di scambiare i soldi.
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
+                      Se è un subentro in appartamento, chiedi di vedere il contratto.
+                    </li>
                   </ul>
                 </div>
               </div>
