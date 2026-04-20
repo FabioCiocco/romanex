@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/react";
+import { useUser, useClerk } from "@clerk/react";
 import { useLocation } from "wouter";
 import { useGetMyProfile, useUpsertMyProfile, getGetMyProfileQueryKey } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,7 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { User, GraduationCap, Phone, Mail, BookOpen, CheckCircle2, AtSign, AlertCircle } from "lucide-react";
+import { User, GraduationCap, Phone, Mail, BookOpen, CheckCircle2, AtSign, AlertCircle, LogOut } from "lucide-react";
 
 const ANNI_OPTIONS_FALLBACK = [
   "1° Anno", "2° Anno", "3° Anno", "4° Anno", "5° Anno",
@@ -20,6 +20,7 @@ export default function Profilo() {
   const { t } = useLanguage();
   const tp = t.profilo;
   const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -286,18 +287,33 @@ export default function Profilo() {
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={mutation.isPending || !!usernameError}
-              className={cn(
-                "w-full border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] font-black uppercase tracking-wider py-3 text-base transition-all",
-                "hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px]",
-                "bg-primary text-primary-foreground",
-                (mutation.isPending || !!usernameError) && "opacity-70 cursor-not-allowed",
-              )}
-            >
-              {mutation.isPending ? tp.saving : tp.saveBtn}
-            </button>
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={mutation.isPending || !!usernameError}
+                className={cn(
+                  "flex-1 border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] font-black uppercase tracking-wider py-3 text-base transition-all",
+                  "hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] hover:translate-x-[2px] hover:translate-y-[2px]",
+                  "bg-primary text-primary-foreground",
+                  (mutation.isPending || !!usernameError) && "opacity-70 cursor-not-allowed",
+                )}
+              >
+                {mutation.isPending ? tp.saving : tp.saveBtn}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => signOut(() => setLocation("/"))}
+                className={cn(
+                  "flex items-center gap-2 border-4 border-destructive shadow-[4px_4px_0_0_hsl(var(--destructive))] font-black uppercase tracking-wider px-5 py-3 text-base transition-all",
+                  "hover:shadow-[2px_2px_0_0_hsl(var(--destructive))] hover:translate-x-[2px] hover:translate-y-[2px]",
+                  "bg-destructive text-destructive-foreground",
+                )}
+              >
+                <LogOut className="w-5 h-5" strokeWidth={2.5} />
+                {t.nav.signOut}
+              </button>
+            </div>
           </form>
         </div>
       </main>
