@@ -85,44 +85,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Category strip */}
-      <div className="border-t border-foreground/10 overflow-x-auto scrollbar-none">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center gap-1 h-11 w-max md:w-auto min-w-full">
-            <Link
-              href="/annunci"
-              className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${location === '/annunci' ? 'bg-foreground text-background' : 'text-foreground/50 hover:text-foreground hover:bg-muted'}`}
-            >
-              {t.nav.allAds}
-            </Link>
-            <Link
-              href="/forum"
-              className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border ${location.startsWith('/forum') ? 'bg-accent text-accent-foreground border-accent' : 'text-foreground/50 hover:text-foreground hover:bg-muted border-transparent'}`}
-            >
-              <MessageCircle className="h-3 w-3" strokeWidth={2.5} />
-              {t.nav.forum}
-            </Link>
-            {CATEGORIES.map(c => {
-              const catT = (t.categories as Record<string, { name: string; description: string }>)[c.id];
-              const isActive = location === `/${c.id}` || location.startsWith(`/${c.id}?`);
-              return (
-                <Link
-                  key={c.id}
-                  href={`/${c.id}`}
-                  className={`${c.colorClass} flex items-center gap-1.5 px-3.5 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border ${isActive ? 'text-white border-transparent' : 'text-foreground/60 hover:text-foreground border-transparent hover:bg-muted'}`}
-                  style={isActive ? { backgroundColor: `hsl(var(--cat-bg))` } : {}}
-                >
-                  <div
-                    className={`w-2 h-2 rounded-full shrink-0 transition-colors ${isActive ? 'bg-white/70' : ''}`}
-                    style={!isActive ? { backgroundColor: `hsl(var(--cat-bg))` } : {}}
-                  />
-                  {catT?.name ?? c.name}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
 
       {/* Mobile menu */}
       {isOpen && (
