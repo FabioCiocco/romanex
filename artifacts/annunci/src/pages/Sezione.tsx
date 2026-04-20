@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useLocation, useSearch, Link } from "wouter";
-import { useListAnnunci, useListCategorie } from "@workspace/api-client-react";
+import { useListAnnunci, useListCategorie, getListAnnunciQueryKey } from "@workspace/api-client-react";
 import { Layout } from "@/components/layout/Layout";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -57,17 +57,21 @@ export default function Sezione({ catId }: SezioneProps) {
   const catT = (t.categories as Record<string, { name: string; description: string }>)[catId];
   const hasPrice = HAS_PRICE[catId];
 
+  const hasQuery = !!params.get("q");
+
   const queryParams = {
-    q: params.get("q") || null,
     categoria: catId,
-    citta: params.get("citta") || null,
-    prezzoMin: params.get("prezzoMin") ? parseInt(params.get("prezzoMin")!, 10) : null,
-    prezzoMax: params.get("prezzoMax") ? parseInt(params.get("prezzoMax")!, 10) : null,
+    ...(params.get("q") ? { q: params.get("q")! } : {}),
+    ...(params.get("citta") ? { citta: params.get("citta")! } : {}),
+    ...(params.get("prezzoMin") ? { prezzoMin: parseInt(params.get("prezzoMin")!, 10) } : {}),
+    ...(params.get("prezzoMax") ? { prezzoMax: parseInt(params.get("prezzoMax")!, 10) } : {}),
     page,
     limit,
   };
 
-  const { data, isLoading, error } = useListAnnunci(queryParams);
+  const { data, isLoading, error } = useListAnnunci(queryParams, {
+    query: { queryKey: getListAnnunciQueryKey(queryParams), enabled: hasQuery },
+  });
   const { data: categorie } = useListCategorie();
   const count = categorie?.find(c => c.id === catId)?.count ?? data?.total ?? 0;
 
@@ -316,7 +320,34 @@ export default function Sezione({ catId }: SezioneProps) {
             </div>
 
             {/* Grid */}
-            {error ? (
+            {!hasQuery ? (
+              <div className={`${catConfig.colorClass} text-center py-24 rounded-3xl border-4 border-white/20 overflow-hidden relative`} style={{ backgroundColor: `hsl(var(--cat-bg))` }}>
+                <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                <div className="relative z-10 space-y-5">
+                  <div className="w-20 h-20 rounded-3xl bg-white/20 border-4 border-white/30 flex items-center justify-center mx-auto shadow-xl">
+                    <Search className="w-10 h-10 text-white" strokeWidth={2} />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black font-display uppercase tracking-tighter text-white mb-2">
+                      {(tc as any).searchEmptyTitle}
+                    </h3>
+                    <p className="text-white/70 max-w-xs mx-auto font-medium leading-relaxed text-sm">
+                      {(tc as any).searchEmptyDesc}
+                    </p>
+                  </div>
+                  {sectionCfg.quickTags?.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 pt-1">
+                      {sectionCfg.quickTags.map(tag => (
+                        <button key={tag} onClick={() => addQuickTag(tag)}
+                          className="px-4 py-2 rounded-full text-sm font-black uppercase tracking-wider border-2 bg-white/10 border-white/30 text-white hover:bg-white/25 transition-all">
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : error ? (
               <div className="text-center py-16 bg-destructive/5 rounded-3xl border-2 border-destructive/20">
                 <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
                 <p className="font-black text-lg uppercase">{tc.loadError}</p>
