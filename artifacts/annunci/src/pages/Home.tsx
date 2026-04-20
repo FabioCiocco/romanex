@@ -115,9 +115,9 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5" style={{gridAutoRows: 'minmax(180px, 1fr)'}}>
 
-            {/* Appartamenti — BIG (2×2) */}
+            {/* Libri — BIG (2×2) */}
             {(() => {
-              const cat = CATEGORIES[0];
+              const cat = CATEGORIES[1];
               const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
               const Icon = cat.icon;
@@ -152,8 +152,8 @@ export default function Home() {
               );
             })()}
 
-            {/* Libri, Ripetizioni, Consigli, Gruppi — small */}
-            {CATEGORIES.slice(1).map((cat, i) => {
+            {/* Ripetizioni, Appartamenti (3°), Consigli, Gruppi — small */}
+            {[CATEGORIES[2], CATEGORIES[0], CATEGORIES[3], CATEGORIES[4]].map((cat, i) => {
               const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
               const Icon = cat.icon;
