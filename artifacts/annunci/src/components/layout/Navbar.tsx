@@ -90,7 +90,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden border-t-2 border-foreground p-5 space-y-4 bg-background shadow-xl absolute w-full left-0 animate-in slide-in-from-top-2">
+        <div className="md:hidden border-t-2 border-foreground p-5 space-y-4 bg-background shadow-xl absolute w-full left-0 animate-in slide-in-from-top-2 overflow-y-auto max-h-[80dvh]">
 
           <Show when="signed-in">
             <Link href="/profilo" onClick={() => setIsOpen(false)}>

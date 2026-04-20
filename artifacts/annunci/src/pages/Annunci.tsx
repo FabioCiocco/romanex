@@ -43,13 +43,13 @@ export default function Annunci() {
   }, [initialQ, initialCitta, initialPrezzoMin, initialPrezzoMax]);
 
   const queryParams = {
-    q: initialQ || null,
-    categoria: initialCategoria !== "Tutti" ? initialCategoria : null,
-    citta: initialCitta || null,
-    prezzoMin: initialPrezzoMin ? parseInt(initialPrezzoMin, 10) : null,
-    prezzoMax: initialPrezzoMax ? parseInt(initialPrezzoMax, 10) : null,
+    ...(initialQ ? { q: initialQ } : {}),
+    ...(initialCategoria !== "Tutti" ? { categoria: initialCategoria } : {}),
+    ...(initialCitta ? { citta: initialCitta } : {}),
+    ...(initialPrezzoMin ? { prezzoMin: parseInt(initialPrezzoMin, 10) } : {}),
+    ...(initialPrezzoMax ? { prezzoMax: parseInt(initialPrezzoMax, 10) } : {}),
     page,
-    limit
+    limit,
   };
 
   const { data, isLoading, error } = useListAnnunci(queryParams);

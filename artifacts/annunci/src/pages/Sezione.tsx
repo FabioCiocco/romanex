@@ -167,7 +167,7 @@ export default function Sezione({ catId }: SezioneProps) {
                   )}
                 </div>
 
-                <h1 className="text-5xl md:text-7xl lg:text-[84px] font-black font-display uppercase tracking-tighter leading-[0.88] text-white whitespace-pre-line drop-shadow-sm">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[84px] font-black font-display uppercase tracking-tighter leading-[0.88] text-white whitespace-pre-line drop-shadow-sm">
                   {sectionCfg.heroTitle}
                 </h1>
 

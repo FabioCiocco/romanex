@@ -51,36 +51,36 @@ export default function Home() {
               <span>{h.badge}</span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl lg:text-[100px] font-black text-foreground tracking-tighter font-display leading-[0.9] uppercase">
+            <h1 className="text-[2.6rem] sm:text-6xl md:text-8xl lg:text-[100px] font-black text-foreground tracking-tighter font-display leading-[0.9] uppercase">
               {h.heroTitle} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary block mt-2 drop-shadow-sm">
                 {h.heroHighlight}
               </span>
             </h1>
             
-            <p className="text-xl md:text-3xl text-foreground/80 max-w-3xl font-medium leading-relaxed border-l-4 border-accent pl-6">
+            <p className="text-base sm:text-xl md:text-2xl text-foreground/80 max-w-3xl font-medium leading-relaxed border-l-4 border-accent pl-4 md:pl-6">
               {h.heroSub}
             </p>
             
-            <form onSubmit={handleSearch} className="bg-background rounded-3xl p-3 shadow-[8px_8px_0_0_hsl(var(--foreground))] border-4 border-foreground max-w-4xl flex flex-col md:flex-row gap-3 mt-12 relative z-20">
+            <form onSubmit={handleSearch} className="bg-background rounded-3xl p-3 shadow-[8px_8px_0_0_hsl(var(--foreground))] border-4 border-foreground max-w-4xl flex flex-col md:flex-row gap-3 mt-8 md:mt-12 relative z-20">
               <div className="flex-1 relative">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground w-6 h-6" strokeWidth={2.5} />
+                <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-foreground w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
                 <Input 
                   placeholder={h.searchPlaceholder}
-                  className="pl-14 h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
+                  className="pl-11 md:pl-14 h-12 md:h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-base md:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="flex-1 relative md:max-w-[240px]">
-                <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-foreground w-6 h-6" strokeWidth={2.5} />
+                <MapPin className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-foreground w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
                 <Input 
                   placeholder={h.cityPlaceholder}
-                  className="pl-14 h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
+                  className="pl-11 md:pl-14 h-12 md:h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-base md:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
                   value={searchCity}
                   onChange={(e) => setSearchCity(e.target.value)}
                 />
               </div>
-              <Button type="submit" size="lg" className="h-16 px-10 rounded-2xl text-xl font-black uppercase tracking-wider bg-primary text-primary-foreground border-4 border-transparent hover:border-foreground hover:bg-primary transition-all bouncy-active shadow-[4px_4px_0_0_hsl(var(--foreground))]">
+              <Button type="submit" size="lg" className="h-12 md:h-16 px-6 md:px-10 rounded-2xl text-base md:text-xl font-black uppercase tracking-wider bg-primary text-primary-foreground border-4 border-transparent hover:border-foreground hover:bg-primary transition-all bouncy-active shadow-[4px_4px_0_0_hsl(var(--foreground))]">
                 {h.searchBtn}
               </Button>
             </form>
@@ -289,11 +289,11 @@ export default function Home() {
               <AlertDescription className="font-bold">{h.errorDesc}</AlertDescription>
             </Alert>
           ) : isLoadingRecenti ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-52 rounded-2xl" />)}
             </div>
           ) : recenti && recenti.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {recenti.map((annuncio) => (
                 <AnnuncioCard key={annuncio.id} annuncio={annuncio} compact />
               ))}
@@ -319,17 +319,17 @@ export default function Home() {
       </section>
 
       {/* CTA SECTION */}
-      <section className="py-32 relative overflow-hidden bg-foreground text-background border-t-4 border-foreground">
+      <section className="py-16 md:py-32 relative overflow-hidden bg-foreground text-background border-t-4 border-foreground">
         <div className="absolute inset-0 opacity-[0.05]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '40px 40px'}} />
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-4xl">
-          <h2 className="text-5xl md:text-7xl font-black font-display mb-8 uppercase tracking-tighter leading-[0.9]">
+          <h2 className="text-3xl sm:text-5xl md:text-7xl font-black font-display mb-6 md:mb-8 uppercase tracking-tighter leading-[0.9]">
             {h.ctaTitle}
           </h2>
-          <p className="text-2xl text-background/80 mb-12 font-bold leading-relaxed">
+          <p className="text-base sm:text-xl md:text-2xl text-background/80 mb-8 md:mb-12 font-bold leading-relaxed">
             {h.ctaSub}
           </p>
           <Link href="/pubblica">
-            <Button size="lg" className="h-20 px-12 rounded-2xl text-2xl font-black uppercase tracking-widest bg-primary text-primary-foreground border-4 border-background shadow-[8px_8px_0_0_#fff] hover:translate-y-2 hover:translate-x-2 hover:shadow-none transition-all bouncy-active">
+            <Button size="lg" className="h-14 md:h-20 px-8 md:px-12 rounded-2xl text-lg md:text-2xl font-black uppercase tracking-widest bg-primary text-primary-foreground border-4 border-background shadow-[6px_6px_0_0_#fff] md:shadow-[8px_8px_0_0_#fff] hover:translate-y-1 hover:translate-x-1 md:hover:translate-y-2 md:hover:translate-x-2 hover:shadow-none transition-all bouncy-active">
               {h.ctaBtn}
             </Button>
           </Link>

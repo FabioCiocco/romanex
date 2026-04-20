@@ -59,7 +59,7 @@ export function LanguageBanner() {
 
         <button
           onClick={dismiss}
-          className="ml-auto text-white/40 hover:text-white/80 transition-colors shrink-0 hidden sm:block"
+          className="ml-auto text-white/40 hover:text-white/80 transition-colors shrink-0 p-1"
           aria-label="Chiudi"
         >
           <X className="w-4 h-4" />
