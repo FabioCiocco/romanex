@@ -728,6 +728,8 @@ components:
       properties:
         clerkId:
           type: string
+        username:
+          type: ["string", "null"]
         nome:
           type: string
         cognome:
@@ -762,6 +764,8 @@ components:
     UpsertUserProfileBody:
       type: object
       properties:
+        username:
+          type: ["string", "null"]
         nome:
           type: string
         cognome:

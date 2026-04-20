@@ -141,6 +141,8 @@ export interface CreateForumReplyBody {
 
 export interface UserProfile {
   clerkId: string;
+  /** @nullable */
+  username?: string | null;
   nome: string;
   cognome: string;
   email: string;
@@ -154,6 +156,8 @@ export interface UserProfile {
 }
 
 export interface UpsertUserProfileBody {
+  /** @nullable */
+  username?: string | null;
   nome: string;
   cognome: string;
   email: string;
