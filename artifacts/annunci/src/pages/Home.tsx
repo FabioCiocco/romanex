@@ -1,10 +1,10 @@
-import { useGetAnnunciRecenti, useGetAnnunciInEvidenza, useGetStats, useListCategorie } from "@workspace/api-client-react";
+import { useGetAnnunciRecenti, useGetAnnunciInEvidenza, useListCategorie } from "@workspace/api-client-react";
 import { Layout } from "@/components/layout/Layout";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap, Home as HomeIcon, PlusCircle } from "lucide-react";
+import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,7 +18,6 @@ export default function Home() {
 
   const { data: recenti, isLoading: isLoadingRecenti, error: errorRecenti } = useGetAnnunciRecenti();
   const { data: inEvidenza, isLoading: isLoadingEvidenza } = useGetAnnunciInEvidenza();
-  const { data: stats, isLoading: isLoadingStats } = useGetStats();
   const { data: categorie } = useListCategorie();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -32,7 +31,7 @@ export default function Home() {
   return (
     <Layout>
       {/* POSTER HERO SECTION */}
-      <section className="relative bg-background overflow-hidden border-b-4 border-foreground min-h-[90vh] flex items-center">
+      <section className="relative bg-background overflow-hidden border-b-4 border-foreground min-h-[70vh] flex items-center">
         {/* CSS Background Blobs representing category colors */}
         <div className="absolute top-10 left-10 w-64 h-64 bg-[hsl(264_67%_35%)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
         <div className="absolute top-20 right-20 w-72 h-72 bg-[hsl(38_92%_44%)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
@@ -190,68 +189,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* APPARTAMENTI SPLIT SECTION */}
-      <section className="py-20 border-b-4 border-foreground bg-background">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary font-black text-xs uppercase tracking-widest border border-primary/20 mb-4">
-              <HomeIcon className="w-4 h-4" strokeWidth={2.5} /> Appartamenti & Stanze
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter">
-              Cerchi casa o hai uno <span className="text-primary">spazio libero?</span>
-            </h2>
-            <p className="text-foreground/60 font-medium text-lg mt-3 max-w-2xl">
-              Mettiti in contatto direttamente con studenti e proprietari nella tua città.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Cerco Casa */}
-            <Link href="/annunci?categoria=appartamenti" className="group outline-none block">
-              <div className="relative overflow-hidden rounded-3xl border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] group-hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] group-hover:translate-y-1 group-hover:translate-x-1 transition-all duration-300 bg-primary p-8 md:p-10 h-full flex flex-col justify-between min-h-[240px]">
-                <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '32px 32px'}} />
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6 border-2 border-white/30">
-                    <Search className="w-8 h-8 text-white" strokeWidth={2.5} />
-                  </div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white font-display uppercase tracking-tight mb-2">
-                    Cerco casa
-                  </h3>
-                  <p className="text-white/80 font-medium text-base leading-relaxed">
-                    Sfoglia stanze e appartamenti vicino al tuo ateneo, già pubblicati da altri studenti.
-                  </p>
-                </div>
-                <div className="relative z-10 mt-8 inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
-                  Vedi annunci
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
-                </div>
-              </div>
-            </Link>
-
-            {/* Affitto il mio spazio */}
-            <Link href="/pubblica?categoria=appartamenti" className="group outline-none block">
-              <div className="relative overflow-hidden rounded-3xl border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] group-hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] group-hover:translate-y-1 group-hover:translate-x-1 transition-all duration-300 bg-accent p-8 md:p-10 h-full flex flex-col justify-between min-h-[240px]">
-                <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '32px 32px'}} />
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6 border-2 border-white/30">
-                    <HomeIcon className="w-8 h-8 text-white" strokeWidth={2.5} />
-                  </div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white font-display uppercase tracking-tight mb-2">
-                    Affitto il mio spazio
-                  </h3>
-                  <p className="text-white/80 font-medium text-base leading-relaxed">
-                    Hai una stanza o un appartamento libero? Pubblica il tuo annuncio in 2 minuti, gratis.
-                  </p>
-                </div>
-                <div className="relative z-10 mt-8 inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
-                  <PlusCircle className="w-5 h-5" strokeWidth={2.5} />
-                  Pubblica annuncio
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* IN EVIDENZA */}
       {(!inEvidenza || inEvidenza.length > 0 || isLoadingEvidenza) && (
@@ -281,36 +218,6 @@ export default function Home() {
         </section>
       )}
 
-      {/* VIBRANT STATS */}
-      <section className="py-24 bg-gradient-to-br from-primary via-accent to-secondary text-white border-b-4 border-foreground relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.07]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          {isLoadingStats ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-40 rounded-3xl bg-white/20 border-4 border-white/30" />)}
-            </div>
-          ) : stats ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border-4 border-white/20 text-center transform hover:-translate-y-2 transition-transform">
-                <h3 className="text-6xl font-display font-black mb-2">{stats.totaleAnnunci.toLocaleString('it-IT')}</h3>
-                <p className="font-bold text-white/90 uppercase tracking-widest text-sm">Annunci Attivi</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border-4 border-white/20 text-center transform hover:-translate-y-2 transition-transform">
-                <h3 className="text-6xl font-display font-black mb-2">+{stats.annunciOggi.toLocaleString('it-IT')}</h3>
-                <p className="font-bold text-white/90 uppercase tracking-widest text-sm">Oggi</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border-4 border-white/20 text-center transform hover:-translate-y-2 transition-transform">
-                <h3 className="text-6xl font-display font-black mb-2 capitalize truncate">{stats.cittaPiuAttive[0]?.citta || 'Milano'}</h3>
-                <p className="font-bold text-white/90 uppercase tracking-widest text-sm">Più Attiva</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border-4 border-white/20 text-center transform hover:-translate-y-2 transition-transform">
-                <h3 className="text-6xl font-display font-black mb-2">100%</h3>
-                <p className="font-bold text-white/90 uppercase tracking-widest text-sm">Per Studenti</p>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </section>
 
       {/* RECENTI */}
       <section className="py-24 bg-background">
@@ -336,7 +243,7 @@ export default function Home() {
             </Alert>
           ) : isLoadingRecenti ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <Skeleton key={i} className="h-[450px] rounded-3xl border-4 border-foreground" />)}
+              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-[450px] rounded-3xl border-4 border-foreground" />)}
             </div>
           ) : recenti && recenti.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
