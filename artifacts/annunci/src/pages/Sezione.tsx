@@ -144,8 +144,9 @@ export default function Sezione({ catId }: SezioneProps) {
               {tc.backToAll}
             </Link>
 
-            <div className="flex flex-col md:flex-row md:items-end gap-8 md:gap-16">
-              <div className="flex-1 space-y-6">
+            <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-12">
+              {/* Left — title + tags */}
+              <div className="flex-1 space-y-5">
                 <div className="inline-flex items-center gap-2.5 bg-white/20 border border-white/30 rounded-2xl px-4 py-2 backdrop-blur-sm">
                   <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center">
                     <Icon className="w-4 h-4 text-white" strokeWidth={2.5} />
@@ -156,49 +157,60 @@ export default function Sezione({ catId }: SezioneProps) {
                   )}
                 </div>
 
-                <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-[84px] font-black font-display uppercase tracking-tighter leading-[0.88] text-white whitespace-pre-line drop-shadow-sm">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display uppercase tracking-tighter leading-[0.88] text-white whitespace-pre-line drop-shadow-sm">
                   {sectionCfg.heroTitle}
                 </h1>
 
-                <p className="text-white/80 text-lg md:text-xl font-medium leading-relaxed max-w-lg border-l-4 border-white/30 pl-5">
+                <p className="text-white/80 text-base md:text-lg font-medium leading-relaxed max-w-lg border-l-4 border-white/30 pl-5">
                   {sectionCfg.heroSub}
                 </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {sectionCfg.quickTags.map(tag => {
-                    const active = params.get("q") === tag;
-                    return (
-                      <button key={tag} onClick={() => addQuickTag(tag)}
-                        className={`px-4 py-2 rounded-full text-sm font-black uppercase tracking-wider border-2 transition-all ${
-                          active
-                            ? "bg-white text-foreground border-white shadow-[3px_3px_0_0_rgba(0,0,0,0.3)]"
-                            : "bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50"
-                        }`}>
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
+                {sectionCfg.quickTags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {sectionCfg.quickTags.map(tag => {
+                      const active = params.get("q") === tag;
+                      return (
+                        <button key={tag} onClick={() => addQuickTag(tag)}
+                          className={`px-4 py-2 rounded-full text-sm font-black uppercase tracking-wider border-2 transition-all ${
+                            active
+                              ? "bg-white text-foreground border-white shadow-[3px_3px_0_0_rgba(0,0,0,0.3)]"
+                              : "bg-white/10 border-white/30 text-white hover:bg-white/20 hover:border-white/50"
+                          }`}>
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
 
-                <Link href={`/pubblica?categoria=${catId}`}>
-                  <button className="inline-flex items-center gap-3 bg-white text-foreground border-4 border-white/80 rounded-2xl px-6 py-3.5 font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,0.25)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.25)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+              {/* Right — search + publish */}
+              <div className="w-full md:w-80 shrink-0 flex flex-col gap-3">
+                {/* Search form */}
+                <form onSubmit={applyFilters} className="bg-background rounded-2xl border-4 border-white/30 p-4 shadow-xl space-y-3">
+                  <p className="text-xs font-black uppercase tracking-widest text-foreground/50 pb-1">{tc.search}</p>
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" strokeWidth={2.5} />
+                    <Input
+                      placeholder={tc.searchPlaceholder}
+                      className="pl-12 h-12 rounded-xl border-2 focus-visible:border-foreground text-base font-bold"
+                      value={q}
+                      onChange={e => setQ(e.target.value)}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full h-12 rounded-xl font-black uppercase tracking-wider text-base" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
+                    <Search className="w-4 h-4 mr-2" strokeWidth={3} />
+                    {tc.search}
+                  </Button>
+                </form>
+
+                {/* Publish CTA */}
+                <Link href={`/pubblica?categoria=${catId}`} className="block">
+                  <button className="w-full inline-flex items-center justify-center gap-3 bg-white text-foreground border-4 border-white/60 rounded-2xl px-6 py-4 font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
                     <PlusCircle className="w-5 h-5 shrink-0" strokeWidth={2.5} />
                     {sectionCfg.publishLabel}
                   </button>
                 </Link>
-              </div>
-
-              {/* Search bar */}
-              <div className="w-full md:w-80 shrink-0">
-                <form onSubmit={applyFilters} className="bg-background rounded-2xl border-4 border-white/30 p-4 shadow-xl space-y-3">
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground w-5 h-5" strokeWidth={2.5} />
-                    <Input placeholder={tc.searchPlaceholder} className="pl-12 h-12 rounded-xl border-2 focus-visible:border-foreground text-base font-bold" value={q} onChange={e => setQ(e.target.value)} />
-                  </div>
-                  <Button type="submit" className="w-full h-12 rounded-xl font-black uppercase tracking-wider text-base" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
-                    {tc.search} <ArrowRight className="ml-2 w-5 h-5" strokeWidth={3} />
-                  </Button>
-                </form>
               </div>
             </div>
           </div>
