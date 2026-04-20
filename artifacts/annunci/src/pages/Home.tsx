@@ -87,12 +87,12 @@ export default function Home() {
       </section>
 
       {/* BENTO CATEGORIES */}
-      <section className="py-24 bg-foreground border-b-4 border-foreground overflow-hidden">
+      <section className="py-12 md:py-16 bg-foreground border-b-4 border-foreground overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-7 md:mb-9 gap-3">
             <div>
-              <h2 className="text-5xl md:text-7xl font-black font-display uppercase tracking-tighter text-background leading-[0.9]">
+              <h2 className="text-3xl md:text-4xl font-black font-display uppercase tracking-tighter text-background leading-[0.9]">
                 {h.categoriesTitle} <span className="text-accent">{h.categoriesHighlight}</span>
               </h2>
             </div>
@@ -102,7 +102,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5" style={{gridAutoRows: 'minmax(180px, 1fr)'}}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4" style={{gridAutoRows: 'minmax(150px, 1fr)'}}>
 
             {/* Libri — BIG (2×2) */}
             {(() => {
@@ -114,24 +114,24 @@ export default function Home() {
                 <Link key={cat.id} href={`/${cat.id}`}
                   className={`col-span-2 row-span-2 group outline-none block ${cat.colorClass}`}
                   style={{gridRow: 'span 2'}}>
-                  <div className="h-full flex flex-col justify-between p-8 md:p-10 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.98]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '380px'}}>
-                    <span className="absolute -bottom-6 -right-4 text-[180px] font-black text-white/5 leading-none select-none pointer-events-none font-display">01</span>
+                  <div className="h-full flex flex-col justify-between p-6 md:p-8 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.98]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '300px'}}>
+                    <span className="absolute -bottom-6 -right-4 text-[140px] font-black text-white/5 leading-none select-none pointer-events-none font-display">01</span>
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
 
                     <div className="relative z-10 flex items-start justify-between">
-                      <div className="w-16 h-16 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <Icon className="w-8 h-8 text-white" strokeWidth={2.5} />
+                      <div className="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <Icon className="w-7 h-7 text-white" strokeWidth={2.5} />
                       </div>
                       {count > 0 && (
-                        <span className="bg-white/20 border border-white/30 text-white font-black text-sm px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
+                        <span className="bg-white/20 border border-white/30 text-white font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-widest backdrop-blur-sm">
                           {count} {t.common.listings}
                         </span>
                       )}
                     </div>
 
                     <div className="relative z-10 mt-auto">
-                      <h3 className="font-display font-black text-4xl md:text-5xl text-white uppercase tracking-tighter mb-3">{catT?.name ?? cat.name}</h3>
-                      <p className="text-white/80 font-medium text-base leading-relaxed mb-6 max-w-xs">{catT?.description ?? cat.description}</p>
+                      <h3 className="font-display font-black text-3xl md:text-4xl text-white uppercase tracking-tighter mb-2">{catT?.name ?? cat.name}</h3>
+                      <p className="text-white/80 font-medium text-sm leading-relaxed mb-5 max-w-xs">{catT?.description ?? cat.description}</p>
                       <div className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
                         {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
                       </div>
@@ -141,7 +141,7 @@ export default function Home() {
               );
             })()}
 
-            {/* Ripetizioni, Forum (piccolo), Consigli, Gruppi — small */}
+            {/* Ripetizioni, Consigli, Gruppi — small */}
             {[CATEGORIES[2], CATEGORIES[3], CATEGORIES[4]].map((cat, i) => {
               const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
@@ -150,21 +150,21 @@ export default function Home() {
               return (
                 <Link key={cat.id} href={`/${cat.id}`}
                   className={`col-span-1 group outline-none block ${cat.colorClass}`}>
-                  <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '180px'}}>
-                    <span className="absolute -bottom-4 -right-2 text-[90px] font-black text-white/5 leading-none select-none pointer-events-none font-display">{num}</span>
+                  <div className="h-full flex flex-col justify-between p-4 md:p-5 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '150px'}}>
+                    <span className="absolute -bottom-4 -right-2 text-[80px] font-black text-white/5 leading-none select-none pointer-events-none font-display">{num}</span>
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                     <div className="relative z-10 flex items-start justify-between">
-                      <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
+                      <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <Icon className="w-5 h-5 text-white" strokeWidth={2.5} />
                       </div>
                       {count > 0 && (
-                        <span className="bg-white/20 text-white font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">
+                        <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-full uppercase tracking-wider">
                           {count}
                         </span>
                       )}
                     </div>
                     <div className="relative z-10 mt-auto">
-                      <h3 className="font-display font-black text-xl md:text-2xl text-white uppercase tracking-tight mb-1">{catT?.name ?? cat.name}</h3>
+                      <h3 className="font-display font-black text-lg md:text-xl text-white uppercase tracking-tight mb-1">{catT?.name ?? cat.name}</h3>
                       <div className="flex items-center gap-1 text-white/70 font-bold text-xs uppercase tracking-widest group-hover:text-white group-hover:gap-2 transition-all">
                         {t.common.explore} <ArrowRight className="w-3.5 h-3.5" strokeWidth={3} />
                       </div>
@@ -174,55 +174,62 @@ export default function Home() {
               );
             })}
 
-            {/* Forum — small card */}
-            <Link href="/forum" className="col-span-1 group outline-none block">
-              <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-accent/40 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97] bg-accent/15 hover:bg-accent/25" style={{minHeight: '180px'}}>
-                <span className="absolute -bottom-4 -right-2 text-[90px] font-black text-accent/10 leading-none select-none pointer-events-none font-display">05</span>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-                <div className="relative z-10 flex items-start justify-between">
-                  <div className="w-12 h-12 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                    <MessageCircle className="w-6 h-6 text-accent" strokeWidth={2.5} />
-                  </div>
-                </div>
-                <div className="relative z-10 mt-auto">
-                  <h3 className="font-display font-black text-xl md:text-2xl text-background uppercase tracking-tight mb-1">{(t as any).forum?.title ?? "Forum"}</h3>
-                  <div className="flex items-center gap-1 text-background/50 font-bold text-xs uppercase tracking-widest group-hover:text-accent group-hover:gap-2 transition-all">
-                    {t.common.explore} <ArrowRight className="w-3.5 h-3.5" strokeWidth={3} />
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Case e Stanze — full-width banner card */}
+            {/* Case e Stanze — small card */}
             {(() => {
               const cat = CATEGORIES[0];
               const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
+              const Icon = cat.icon;
               return (
-                <Link href={`/${cat.id}`} className={`col-span-2 md:col-span-4 group outline-none block ${cat.colorClass}`}>
-                  <div className="h-full flex flex-col sm:flex-row items-center justify-between gap-6 p-7 md:p-8 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:border-white/40" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '120px'}}>
-                    <div className="absolute -bottom-6 -right-4 text-[140px] font-black text-white/5 leading-none select-none pointer-events-none font-display">06</div>
-                    <div className="flex items-center gap-5 relative z-10">
-                      <div className="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shrink-0">
-                        <cat.icon className="w-7 h-7 text-white" strokeWidth={2.5} />
+                <Link key={cat.id} href={`/${cat.id}`}
+                  className={`col-span-1 group outline-none block ${cat.colorClass}`}>
+                  <div className="h-full flex flex-col justify-between p-4 md:p-5 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '150px'}}>
+                    <span className="absolute -bottom-4 -right-2 text-[80px] font-black text-white/5 leading-none select-none pointer-events-none font-display">05</span>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                    <div className="relative z-10 flex items-start justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <Icon className="w-5 h-5 text-white" strokeWidth={2.5} />
                       </div>
-                      <div>
-                        <h3 className="font-display font-black text-2xl md:text-3xl text-white uppercase tracking-tight leading-none">
-                          {catT?.name ?? cat.name}
-                        </h3>
-                        <p className="text-white/60 font-medium text-sm mt-1">
-                          {catT?.description ?? cat.description}
-                          {count > 0 && <span className="ml-2 text-white/80 font-black">· {count} {t.common.listings}</span>}
-                        </p>
-                      </div>
+                      {count > 0 && (
+                        <span className="bg-white/20 text-white font-black text-xs px-2 py-0.5 rounded-full uppercase tracking-wider">
+                          {count}
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all relative z-10 shrink-0">
-                      {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                    <div className="relative z-10 mt-auto">
+                      <h3 className="font-display font-black text-lg md:text-xl text-white uppercase tracking-tight mb-1">{catT?.name ?? cat.name}</h3>
+                      <div className="flex items-center gap-1 text-white/70 font-bold text-xs uppercase tracking-widest group-hover:text-white group-hover:gap-2 transition-all">
+                        {t.common.explore} <ArrowRight className="w-3.5 h-3.5" strokeWidth={3} />
+                      </div>
                     </div>
                   </div>
                 </Link>
               );
             })()}
+
+            {/* Forum — full-width banner */}
+            <Link href="/forum" className="col-span-2 md:col-span-4 group outline-none block">
+              <div className="h-full flex flex-col sm:flex-row items-center justify-between gap-6 p-6 md:p-7 rounded-3xl border-4 border-accent/40 relative overflow-hidden transition-all duration-300 group-hover:border-accent/60 bg-accent/10 hover:bg-accent/20" style={{minHeight: '100px'}}>
+                <div className="absolute -bottom-6 -right-4 text-[120px] font-black text-accent/5 leading-none select-none pointer-events-none font-display">06</div>
+                <div className="flex items-center gap-5 relative z-10">
+                  <div className="w-12 h-12 rounded-2xl bg-accent/20 border-2 border-accent/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shrink-0">
+                    <MessageCircle className="w-6 h-6 text-accent" strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-black text-xl md:text-2xl text-background uppercase tracking-tight leading-none">
+                      {(t as any).forum?.title ?? "Forum"}
+                    </h3>
+                    <p className="text-background/50 font-medium text-sm mt-0.5">
+                      {(t as any).forum?.description ?? "Discussioni, domande e risposte tra studenti"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-accent font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all relative z-10 shrink-0">
+                  {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                </div>
+              </div>
+            </Link>
+
           </div>
         </div>
       </section>
