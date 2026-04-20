@@ -139,6 +139,8 @@ const T = {
     },
     common: {
       explore: "Esplora",
+      backHome: "Home",
+      back: "Indietro",
       backToAll: "Tutti gli annunci",
       loading: "Caricamento...",
       loadError: "Errore di caricamento",
@@ -375,6 +377,8 @@ const T = {
     },
     common: {
       explore: "Explore",
+      backHome: "Home",
+      back: "Back",
       backToAll: "All listings",
       loading: "Loading...",
       loadError: "Loading error",
@@ -611,6 +615,8 @@ const T = {
     },
     common: {
       explore: "Explorar",
+      backHome: "Inicio",
+      back: "Volver",
       backToAll: "Todos los anuncios",
       loading: "Cargando...",
       loadError: "Error de carga",

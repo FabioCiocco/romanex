@@ -14,6 +14,7 @@ import { getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { useUser } from "@clerk/react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { BackBanner } from "@/components/layout/BackBanner";
 
 const DATE_LOCALE = { it, en: enUS, es };
 
@@ -96,14 +97,13 @@ export default function AnnuncioDetail() {
 
   return (
     <Layout>
-      <div className="bg-muted/30 border-b sticky top-[64px] z-40 backdrop-blur supports-[backdrop-filter]:bg-muted/30">
-        <div className="container mx-auto px-4 md:px-6 py-3">
-          <Link href="/annunci" className="inline-flex items-center text-sm font-bold text-muted-foreground hover:text-primary transition-colors">
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            {tc.backToAll}
-          </Link>
-        </div>
-      </div>
+      <BackBanner
+        crumbs={[
+          { label: tc.backToAll, href: '/annunci' },
+          ...(annuncio ? [{ label: annuncio.titolo }] : []),
+        ]}
+        backHref="/annunci"
+      />
 
       <div className="container mx-auto px-4 md:px-6 py-8">
         {isLoading || !annuncio || !categoryConfig ? (

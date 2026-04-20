@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
+import { BackBanner } from "@/components/layout/BackBanner";
 import { useListCategorie } from "@workspace/api-client-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Link } from "wouter";
@@ -32,6 +33,7 @@ export default function Categorie() {
 
   return (
     <Layout>
+      <BackBanner crumbs={[{ label: t.nav.allBoard }]} backHref="/" />
       <div className="bg-foreground text-background py-24 border-b-4 border-foreground relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.05]" style={{backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '60px 60px'}} />
         <div className="container mx-auto px-4 md:px-6 relative z-10">

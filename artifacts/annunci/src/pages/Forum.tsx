@@ -28,8 +28,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AlertCircle, MessageCircle, Plus, ChevronRight, Clock } from "lucide-react";
+import { BackBanner } from "@/components/layout/BackBanner";
 import { formatDistanceToNow } from "date-fns";
-import { it as itLocale, enUS, es as esLocale } from "date-fns/locale";
+import { it as itLocale, enUS, es as esLocale, type Locale } from "date-fns/locale";
 
 const DATE_LOCALES: Record<string, Locale> = { it: itLocale, en: enUS, es: esLocale };
 
@@ -100,6 +101,7 @@ export default function Forum() {
 
   return (
     <Layout>
+      <BackBanner crumbs={[{ label: tf.title }]} backHref="/" />
       <div className="container mx-auto px-4 md:px-6 py-8 max-w-4xl">
 
         {/* Header */}

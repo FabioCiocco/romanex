@@ -15,6 +15,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { getCategoryConfig } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { BackBanner } from "@/components/layout/BackBanner";
 
 type SectionKey = "appartamenti" | "libri" | "ripetizioni" | "consigli" | "gruppi-studio";
 
@@ -135,6 +136,7 @@ export default function Sezione({ catId }: SezioneProps) {
 
   return (
     <Layout>
+      <BackBanner crumbs={[{ label: catT?.name ?? catConfig.name }]} backHref="/" />
       {/* ── Hero ─────────────────────────────────────────────── */}
       <div className={`${catConfig.colorClass}`}>
         <section className="relative overflow-hidden border-b-4 border-white/20 py-16 md:py-24" style={{ backgroundColor: `hsl(var(--cat-bg))` }}>

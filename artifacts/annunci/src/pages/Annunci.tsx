@@ -12,9 +12,12 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BackBanner } from "@/components/layout/BackBanner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Annunci() {
   const [location, setLocation] = useLocation();
+  const { t } = useLanguage();
   const searchString = useSearch();
   
   const params = useMemo(() => new URLSearchParams(searchString), [searchString]);
@@ -157,6 +160,7 @@ export default function Annunci() {
 
   return (
     <Layout>
+      <BackBanner crumbs={[{ label: t.common.backToAll }]} backHref="/" />
       <div className="bg-muted/30 border-b">
         <div className="container mx-auto px-4 md:px-6 py-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

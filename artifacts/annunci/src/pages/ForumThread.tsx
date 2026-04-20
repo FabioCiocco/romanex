@@ -3,6 +3,7 @@ import { Link, useParams } from "wouter";
 import { Layout } from "@/components/layout/Layout";
 import {
   useGetForumThread,
+  getGetForumThreadQueryKey,
   useCreateForumReply,
   useDeleteForumThread,
   useDeleteForumReply,
@@ -14,9 +15,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AlertCircle, ArrowLeft, MessageCircle, Trash2, Clock } from "lucide-react";
+import { AlertCircle, MessageCircle, Trash2, Clock } from "lucide-react";
+import { BackBanner } from "@/components/layout/BackBanner";
 import { formatDistanceToNow, format } from "date-fns";
-import { it as itLocale, enUS, es as esLocale } from "date-fns/locale";
+import { it as itLocale, enUS, es as esLocale, type Locale } from "date-fns/locale";
 import { useLocation } from "wouter";
 
 const DATE_LOCALES: Record<string, Locale> = { it: itLocale, en: enUS, es: esLocale };
@@ -41,7 +43,10 @@ export default function ForumThread() {
   const threadId = parseInt(id ?? "0", 10);
 
   const { data, isLoading, error, refetch } = useGetForumThread(threadId, {
-    query: { enabled: !isNaN(threadId) && threadId > 0 },
+    query: {
+      queryKey: getGetForumThreadQueryKey(threadId),
+      enabled: !isNaN(threadId) && threadId > 0,
+    },
   });
 
   const { mutate: createReply, isPending: isReplying } = useCreateForumReply({
@@ -92,15 +97,14 @@ export default function ForumThread() {
 
   return (
     <Layout>
+      <BackBanner
+        crumbs={[
+          { label: tf.title, href: '/forum' },
+          ...(thread ? [{ label: thread.titolo }] : []),
+        ]}
+        backHref="/forum"
+      />
       <div className="container mx-auto px-4 md:px-6 py-8 max-w-3xl">
-
-        {/* Back link */}
-        <Link href="/forum">
-          <button className="flex items-center gap-2 text-sm font-black uppercase tracking-wide text-foreground/50 hover:text-foreground transition-colors mb-6 group">
-            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" strokeWidth={2.5} />
-            {tf.backToForum}
-          </button>
-        </Link>
 
         {/* Error */}
         {error && (
