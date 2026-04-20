@@ -35,71 +35,71 @@ export function WelcomeBanner() {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" style={{ backgroundColor: "rgba(10,10,20,0.85)", backdropFilter: "blur(8px)" }}>
 
       {!showGuestNotice ? (
-        <div className="bg-background rounded-3xl border-4 border-foreground shadow-[12px_12px_0_0_hsl(var(--primary))] w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="bg-background rounded-2xl border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--primary))] w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-300">
 
           {/* Header */}
-          <div className="bg-foreground px-8 py-7 flex items-center gap-4">
-            <div className="bg-primary text-primary-foreground p-2.5 rounded-2xl border-2 border-background/20 rotate-3">
-              <GraduationCap className="h-8 w-8" strokeWidth={2.5} />
+          <div className="bg-foreground px-6 py-4 flex items-center gap-3">
+            <div className="bg-primary text-primary-foreground p-2 rounded-xl border-2 border-background/20 rotate-3">
+              <GraduationCap className="h-5 w-5" strokeWidth={2.5} />
             </div>
             <div>
-              <p className="text-background/50 text-xs font-black uppercase tracking-[0.3em]">{wt.subtitle}</p>
-              <h1 className="font-display text-3xl font-black text-background tracking-tighter uppercase leading-none">
+              <p className="text-background/50 text-[10px] font-black uppercase tracking-[0.3em]">{wt.subtitle}</p>
+              <h1 className="font-display text-xl font-black text-background tracking-tighter uppercase leading-none">
                 Roma<span className="text-accent">Nex</span>
               </h1>
             </div>
           </div>
 
           {/* Body */}
-          <div className="px-8 py-7 space-y-6">
+          <div className="px-5 py-5 space-y-4">
             <div>
-              <h2 className="text-2xl font-black font-display uppercase tracking-tighter mb-2">
+              <h2 className="text-lg font-black font-display uppercase tracking-tighter mb-1">
                 {wt.question}
               </h2>
-              <p className="text-foreground/60 font-medium text-sm leading-relaxed">
+              <p className="text-foreground/60 font-medium text-xs leading-relaxed">
                 {wt.desc}
               </p>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               {/* Sign In */}
               <Link href="/sign-in" onClick={() => setVisible(false)}>
-                <div className="group flex items-center gap-4 p-4 rounded-2xl border-2 border-foreground bg-primary/5 hover:bg-primary hover:border-primary transition-all duration-200 cursor-pointer">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-primary/20 group-hover:border-white/30 shrink-0 transition-colors">
-                    <LogIn className="w-5 h-5 text-primary group-hover:text-white" strokeWidth={2.5} />
+                <div className="group flex items-center gap-3 p-3 rounded-xl border-2 border-foreground bg-primary/5 hover:bg-primary hover:border-primary transition-all duration-200 cursor-pointer">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-primary/20 group-hover:border-white/30 shrink-0 transition-colors">
+                    <LogIn className="w-4 h-4 text-primary group-hover:text-white" strokeWidth={2.5} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-black text-base group-hover:text-white transition-colors">{wt.signIn}</p>
-                    <p className="text-sm text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.signInSub}</p>
+                    <p className="font-black text-sm group-hover:text-white transition-colors">{wt.signIn}</p>
+                    <p className="text-xs text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.signInSub}</p>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
                 </div>
               </Link>
 
               {/* Register */}
               <Link href="/sign-up" onClick={() => setVisible(false)}>
-                <div className="group flex items-center gap-4 p-4 rounded-2xl border-2 border-foreground bg-accent/5 hover:bg-accent hover:border-accent transition-all duration-200 cursor-pointer">
-                  <div className="w-11 h-11 rounded-xl bg-accent/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-accent/20 group-hover:border-white/30 shrink-0 transition-colors">
-                    <UserPlus className="w-5 h-5 text-accent group-hover:text-white" strokeWidth={2.5} />
+                <div className="group flex items-center gap-3 p-3 rounded-xl border-2 border-foreground bg-accent/5 hover:bg-accent hover:border-accent transition-all duration-200 cursor-pointer">
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-accent/20 group-hover:border-white/30 shrink-0 transition-colors">
+                    <UserPlus className="w-4 h-4 text-accent group-hover:text-white" strokeWidth={2.5} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-black text-base group-hover:text-white transition-colors">{wt.register}</p>
-                    <p className="text-sm text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.registerSub}</p>
+                    <p className="font-black text-sm group-hover:text-white transition-colors">{wt.register}</p>
+                    <p className="text-xs text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.registerSub}</p>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
                 </div>
               </Link>
 
               {/* Guest */}
-              <button onClick={handleGuest} className="group w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-dashed border-foreground/20 hover:border-foreground/40 bg-muted/30 hover:bg-muted/60 transition-all duration-200 text-left">
-                <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center border-2 border-foreground/10 shrink-0">
-                  <Eye className="w-5 h-5 text-foreground/40" strokeWidth={2} />
+              <button onClick={handleGuest} className="group w-full flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-foreground/20 hover:border-foreground/40 bg-muted/30 hover:bg-muted/60 transition-all duration-200 text-left">
+                <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center border-2 border-foreground/10 shrink-0">
+                  <Eye className="w-4 h-4 text-foreground/40" strokeWidth={2} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-base text-foreground/60">{wt.guest}</p>
-                  <p className="text-sm text-foreground/40 font-medium">{wt.guestSub}</p>
+                  <p className="font-black text-sm text-foreground/60">{wt.guest}</p>
+                  <p className="text-xs text-foreground/40 font-medium">{wt.guestSub}</p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-foreground/20 group-hover:text-foreground/40 group-hover:translate-x-1 transition-all" strokeWidth={2} />
+                <ArrowRight className="w-4 h-4 text-foreground/20 group-hover:text-foreground/40 group-hover:translate-x-1 transition-all" strokeWidth={2} />
               </button>
             </div>
           </div>
