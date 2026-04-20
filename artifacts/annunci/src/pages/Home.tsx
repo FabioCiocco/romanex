@@ -55,7 +55,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl md:text-3xl text-foreground/80 max-w-3xl font-medium leading-relaxed border-l-4 border-accent pl-6">
-              Trova un coinquilino, vendi il libro di Diritto, offri ripetizioni o unisciti a un gruppo di studio.
+              Trova un coinquilino, vendi i tuoi libri, offri ripetizioni o unisciti a un gruppo di studio.
             </p>
             
             <form onSubmit={handleSearch} className="bg-background rounded-3xl p-3 shadow-[8px_8px_0_0_hsl(var(--foreground))] border-4 border-foreground max-w-4xl flex flex-col md:flex-row gap-3 mt-12 relative z-20">
