@@ -244,16 +244,16 @@ export default function Home() {
 
 
       {/* RECENTI */}
-      <section className="py-24 bg-background">
+      <section className="py-12 bg-background">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-end justify-between mb-12">
-            <div className="space-y-4">
-              <h2 className="text-4xl md:text-6xl font-black font-display uppercase tracking-tighter">{h.recentTitle}</h2>
-              <p className="text-foreground/60 text-xl font-bold">{h.recentSub}</p>
+          <div className="flex items-center justify-between mb-6">
+            <div className="space-y-1">
+              <h2 className="text-2xl md:text-3xl font-black font-display uppercase tracking-tighter">{h.recentTitle}</h2>
+              <p className="text-foreground/60 text-sm font-bold">{h.recentSub}</p>
             </div>
-            <Link href="/annunci" className="hidden md:inline-flex items-center text-primary font-black uppercase tracking-wider hover:text-accent group bg-primary/10 px-6 py-3 rounded-xl border-2 border-transparent hover:border-accent transition-all">
+            <Link href="/annunci" className="hidden md:inline-flex items-center text-primary font-black uppercase tracking-wider hover:text-accent group text-sm gap-1 transition-all">
               {h.allBoardLink}
-              <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+              <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={3} />
             </Link>
           </div>
 
@@ -264,33 +264,30 @@ export default function Home() {
               <AlertDescription className="font-bold">{h.errorDesc}</AlertDescription>
             </Alert>
           ) : isLoadingRecenti ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-[450px] rounded-3xl border-4 border-foreground" />)}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-52 rounded-2xl" />)}
             </div>
           ) : recenti && recenti.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {recenti.map((annuncio) => (
-                <AnnuncioCard key={annuncio.id} annuncio={annuncio} />
+                <AnnuncioCard key={annuncio.id} annuncio={annuncio} compact />
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 bg-card rounded-3xl border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))]">
-              <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
-                <AlertCircle className="w-12 h-12 text-muted-foreground" strokeWidth={2.5} />
-              </div>
-              <h3 className="text-3xl font-black font-display uppercase tracking-wider mb-4">{h.emptyBoard}</h3>
-              <p className="text-foreground/60 font-bold max-w-md mx-auto mb-8 text-lg">{h.emptyBoardDesc}</p>
+            <div className="text-center py-12 bg-card rounded-2xl border-2 border-dashed border-foreground/20">
+              <h3 className="text-xl font-black font-display uppercase tracking-wider mb-2">{h.emptyBoard}</h3>
+              <p className="text-foreground/60 font-bold max-w-md mx-auto mb-6 text-sm">{h.emptyBoardDesc}</p>
               <Link href="/pubblica">
-                <Button size="lg" className="h-16 px-8 rounded-2xl text-xl font-black uppercase tracking-wider bg-accent text-accent-foreground border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+                <Button size="sm" className="rounded-xl font-black uppercase tracking-wider bg-accent text-accent-foreground border-2 border-foreground">
                   {h.emptyBoardBtn}
                 </Button>
               </Link>
             </div>
           )}
           
-          <div className="mt-12 text-center md:hidden">
+          <div className="mt-6 text-center md:hidden">
             <Link href="/annunci">
-              <Button variant="outline" size="lg" className="w-full h-16 rounded-2xl text-xl font-black uppercase tracking-wider border-4 border-foreground">{h.allBoardLink}</Button>
+              <Button variant="outline" size="sm" className="w-full rounded-xl font-black uppercase tracking-wider border-2 border-foreground">{h.allBoardLink}</Button>
             </Link>
           </div>
         </div>
