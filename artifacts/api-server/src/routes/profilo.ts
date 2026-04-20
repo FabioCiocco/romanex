@@ -32,30 +32,29 @@ router.put("/", async (req, res) => {
 
   const { username, nome, cognome, email, universita, annoCorso, corsoDiLaurea, telefono } = req.body;
 
-  if (!nome || !cognome || !email || !universita || !annoCorso || !corsoDiLaurea) {
+  if (!username || !nome || !cognome || !email || !universita || !annoCorso || !corsoDiLaurea) {
     return res.status(400).json({ error: "Campi obbligatori mancanti" });
   }
 
-  if (username) {
-    const usernameRegex = /^[a-z0-9_]{3,30}$/;
-    if (!usernameRegex.test(username)) {
-      return res.status(400).json({ error: "USERNAME_INVALID" });
-    }
-    const existing = await db
-      .select({ clerkId: userProfilesTable.clerkId })
-      .from(userProfilesTable)
-      .where(eq(userProfilesTable.username, username))
-      .limit(1);
-    if (existing.length > 0 && existing[0].clerkId !== userId) {
-      return res.status(409).json({ error: "USERNAME_TAKEN" });
-    }
+  const usernameRegex = /^[a-z0-9_]{3,30}$/;
+  if (!usernameRegex.test(username)) {
+    return res.status(400).json({ error: "USERNAME_INVALID" });
+  }
+
+  const existing = await db
+    .select({ clerkId: userProfilesTable.clerkId })
+    .from(userProfilesTable)
+    .where(eq(userProfilesTable.username, username))
+    .limit(1);
+  if (existing.length > 0 && existing[0].clerkId !== userId) {
+    return res.status(409).json({ error: "USERNAME_TAKEN" });
   }
 
   const [profile] = await db
     .insert(userProfilesTable)
     .values({
       clerkId: userId,
-      username: username || null,
+      username,
       nome,
       cognome,
       email,
@@ -67,7 +66,7 @@ router.put("/", async (req, res) => {
     .onConflictDoUpdate({
       target: userProfilesTable.clerkId,
       set: {
-        username: username || null,
+        username,
         nome,
         cognome,
         email,

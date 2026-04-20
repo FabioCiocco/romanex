@@ -729,7 +729,7 @@ components:
         clerkId:
           type: string
         username:
-          type: ["string", "null"]
+          type: string
         nome:
           type: string
         cognome:
@@ -752,6 +752,7 @@ components:
           format: date-time
       required:
         - clerkId
+        - username
         - nome
         - cognome
         - email
@@ -765,7 +766,7 @@ components:
       type: object
       properties:
         username:
-          type: ["string", "null"]
+          type: string
         nome:
           type: string
         cognome:
@@ -781,6 +782,7 @@ components:
         telefono:
           type: ["string", "null"]
       required:
+        - username
         - nome
         - cognome
         - email

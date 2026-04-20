@@ -8,8 +8,7 @@
 
 export interface UserProfile {
   clerkId: string;
-  /** @nullable */
-  username?: string | null;
+  username: string;
   nome: string;
   cognome: string;
   email: string;

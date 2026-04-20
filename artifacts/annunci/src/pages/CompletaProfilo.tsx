@@ -36,6 +36,7 @@ export default function CompletaProfilo() {
       setNome(user.firstName || "");
       setCognome(user.lastName || "");
       setEmail(user.primaryEmailAddress?.emailAddress || "");
+      if (user.username) setUsername(user.username);
     }
   }, [user, isLoaded]);
 
@@ -51,7 +52,12 @@ export default function CompletaProfilo() {
 
   const mutation = useUpsertMyProfile({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async (data) => {
+        try {
+          await user?.update({ username: data.username });
+        } catch {
+          // Clerk username sync not enabled — ignored
+        }
         toast({ title: tp.savedOk, description: tp.savedOkDesc });
         setLocation("/");
       },
@@ -74,13 +80,17 @@ export default function CompletaProfilo() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username && !USERNAME_REGEX.test(username)) {
+    if (!username) {
+      setUsernameError(tp.required);
+      return;
+    }
+    if (!USERNAME_REGEX.test(username)) {
       setUsernameError(tp.usernameInvalid);
       return;
     }
     mutation.mutate({
       data: {
-        username: username || null,
+        username,
         nome, cognome, email, universita, annoCorso, corsoDiLaurea,
         telefono: telefono || null,
       },
@@ -106,10 +116,10 @@ export default function CompletaProfilo() {
         <div className="border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))] bg-card p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* Username */}
+            {/* Username — obbligatorio */}
             <div>
               <label className="block text-xs font-black uppercase tracking-wider mb-1 flex items-center gap-1">
-                <AtSign className="w-3 h-3" /> {tp.username}
+                <AtSign className="w-3 h-3" /> {tp.username} <span className="text-destructive">*</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-black text-sm select-none">@</span>
@@ -123,6 +133,7 @@ export default function CompletaProfilo() {
                   onChange={e => handleUsernameChange(e.target.value)}
                   autoComplete="username"
                   maxLength={30}
+                  required
                 />
               </div>
               {usernameError ? (

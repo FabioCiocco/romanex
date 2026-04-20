@@ -306,7 +306,7 @@ export const DeleteForumReplyParams = zod.object({
  */
 export const GetMyProfileResponse = zod.object({
   clerkId: zod.string(),
-  username: zod.string().nullish(),
+  username: zod.string(),
   nome: zod.string(),
   cognome: zod.string(),
   email: zod.string(),
@@ -322,7 +322,7 @@ export const GetMyProfileResponse = zod.object({
  * @summary Create or update current user profile
  */
 export const UpsertMyProfileBody = zod.object({
-  username: zod.string().nullish(),
+  username: zod.string(),
   nome: zod.string(),
   cognome: zod.string(),
   email: zod.string(),
@@ -334,7 +334,7 @@ export const UpsertMyProfileBody = zod.object({
 
 export const UpsertMyProfileResponse = zod.object({
   clerkId: zod.string(),
-  username: zod.string().nullish(),
+  username: zod.string(),
   nome: zod.string(),
   cognome: zod.string(),
   email: zod.string(),

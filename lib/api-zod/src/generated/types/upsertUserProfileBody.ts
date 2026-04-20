@@ -7,8 +7,7 @@
  */
 
 export interface UpsertUserProfileBody {
-  /** @nullable */
-  username?: string | null;
+  username: string;
   nome: string;
   cognome: string;
   email: string;
