@@ -12,6 +12,7 @@ import Pubblica from "@/pages/Pubblica";
 import Categorie from "@/pages/Categorie";
 import Sezione from "@/pages/Sezione";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -193,9 +194,11 @@ function ClerkProviderWithRoutes() {
 
 function App() {
   return (
-    <WouterRouter base={basePath}>
-      <ClerkProviderWithRoutes />
-    </WouterRouter>
+    <LanguageProvider>
+      <WouterRouter base={basePath}>
+        <ClerkProviderWithRoutes />
+      </WouterRouter>
+    </LanguageProvider>
   );
 }
 

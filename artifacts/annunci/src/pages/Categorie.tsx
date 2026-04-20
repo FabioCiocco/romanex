@@ -7,16 +7,20 @@ import { Search, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { CATEGORIES } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Categorie() {
   const { data: dbCategorie, isLoading } = useListCategorie();
   const [search, setSearch] = useState("");
+  const { t } = useLanguage();
 
-  // Merge static constant info with DB counts
   const displayCategories = CATEGORIES.map(cat => {
     const dbCat = dbCategorie?.find(c => c.nome === cat.name);
+    const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
     return {
       ...cat,
+      name: catT?.name ?? cat.name,
+      description: catT?.description ?? cat.description,
       count: dbCat ? dbCat.count : 0
     };
   });
@@ -73,7 +77,7 @@ export default function Categorie() {
                         <Icon className="w-10 h-10" strokeWidth={2.5} />
                       </div>
                       <div className="bg-foreground text-background px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest border-2 border-foreground shadow-[4px_4px_0_0_rgba(0,0,0,0.2)]">
-                        {cat.count.toLocaleString('it-IT')} annunci
+                        {cat.count.toLocaleString('it-IT')} {t.common.adsAvailable}
                       </div>
                     </div>
                     <div className="relative z-10">
@@ -85,7 +89,7 @@ export default function Categorie() {
                       </p>
                       
                       <div className="inline-flex items-center text-white font-black uppercase tracking-widest group-hover:text-foreground transition-colors">
-                        Esplora <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+                        {t.common.explore} <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
                       </div>
                     </div>
                   </div>

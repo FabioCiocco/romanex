@@ -35,3 +35,21 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Navbar**: shows "Accedi" button when signed out, user avatar + logout when signed in
 - **Login pages**: `/sign-in` and `/sign-up` — branded to match RomaNex theme (violet/orange, Space Grotesk)
 - **User management**: use the Auth pane in the workspace toolbar
+
+## Internationalization (i18n)
+
+- **Languages**: Italian (IT, default), English (EN), Spanish (ES)
+- **Translation file**: `artifacts/annunci/src/lib/i18n.ts` — complete translations for all UI text
+- **Context**: `artifacts/annunci/src/contexts/LanguageContext.tsx` — React context + `useLanguage()` hook, persists lang in `localStorage` (`romanex-lang`)
+- **Language banner**: `LanguageBanner` component shown on the home page (first visit, dismissible), stores dismissal in `romanex-lang-banner-dismissed`
+- **Navbar switcher**: `LanguageSwitcher` dropdown (globe icon) always visible in the navbar
+- **Translated components**: Navbar, Home, Footer, WelcomeBanner, GuestBar, Sezione, Categorie
+- **Category names**: fetched from `t.categories[id]` to avoid hardcoding Italian names
+
+## Features
+
+- **Platform**: RomaNex — bulletin board for Italian university students
+- **5 sections**: Appartamenti, Libri di Testo, Ripetizioni, Consigli, Gruppi Studio
+- **Guest mode**: WelcomeBanner modal on first visit + persistent GuestBar for guests
+- **Search & filters**: keyword, city/campus, price range (where applicable)
+- **Listing detail**: full page at `/annunci/:id` with contact reveal (auth-gated)

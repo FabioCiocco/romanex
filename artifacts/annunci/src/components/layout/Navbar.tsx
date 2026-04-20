@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CATEGORIES } from "@/lib/constants";
 import { useUser, useClerk, Show } from "@clerk/react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-[3px] border-foreground bg-background/95 backdrop-blur shadow-[0_4px_0_0_hsl(var(--foreground))]">
@@ -27,12 +30,14 @@ export function Navbar() {
           </Link>
 
           {/* Desktop actions */}
-          <div className="hidden md:flex items-center gap-3 ml-auto">
+          <div className="hidden md:flex items-center gap-2 ml-auto">
+            <LanguageSwitcher />
+
             <Show when="signed-out">
               <Link href="/sign-in">
                 <Button variant="ghost" className="h-10 gap-2 rounded-xl px-5 border-2 border-foreground hover:bg-muted font-black text-sm uppercase tracking-wide transition-all">
                   <LogIn className="h-4 w-4" strokeWidth={2.5} />
-                  Accedi
+                  {t.nav.signIn}
                 </Button>
               </Link>
             </Show>
@@ -56,7 +61,7 @@ export function Navbar() {
                   size="icon"
                   className="w-10 h-10 rounded-xl border-2 border-foreground hover:bg-destructive/10 hover:border-destructive hover:text-destructive transition-all"
                   onClick={() => signOut()}
-                  title="Esci"
+                  title={t.nav.signOut}
                 >
                   <LogOut className="h-4 w-4" strokeWidth={2.5} />
                 </Button>
@@ -66,7 +71,7 @@ export function Navbar() {
             <Link href="/pubblica">
               <Button className="h-10 gap-2 rounded-xl px-6 bg-accent hover:bg-accent/90 text-accent-foreground border-2 border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:shadow-[1px_1px_0_0_hsl(var(--foreground))] hover:translate-y-[2px] hover:translate-x-[2px] transition-all font-black text-sm uppercase tracking-wide">
                 <PlusCircle className="h-4 w-4" strokeWidth={2.5} />
-                Pubblica
+                {t.nav.publish}
               </Button>
             </Link>
           </div>
@@ -88,9 +93,10 @@ export function Navbar() {
               href="/annunci"
               className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${location === '/annunci' ? 'bg-foreground text-background' : 'text-foreground/50 hover:text-foreground hover:bg-muted'}`}
             >
-              Tutti
+              {t.nav.allAds}
             </Link>
             {CATEGORIES.map(c => {
+              const catT = (t.categories as Record<string, { name: string; description: string }>)[c.id];
               const isActive = location === `/${c.id}` || location.startsWith(`/${c.id}?`);
               return (
                 <Link
@@ -103,7 +109,7 @@ export function Navbar() {
                     className={`w-2 h-2 rounded-full shrink-0 transition-colors ${isActive ? 'bg-white/70' : ''}`}
                     style={!isActive ? { backgroundColor: `hsl(var(--cat-bg))` } : {}}
                   />
-                  {c.name}
+                  {catT?.name ?? c.name}
                 </Link>
               );
             })}
@@ -131,11 +137,16 @@ export function Navbar() {
             </div>
           </Show>
 
-          <Link href="/annunci" className="block text-base font-black uppercase text-foreground/60 hover:text-primary" onClick={() => setIsOpen(false)}>
-            Tutta la bacheca
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link href="/annunci" className="block text-base font-black uppercase text-foreground/60 hover:text-primary" onClick={() => setIsOpen(false)}>
+              {t.nav.allBoard}
+            </Link>
+            <LanguageSwitcher />
+          </div>
+
           <div className="grid grid-cols-1 gap-2">
             {CATEGORIES.map(c => {
+              const catT = (t.categories as Record<string, { name: string; description: string }>)[c.id];
               const Icon = c.icon;
               return (
                 <Link key={c.id} href={`/${c.id}`}
@@ -143,7 +154,7 @@ export function Navbar() {
                   style={{ backgroundColor: `hsl(var(--cat-bg))` }}
                   onClick={() => setIsOpen(false)}>
                   <Icon className="w-4 h-4" strokeWidth={2.5} />
-                  {c.name}
+                  {catT?.name ?? c.name}
                 </Link>
               );
             })}
@@ -152,14 +163,14 @@ export function Navbar() {
             <Link href="/pubblica" onClick={() => setIsOpen(false)}>
               <Button className="w-full h-13 gap-3 rounded-xl bg-accent text-accent-foreground border-2 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] active:shadow-none active:translate-y-[4px] active:translate-x-[4px] transition-all font-black text-base uppercase tracking-wide">
                 <PlusCircle className="h-5 w-5" strokeWidth={3} />
-                Pubblica Annuncio
+                {t.nav.publish}
               </Button>
             </Link>
             <Show when="signed-out">
               <Link href="/sign-in" onClick={() => setIsOpen(false)}>
                 <Button variant="outline" className="w-full h-11 gap-2 rounded-xl border-2 border-foreground font-black text-base uppercase tracking-wide">
                   <LogIn className="h-4 w-4" strokeWidth={2.5} />
-                  Accedi / Registrati
+                  {t.nav.signIn}
                 </Button>
               </Link>
             </Show>
@@ -167,7 +178,7 @@ export function Navbar() {
               <Button variant="ghost" className="w-full h-11 gap-2 rounded-xl border-2 border-foreground font-black text-sm uppercase tracking-wide text-destructive hover:bg-destructive/10"
                 onClick={() => { signOut(); setIsOpen(false); }}>
                 <LogOut className="h-4 w-4" strokeWidth={2.5} />
-                Esci
+                {t.nav.signOut}
               </Button>
             </Show>
           </div>
