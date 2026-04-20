@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getAuth } from "@clerk/express";
 import { db, userProfilesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
+import { sendWelcomeEmail } from "../lib/email";
 
 const router = Router();
 
@@ -50,6 +51,13 @@ router.put("/", async (req, res) => {
     return res.status(409).json({ error: "USERNAME_TAKEN" });
   }
 
+  const existingProfile = await db
+    .select({ clerkId: userProfilesTable.clerkId })
+    .from(userProfilesTable)
+    .where(eq(userProfilesTable.clerkId, userId))
+    .limit(1);
+  const isNewProfile = existingProfile.length === 0;
+
   const [profile] = await db
     .insert(userProfilesTable)
     .values({
@@ -78,6 +86,10 @@ router.put("/", async (req, res) => {
       },
     })
     .returning();
+
+  if (isNewProfile && email) {
+    sendWelcomeEmail({ to: email, nome, universita, corsoDiLaurea }).catch(() => {});
+  }
 
   return res.json(profile);
 });
