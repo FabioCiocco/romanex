@@ -85,7 +85,7 @@ const T = {
       inItaly: "in Italia",
     },
     categories: {
-      appartamenti: { name: "Appartamenti", description: "Stanze e appartamenti in affitto vicino all'università" },
+      appartamenti: { name: "Case e Stanze", description: "Cerca e pubblica annunci di stanze e appartamenti in affitto" },
       libri: { name: "Libri di Testo", description: "Compra e vendi libri universitari usati" },
       ripetizioni: { name: "Ripetizioni", description: "Tutor e lezioni private per ogni materia" },
       consigli: { name: "Consigli", description: "Consigli su università, esami e vita da studente" },
@@ -374,7 +374,7 @@ const T = {
       inItaly: "in Italy",
     },
     categories: {
-      appartamenti: { name: "Apartments", description: "Rooms and apartments near the university" },
+      appartamenti: { name: "Rooms & Apartments", description: "Find and post room and apartment rental listings" },
       libri: { name: "Textbooks", description: "Buy and sell used university textbooks" },
       ripetizioni: { name: "Tutoring", description: "Private tutors and lessons for every subject" },
       consigli: { name: "Advice", description: "Tips on university life, exams and student life" },
@@ -663,7 +663,7 @@ const T = {
       inItaly: "en Italia",
     },
     categories: {
-      appartamenti: { name: "Pisos", description: "Habitaciones y pisos cerca de la universidad" },
+      appartamenti: { name: "Casas y Habitaciones", description: "Encuentra y publica anuncios de habitaciones y pisos en alquiler" },
       libri: { name: "Libros de texto", description: "Compra y vende libros universitarios de segunda mano" },
       ripetizioni: { name: "Clases particulares", description: "Tutores y clases privadas para todas las materias" },
       consigli: { name: "Consejos", description: "Consejos sobre universidad, exámenes y vida estudiantil" },

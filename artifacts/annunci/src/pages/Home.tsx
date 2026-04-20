@@ -152,8 +152,8 @@ export default function Home() {
               );
             })()}
 
-            {/* Ripetizioni, Appartamenti (3°), Consigli, Gruppi — small */}
-            {[CATEGORIES[2], CATEGORIES[0], CATEGORIES[3], CATEGORIES[4]].map((cat, i) => {
+            {/* Ripetizioni, Forum (piccolo), Consigli, Gruppi — small */}
+            {[CATEGORIES[2], CATEGORIES[3], CATEGORIES[4]].map((cat, i) => {
               const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
               const Icon = cat.icon;
@@ -164,7 +164,6 @@ export default function Home() {
                   <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '180px'}}>
                     <span className="absolute -bottom-4 -right-2 text-[90px] font-black text-white/5 leading-none select-none pointer-events-none font-display">{num}</span>
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-
                     <div className="relative z-10 flex items-start justify-between">
                       <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                         <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
@@ -175,7 +174,6 @@ export default function Home() {
                         </span>
                       )}
                     </div>
-
                     <div className="relative z-10 mt-auto">
                       <h3 className="font-display font-black text-xl md:text-2xl text-white uppercase tracking-tight mb-1">{catT?.name ?? cat.name}</h3>
                       <div className="flex items-center gap-1 text-white/70 font-bold text-xs uppercase tracking-widest group-hover:text-white group-hover:gap-2 transition-all">
@@ -187,28 +185,55 @@ export default function Home() {
               );
             })}
 
-            {/* Forum — full-width banner card */}
-            <Link href="/forum" className="col-span-2 md:col-span-4 group outline-none block">
-              <div className="h-full flex flex-col sm:flex-row items-center justify-between gap-6 p-7 md:p-8 rounded-3xl border-4 border-accent/60 bg-accent/10 hover:bg-accent/20 relative overflow-hidden transition-all duration-300 group-hover:border-accent" style={{minHeight: '120px'}}>
-                <div className="absolute -bottom-6 -right-4 text-[140px] font-black text-accent/5 leading-none select-none pointer-events-none font-display">06</div>
-                <div className="flex items-center gap-5 relative z-10">
-                  <div className="w-14 h-14 rounded-2xl bg-accent/20 border-2 border-accent/40 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shrink-0">
-                    <MessageCircle className="w-7 h-7 text-accent" strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h3 className="font-display font-black text-2xl md:text-3xl text-background uppercase tracking-tight leading-none">
-                      {(t as any).forum?.title ?? "Forum"}
-                    </h3>
-                    <p className="text-background/60 font-medium text-sm mt-1">
-                      {(t as any).forum?.subtitle ?? "Discuti con altri studenti"}
-                    </p>
+            {/* Forum — small card */}
+            <Link href="/forum" className="col-span-1 group outline-none block">
+              <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-accent/40 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97] bg-accent/15 hover:bg-accent/25" style={{minHeight: '180px'}}>
+                <span className="absolute -bottom-4 -right-2 text-[90px] font-black text-accent/10 leading-none select-none pointer-events-none font-display">05</span>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                <div className="relative z-10 flex items-start justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                    <MessageCircle className="w-6 h-6 text-accent" strokeWidth={2.5} />
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-accent font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all relative z-10 shrink-0">
-                  {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                <div className="relative z-10 mt-auto">
+                  <h3 className="font-display font-black text-xl md:text-2xl text-background uppercase tracking-tight mb-1">{(t as any).forum?.title ?? "Forum"}</h3>
+                  <div className="flex items-center gap-1 text-background/50 font-bold text-xs uppercase tracking-widest group-hover:text-accent group-hover:gap-2 transition-all">
+                    {t.common.explore} <ArrowRight className="w-3.5 h-3.5" strokeWidth={3} />
+                  </div>
                 </div>
               </div>
             </Link>
+
+            {/* Case e Stanze — full-width banner card */}
+            {(() => {
+              const cat = CATEGORIES[0];
+              const catT = (t.categories as Record<string, { name: string; description: string }>)[cat.id];
+              const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
+              return (
+                <Link href={`/${cat.id}`} className={`col-span-2 md:col-span-4 group outline-none block ${cat.colorClass}`}>
+                  <div className="h-full flex flex-col sm:flex-row items-center justify-between gap-6 p-7 md:p-8 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:border-white/40" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '120px'}}>
+                    <div className="absolute -bottom-6 -right-4 text-[140px] font-black text-white/5 leading-none select-none pointer-events-none font-display">06</div>
+                    <div className="flex items-center gap-5 relative z-10">
+                      <div className="w-14 h-14 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shrink-0">
+                        <cat.icon className="w-7 h-7 text-white" strokeWidth={2.5} />
+                      </div>
+                      <div>
+                        <h3 className="font-display font-black text-2xl md:text-3xl text-white uppercase tracking-tight leading-none">
+                          {catT?.name ?? cat.name}
+                        </h3>
+                        <p className="text-white/60 font-medium text-sm mt-1">
+                          {catT?.description ?? cat.description}
+                          {count > 0 && <span className="ml-2 text-white/80 font-black">· {count} {t.common.listings}</span>}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all relative z-10 shrink-0">
+                      {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })()}
           </div>
         </div>
       </section>
