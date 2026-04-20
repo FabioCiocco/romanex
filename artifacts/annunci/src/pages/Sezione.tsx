@@ -102,15 +102,17 @@ export default function Sezione({ catId }: SezioneProps) {
   const Icon = catConfig.icon;
   const tc = t.common;
 
-  const FiltersForm = () => (
+  const FiltersForm = ({ showKeyword = false }: { showKeyword?: boolean }) => (
     <form onSubmit={applyFilters} className="space-y-5">
-      <div className="space-y-2">
-        <label className="text-sm font-black uppercase tracking-wider">{tc.keyword}</label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input placeholder={tc.searchPlaceholder} className="pl-9 h-10 rounded-xl bg-muted/50" value={q} onChange={e => setQ(e.target.value)} />
+      {showKeyword && (
+        <div className="space-y-2">
+          <label className="text-sm font-black uppercase tracking-wider">{tc.keyword}</label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input placeholder={tc.searchPlaceholder} className="pl-9 h-10 rounded-xl bg-muted/50" value={q} onChange={e => setQ(e.target.value)} />
+          </div>
         </div>
-      </div>
+      )}
       {hasPrice && (
         <div className="space-y-2">
           <label className="text-sm font-black uppercase tracking-wider">{sectionCfg.priceLabel || tc.priceRange}</label>
@@ -246,13 +248,15 @@ export default function Sezione({ catId }: SezioneProps) {
           {/* Sidebar — desktop */}
           <aside className="hidden md:flex flex-col gap-4 w-72 shrink-0 sticky top-28">
 
-            <div className="bg-card border-2 border-foreground rounded-3xl p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
-              <div className="flex items-center gap-2 mb-5 pb-4 border-b">
-                <Filter className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                <h2 className="font-display font-black text-xl uppercase tracking-tight">{tc.filters}</h2>
+            {hasPrice && (
+              <div className="bg-card border-2 border-foreground rounded-3xl p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
+                <div className="flex items-center gap-2 mb-5 pb-4 border-b">
+                  <Filter className="w-5 h-5 text-primary" strokeWidth={2.5} />
+                  <h2 className="font-display font-black text-xl uppercase tracking-tight">{tc.filters}</h2>
+                </div>
+                <FiltersForm />
               </div>
-              <FiltersForm />
-            </div>
+            )}
 
             {/* Tips card */}
             <div className={`${catConfig.colorClass} rounded-3xl border-4 border-white/20 overflow-hidden`} style={{ backgroundColor: `hsl(var(--cat-bg))` }}>
@@ -312,7 +316,7 @@ export default function Sezione({ catId }: SezioneProps) {
                   <SheetHeader className="mb-6 text-left">
                     <SheetTitle className="font-display text-2xl font-black uppercase">{tc.filters}</SheetTitle>
                   </SheetHeader>
-                  <FiltersForm />
+                  <FiltersForm showKeyword={true} />
                 </SheetContent>
               </Sheet>
               </div>
