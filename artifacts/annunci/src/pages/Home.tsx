@@ -308,17 +308,17 @@ export default function Home() {
       </section>
 
       {/* CTA SECTION */}
-      <section className="py-16 md:py-32 relative overflow-hidden bg-foreground text-background border-t-4 border-foreground">
+      <section className="py-10 md:py-16 relative overflow-hidden bg-foreground text-background border-t-4 border-foreground">
         <div className="absolute inset-0 opacity-[0.05]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '40px 40px'}} />
-        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-4xl">
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-black font-display mb-6 md:mb-8 uppercase tracking-tighter leading-[0.9]">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center max-w-3xl">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black font-display mb-3 md:mb-4 uppercase tracking-tighter leading-[0.95]">
             {h.ctaTitle}
           </h2>
-          <p className="text-base sm:text-xl md:text-2xl text-background/80 mb-8 md:mb-12 font-bold leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-background/80 mb-5 md:mb-7 font-medium leading-relaxed">
             {h.ctaSub}
           </p>
           <Link href="/pubblica">
-            <Button size="lg" className="h-14 md:h-20 px-8 md:px-12 rounded-2xl text-lg md:text-2xl font-black uppercase tracking-widest bg-primary text-primary-foreground border-4 border-background shadow-[6px_6px_0_0_#fff] md:shadow-[8px_8px_0_0_#fff] hover:translate-y-1 hover:translate-x-1 md:hover:translate-y-2 md:hover:translate-x-2 hover:shadow-none transition-all bouncy-active">
+            <Button size="lg" className="h-11 md:h-13 px-7 md:px-10 rounded-2xl text-base md:text-lg font-black uppercase tracking-widest bg-primary text-primary-foreground border-4 border-background shadow-[4px_4px_0_0_#fff] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all bouncy-active">
               {h.ctaBtn}
             </Button>
           </Link>
