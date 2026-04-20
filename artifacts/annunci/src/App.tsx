@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ClerkProvider, SignIn, SignUp, Show, useClerk } from "@clerk/react";
 import { useUser } from "@clerk/react";
-import { itIT, enUS, esES } from "@clerk/localizations";
+import { CLERK_LOCALES, itITCustom } from "@/lib/clerkLocalizations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Switch, Route, useLocation, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
@@ -203,15 +203,14 @@ function Router() {
   );
 }
 
-const CLERK_LOCALES = { it: itIT, en: enUS, es: esES } as const;
-
 function ClerkProviderWithRoutes() {
   const [, setLocation] = useLocation();
   const { lang } = useLanguage();
-  const localization = CLERK_LOCALES[lang] ?? itIT;
+  const localization = CLERK_LOCALES[lang] ?? itITCustom;
 
   return (
     <ClerkProvider
+      key={lang}
       publishableKey={clerkPubKey}
       proxyUrl={clerkProxyUrl}
       appearance={clerkAppearance}
