@@ -15,6 +15,7 @@ const T = {
       allAds: "Tutti",
       allBoard: "Tutta la bacheca",
       forum: "Forum",
+      user: "Utente",
     },
     home: {
       badge: "La bacheca degli universitari",
@@ -217,6 +218,10 @@ const T = {
       onRequest: "Contatta",
       searchPlaceholder: "Es. Libro Analisi, Stanza...",
       citySearchPlaceholder: "Es. Roma, Bovisa...",
+      listings: "annunci",
+      error404: "Errore 404",
+      error404Desc: "La pagina che stai cercando sembra non esistere. Forse il link è rotto o la pagina è stata rimossa.",
+      goHome: "Torna alla Home",
     },
     forum: {
       title: "Forum Universitario",
@@ -299,6 +304,7 @@ const T = {
       allAds: "All",
       allBoard: "All listings",
       forum: "Forum",
+      user: "User",
     },
     home: {
       badge: "The bulletin board for university students",
@@ -501,6 +507,10 @@ const T = {
       onRequest: "Contact",
       searchPlaceholder: "e.g. Calculus book, Room...",
       citySearchPlaceholder: "e.g. Rome, Milan...",
+      listings: "listings",
+      error404: "Error 404",
+      error404Desc: "The page you're looking for doesn't seem to exist. Perhaps the link is broken or the page has been removed.",
+      goHome: "Back to Home",
     },
     forum: {
       title: "University Forum",
@@ -583,6 +593,7 @@ const T = {
       allAds: "Todos",
       allBoard: "Todos los anuncios",
       forum: "Foro",
+      user: "Usuario",
     },
     home: {
       badge: "El tablón de anuncios para universitarios",
@@ -785,6 +796,10 @@ const T = {
       onRequest: "Consultar",
       searchPlaceholder: "Ej. Libro Cálculo, Habitación...",
       citySearchPlaceholder: "Ej. Roma, Milán...",
+      listings: "anuncios",
+      error404: "Error 404",
+      error404Desc: "La página que buscas parece no existir. Quizás el enlace está roto o la página ha sido eliminada.",
+      goHome: "Volver al inicio",
     },
     forum: {
       title: "Foro Universitario",

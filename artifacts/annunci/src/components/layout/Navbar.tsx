@@ -103,7 +103,7 @@ export function Navbar() {
                   </div>
                 )}
                 <div>
-                  <p className="font-black text-sm uppercase tracking-wide">{user?.firstName || "Utente"}</p>
+                  <p className="font-black text-sm uppercase tracking-wide">{user?.firstName || t.nav.user}</p>
                   <p className="text-xs text-foreground/50 font-medium truncate">{user?.emailAddresses?.[0]?.emailAddress}</p>
                 </div>
               </div>

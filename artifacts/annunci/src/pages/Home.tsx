@@ -135,7 +135,7 @@ export default function Home() {
                       </div>
                       {count > 0 && (
                         <span className="bg-white/20 border border-white/30 text-white font-black text-sm px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
-                          {count} annunci
+                          {count} {t.common.listings}
                         </span>
                       )}
                     </div>
