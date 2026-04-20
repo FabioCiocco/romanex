@@ -4,7 +4,7 @@ import { useParams, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Phone, Mail, Share2, Heart, AlertCircle, ChevronLeft, Calendar, MessageCircle } from "lucide-react";
+import { MapPin, Clock, Phone, Share2, Heart, AlertCircle, ChevronLeft, Calendar, MessageCircle, LogIn, Lock } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -12,12 +12,15 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
+import { useUser } from "@clerk/react";
 
 export default function AnnuncioDetail() {
   const params = useParams();
   const id = parseInt(params.id || "0", 10);
   const { toast } = useToast();
+  const { isSignedIn } = useUser();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showContact, setShowContact] = useState(false);
 
   const { data: annuncio, isLoading, error } = useGetAnnuncio(id, {
     query: {
@@ -59,6 +62,13 @@ export default function AnnuncioDetail() {
   };
 
   const handleFavorite = () => {
+    if (!isSignedIn) {
+      toast({
+        title: "Accedi per salvare",
+        description: "Crea un account o accedi per salvare gli annunci nei preferiti.",
+      });
+      return;
+    }
     setIsFavorite(!isFavorite);
     toast({
       title: isFavorite ? "Rimosso dai preferiti" : "Aggiunto ai preferiti",
@@ -246,23 +256,56 @@ export default function AnnuncioDetail() {
                   
                   <div className="space-y-5">
                     <h3 className="font-bold text-xl font-display">Contatta lo studente</h3>
-                    <p className="text-sm text-muted-foreground font-medium mb-4">
-                      Scrivi o chiama per maggiori informazioni. Ricorda di menzionare RomaNex!
-                    </p>
-                    
-                    <div className="space-y-3">
-                      <Button className="w-full h-14 text-base font-bold gap-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
-                        <MessageCircle className="w-5 h-5" />
-                        Scrivi messaggio
-                      </Button>
-                      
-                      <Button variant="outline" className="w-full h-14 text-base font-bold gap-3 rounded-xl border-border hover:bg-muted transition-colors">
-                        <Phone className="w-5 h-5" />
-                        Mostra contatto
-                      </Button>
-                    </div>
-                    
-                    <div className="pt-4 mt-6 border-t text-xs font-medium text-center text-muted-foreground">
+
+                    {isSignedIn ? (
+                      <>
+                        <p className="text-sm text-muted-foreground font-medium">
+                          Scrivi o chiama per maggiori informazioni. Ricorda di menzionare RomaNex!
+                        </p>
+                        <div className="space-y-3">
+                          <Button className="w-full h-14 text-base font-bold gap-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
+                            <MessageCircle className="w-5 h-5" />
+                            Scrivi messaggio
+                          </Button>
+                          {!showContact ? (
+                            <Button variant="outline" className="w-full h-14 text-base font-bold gap-3 rounded-xl border-2 border-foreground hover:bg-muted transition-colors" onClick={() => setShowContact(true)}>
+                              <Phone className="w-5 h-5" />
+                              Mostra contatto
+                            </Button>
+                          ) : (
+                            <div className="w-full p-4 rounded-xl border-2 border-foreground bg-muted/50 text-center">
+                              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Contatto</p>
+                              <p className="font-black text-lg text-foreground break-all">{annuncio.contatto}</p>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="rounded-2xl border-2 border-dashed border-foreground/20 bg-muted/30 p-6 text-center space-y-4">
+                        <div className="w-12 h-12 rounded-full bg-foreground/5 border-2 border-foreground/10 flex items-center justify-center mx-auto">
+                          <Lock className="w-6 h-6 text-foreground/30" strokeWidth={2.5} />
+                        </div>
+                        <div>
+                          <p className="font-black text-base text-foreground mb-1">Accedi per contattare</p>
+                          <p className="text-sm text-muted-foreground font-medium">Solo gli utenti registrati possono vedere i contatti e scrivere messaggi.</p>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                          <Link href="/sign-up">
+                            <Button className="w-full h-11 gap-2 rounded-xl bg-primary text-primary-foreground border-2 border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:shadow-[1px_1px_0_0_hsl(var(--foreground))] hover:translate-y-[2px] hover:translate-x-[2px] transition-all font-black text-sm uppercase tracking-wide">
+                              Crea account gratis
+                            </Button>
+                          </Link>
+                          <Link href="/sign-in">
+                            <Button variant="outline" className="w-full h-10 gap-2 rounded-xl border-2 border-foreground font-black text-sm uppercase tracking-wide hover:bg-muted">
+                              <LogIn className="w-4 h-4" strokeWidth={2.5} />
+                              Accedi
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="pt-4 mt-2 border-t text-xs font-medium text-center text-muted-foreground">
                       <p>ID Post: <span className="font-mono bg-muted px-1 py-0.5 rounded text-foreground">{annuncio.id}</span></p>
                     </div>
                   </div>
