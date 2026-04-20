@@ -48,6 +48,12 @@ export function Footer() {
             >
               {ft.legal}
             </Link>
+            <Link
+              href="/diritti-e-inclusione"
+              className="hover:text-background/80 transition-colors underline underline-offset-4 decoration-background/30 hover:decoration-background/60"
+            >
+              {ft.inclusion}
+            </Link>
             <p className="flex items-center gap-2">
               {ft.madeWith} <Heart className="h-4 w-4 text-accent fill-accent animate-pulse" /> {ft.inItaly}
             </p>
