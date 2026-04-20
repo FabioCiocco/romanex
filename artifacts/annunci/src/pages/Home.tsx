@@ -1,4 +1,4 @@
-import { useGetAnnunciRecenti, useGetAnnunciInEvidenza, useGetStats } from "@workspace/api-client-react";
+import { useGetAnnunciRecenti, useGetAnnunciInEvidenza, useGetStats, useListCategorie } from "@workspace/api-client-react";
 import { Layout } from "@/components/layout/Layout";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -19,6 +19,7 @@ export default function Home() {
   const { data: recenti, isLoading: isLoadingRecenti, error: errorRecenti } = useGetAnnunciRecenti();
   const { data: inEvidenza, isLoading: isLoadingEvidenza } = useGetAnnunciInEvidenza();
   const { data: stats, isLoading: isLoadingStats } = useGetStats();
+  const { data: categorie } = useListCategorie();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,26 +93,95 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SOLID CATEGORIES */}
-      <section className="py-24 bg-muted/50 border-b-4 border-foreground">
+      {/* BENTO CATEGORIES */}
+      <section className="py-24 bg-foreground border-b-4 border-foreground overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-end justify-between mb-12">
-            <h2 className="text-4xl md:text-6xl font-black font-display uppercase tracking-tighter">Esplora per <span className="text-primary">Categoria</span></h2>
+
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <p className="text-background/40 font-black text-xs uppercase tracking-[0.3em] mb-3">— 5 sezioni</p>
+              <h2 className="text-5xl md:text-7xl font-black font-display uppercase tracking-tighter text-background leading-[0.9]">
+                Scegli dove <span className="text-accent">andare</span>
+              </h2>
+            </div>
+            <Link href="/categorie" className="inline-flex items-center gap-2 text-background/50 hover:text-accent font-black uppercase tracking-wider text-sm transition-colors group w-max">
+              Tutte le sezioni
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={3} />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {CATEGORIES.map((cat) => {
+          {/* Bento Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5" style={{gridAutoRows: 'minmax(180px, 1fr)'}}>
+
+            {/* Appartamenti — BIG (2×2) */}
+            {(() => {
+              const cat = CATEGORIES[0];
+              const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
               const Icon = cat.icon;
               return (
-                <Link key={cat.id} href={`/annunci?categoria=${encodeURIComponent(cat.id)}`} className={`group outline-none block ${cat.colorClass}`}>
-                  <div className="h-full flex flex-col items-center justify-center p-8 rounded-3xl border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] group-hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1 group-focus-visible:ring-4 ring-foreground relative overflow-hidden" style={{backgroundColor: `hsl(var(--cat-bg))`}}>
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-                    
-                    <div className="w-24 h-24 rounded-2xl bg-white/20 text-white flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 backdrop-blur-sm border-2 border-white/30">
-                      <Icon className="w-12 h-12" strokeWidth={2.5} />
+                <Link key={cat.id} href={`/annunci?categoria=${cat.id}`}
+                  className={`col-span-2 row-span-2 group outline-none block ${cat.colorClass}`}
+                  style={{gridRow: 'span 2'}}>
+                  <div className="h-full flex flex-col justify-between p-8 md:p-10 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.98]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '380px'}}>
+                    {/* Big background number */}
+                    <span className="absolute -bottom-6 -right-4 text-[180px] font-black text-white/5 leading-none select-none pointer-events-none font-display">01</span>
+                    {/* Glow blob */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+
+                    <div className="relative z-10 flex items-start justify-between">
+                      <div className="w-16 h-16 rounded-2xl bg-white/20 border-2 border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <Icon className="w-8 h-8 text-white" strokeWidth={2.5} />
+                      </div>
+                      {count > 0 && (
+                        <span className="bg-white/20 border border-white/30 text-white font-black text-sm px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
+                          {count} post
+                        </span>
+                      )}
                     </div>
-                    <h3 className="font-display font-black text-2xl text-white mb-3 text-center uppercase tracking-wider">{cat.name}</h3>
-                    <p className="text-sm text-white/90 text-center font-bold leading-relaxed">{cat.description}</p>
+
+                    <div className="relative z-10 mt-auto">
+                      <h3 className="font-display font-black text-4xl md:text-5xl text-white uppercase tracking-tighter mb-3">{cat.name}</h3>
+                      <p className="text-white/80 font-medium text-base leading-relaxed mb-6 max-w-xs">{cat.description}</p>
+                      <div className="inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all">
+                        Esplora <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })()}
+
+            {/* Libri, Ripetizioni, Consigli, Gruppi — small (1×1) */}
+            {CATEGORIES.slice(1).map((cat, i) => {
+              const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
+              const Icon = cat.icon;
+              const num = String(i + 2).padStart(2, '0');
+              return (
+                <Link key={cat.id} href={`/annunci?categoria=${cat.id}`}
+                  className={`col-span-1 group outline-none block ${cat.colorClass}`}>
+                  <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '180px'}}>
+                    {/* Background number */}
+                    <span className="absolute -bottom-4 -right-2 text-[90px] font-black text-white/5 leading-none select-none pointer-events-none font-display">{num}</span>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+
+                    <div className="relative z-10 flex items-start justify-between">
+                      <div className="w-12 h-12 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                        <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
+                      </div>
+                      {count > 0 && (
+                        <span className="bg-white/20 text-white font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">
+                          {count}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="relative z-10 mt-auto">
+                      <h3 className="font-display font-black text-xl md:text-2xl text-white uppercase tracking-tight mb-1">{cat.name}</h3>
+                      <div className="flex items-center gap-1 text-white/70 font-bold text-xs uppercase tracking-widest group-hover:text-white group-hover:gap-2 transition-all">
+                        Esplora <ArrowRight className="w-3.5 h-3.5" strokeWidth={3} />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               );
