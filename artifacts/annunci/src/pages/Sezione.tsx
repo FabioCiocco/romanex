@@ -179,6 +179,13 @@ export default function Sezione({ catId }: SezioneProps) {
                     );
                   })}
                 </div>
+
+                <Link href={`/pubblica?categoria=${catId}`}>
+                  <button className="inline-flex items-center gap-3 bg-white text-foreground border-4 border-white/80 rounded-2xl px-6 py-3.5 font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,0.25)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.25)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+                    <PlusCircle className="w-5 h-5 shrink-0" strokeWidth={2.5} />
+                    {sectionCfg.publishLabel}
+                  </button>
+                </Link>
               </div>
 
               {/* Search bar */}
@@ -271,17 +278,24 @@ export default function Sezione({ catId }: SezioneProps) {
           <div className="flex-1 w-full min-w-0 space-y-6">
 
             {/* Mobile filters */}
-            <div className="md:hidden flex items-center justify-between bg-card border-2 border-foreground rounded-2xl p-3 px-4">
-              <span className="text-sm font-black uppercase tracking-wide">
+            <div className="md:hidden flex items-center justify-between bg-card border-2 border-foreground rounded-2xl p-3 px-4 gap-2">
+              <span className="text-sm font-black uppercase tracking-wide shrink-0">
                 {data?.total !== undefined ? `${data.total} annunci` : tc.search}
               </span>
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="secondary" size="sm" className="gap-2 rounded-xl font-black">
-                    <SlidersHorizontal className="w-4 h-4" />
-                    {tc.postFilters}
+              <div className="flex items-center gap-2 shrink-0">
+                <Link href={`/pubblica?categoria=${catId}`}>
+                  <Button size="sm" className="gap-1.5 rounded-xl font-black text-xs uppercase tracking-wide" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
+                    <PlusCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
+                    {sectionCfg.publishLabel}
                   </Button>
-                </SheetTrigger>
+                </Link>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="secondary" size="sm" className="gap-2 rounded-xl font-black">
+                      <SlidersHorizontal className="w-4 h-4" />
+                      {tc.postFilters}
+                    </Button>
+                  </SheetTrigger>
                 <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto">
                   <SheetHeader className="mb-6 text-left">
                     <SheetTitle className="font-display text-2xl font-black uppercase">{tc.filters}</SheetTitle>
@@ -289,6 +303,7 @@ export default function Sezione({ catId }: SezioneProps) {
                   <FiltersForm />
                 </SheetContent>
               </Sheet>
+              </div>
             </div>
 
             {/* Results count — desktop */}
