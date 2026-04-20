@@ -119,7 +119,7 @@ export default function Home() {
               const count = categorie?.find(c => c.id === cat.id)?.count ?? 0;
               const Icon = cat.icon;
               return (
-                <Link key={cat.id} href={`/annunci?categoria=${cat.id}`}
+                <Link key={cat.id} href={`/${cat.id}`}
                   className={`col-span-2 row-span-2 group outline-none block ${cat.colorClass}`}
                   style={{gridRow: 'span 2'}}>
                   <div className="h-full flex flex-col justify-between p-8 md:p-10 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.98]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '380px'}}>
@@ -157,7 +157,7 @@ export default function Home() {
               const Icon = cat.icon;
               const num = String(i + 2).padStart(2, '0');
               return (
-                <Link key={cat.id} href={`/annunci?categoria=${cat.id}`}
+                <Link key={cat.id} href={`/${cat.id}`}
                   className={`col-span-1 group outline-none block ${cat.colorClass}`}>
                   <div className="h-full flex flex-col justify-between p-5 md:p-6 rounded-3xl border-4 border-white/20 relative overflow-hidden transition-all duration-300 group-hover:scale-[0.97]" style={{backgroundColor: `hsl(var(--cat-bg))`, minHeight: '180px'}}>
                     {/* Background number */}

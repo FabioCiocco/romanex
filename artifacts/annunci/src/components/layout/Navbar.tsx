@@ -86,18 +86,17 @@ export function Navbar() {
           <div className="flex items-center gap-1 h-11 w-max md:w-auto min-w-full">
             <Link
               href="/annunci"
-              className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${location === '/annunci' && !location.includes('categoria') ? 'bg-foreground text-background' : 'text-foreground/50 hover:text-foreground hover:bg-muted'}`}
+              className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${location === '/annunci' ? 'bg-foreground text-background' : 'text-foreground/50 hover:text-foreground hover:bg-muted'}`}
             >
               Tutti
             </Link>
             {CATEGORIES.map(c => {
-              const isActive = location.includes(`categoria=${encodeURIComponent(c.id)}`);
-              const Icon = c.icon;
+              const isActive = location === `/${c.id}` || location.startsWith(`/${c.id}?`);
               return (
                 <Link
                   key={c.id}
-                  href={`/annunci?categoria=${encodeURIComponent(c.id)}`}
-                  className={`flex items-center gap-1.5 px-3.5 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border ${isActive ? 'text-white border-transparent' : 'text-foreground/60 hover:text-foreground border-transparent hover:bg-muted'}`}
+                  href={`/${c.id}`}
+                  className={`${c.colorClass} flex items-center gap-1.5 px-3.5 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border ${isActive ? 'text-white border-transparent' : 'text-foreground/60 hover:text-foreground border-transparent hover:bg-muted'}`}
                   style={isActive ? { backgroundColor: `hsl(var(--cat-bg))` } : {}}
                 >
                   <div
@@ -139,7 +138,7 @@ export function Navbar() {
             {CATEGORIES.map(c => {
               const Icon = c.icon;
               return (
-                <Link key={c.id} href={`/annunci?categoria=${encodeURIComponent(c.id)}`}
+                <Link key={c.id} href={`/${c.id}`}
                   className={`flex items-center gap-3 text-sm font-black uppercase text-white p-3.5 rounded-2xl border-2 border-white/20 ${c.colorClass}`}
                   style={{ backgroundColor: `hsl(var(--cat-bg))` }}
                   onClick={() => setIsOpen(false)}>

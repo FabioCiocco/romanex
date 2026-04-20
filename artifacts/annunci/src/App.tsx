@@ -10,6 +10,7 @@ import Annunci from "@/pages/Annunci";
 import AnnuncioDetail from "@/pages/AnnuncioDetail";
 import Pubblica from "@/pages/Pubblica";
 import Categorie from "@/pages/Categorie";
+import Sezione from "@/pages/Sezione";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -141,6 +142,11 @@ function Router() {
         <Route path="/annunci/:id" component={AnnuncioDetail} />
         <Route path="/pubblica" component={Pubblica} />
         <Route path="/categorie" component={Categorie} />
+        <Route path="/appartamenti">{() => <Sezione catId="appartamenti" />}</Route>
+        <Route path="/libri">{() => <Sezione catId="libri" />}</Route>
+        <Route path="/ripetizioni">{() => <Sezione catId="ripetizioni" />}</Route>
+        <Route path="/consigli">{() => <Sezione catId="consigli" />}</Route>
+        <Route path="/gruppi-studio">{() => <Sezione catId="gruppi-studio" />}</Route>
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />
