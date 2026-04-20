@@ -5,7 +5,7 @@ import { useUpsertMyProfile } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { GraduationCap, Phone, BookOpen, ArrowRight, CheckCircle2, Sparkles, AtSign, AlertCircle } from "lucide-react";
+import { GraduationCap, Phone, BookOpen, CheckCircle2, Sparkles, AtSign, AlertCircle } from "lucide-react";
 
 const ANNI_OPTIONS_FALLBACK = [
   "1° Anno", "2° Anno", "3° Anno", "4° Anno", "5° Anno",
@@ -241,13 +241,6 @@ export default function CompletaProfilo() {
                 {mutation.isPending ? tp.saving : (
                   <><CheckCircle2 className="w-4 h-4" />{tp.saveBtn}</>
                 )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setLocation("/")}
-                className="w-full text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1 py-2"
-              >
-                {tp.skipForNow} <ArrowRight className="w-3 h-3" />
               </button>
             </div>
           </form>
