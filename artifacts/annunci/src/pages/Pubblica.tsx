@@ -3,7 +3,7 @@ import { useCreateAnnuncio, useListCategorie, getListAnnunciQueryKey } from "@wo
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,10 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, MapPin, Tag, Edit3, Loader2 } from "lucide-react";
+import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, BookOpen, Search } from "lucide-react";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const formSchema = z.object({
   titolo: z.string().min(5, "Il titolo deve avere almeno 5 caratteri").max(100, "Il titolo non può superare i 100 caratteri"),
@@ -31,10 +31,15 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function Pubblica() {
   const [, setLocation] = useLocation();
+  const searchString = useSearch();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [selectedCat, setSelectedCat] = useState<string>("");
-  
+  const [selectedCat, setSelectedCat] = useState<string>(() => {
+    const params = new URLSearchParams(searchString);
+    return params.get("categoria") || "";
+  });
+  const [tipoAppartamento, setTipoAppartamento] = useState<"cerco" | "offro">("cerco");
+
   const { data: dbCategorie } = useListCategorie();
   const createAnnuncio = useCreateAnnuncio();
 
@@ -44,43 +49,83 @@ export default function Pubblica() {
       titolo: "",
       descrizione: "",
       prezzo: null,
-      categoria: "",
+      categoria: (() => {
+        const params = new URLSearchParams(searchString);
+        return params.get("categoria") || "";
+      })(),
       citta: "",
       contatto: "",
       immagineUrl: "",
     },
   });
 
-  const catConfig = getCategoryConfig(selectedCat.toLowerCase().replace(/\s+/g, '-'));
+  const catConfig = getCategoryConfig(selectedCat);
   const showPrice = catConfig ? catConfig.hasPrice : true;
+  const isAppartamenti = selectedCat === "appartamenti";
 
-  // Custom labels based on category
   const getCustomLabels = () => {
-    if (selectedCat.includes("Appartamenti")) {
-      return { title: "Titolo Annuncio (es. Stanza singola in Bovisa)", desc: "Descrivi la casa, chi ci vive, spese incluse..." };
+    if (selectedCat === "appartamenti") {
+      if (tipoAppartamento === "offro") {
+        return {
+          title: "Descrivi lo spazio (es. Stanza singola in Bovisa, 10 min dal Politecnico)",
+          desc: "Racconta la casa: dimensioni, arredamento, spese incluse, chi sono i coinquilini, regole...",
+          pricePlaceholder: "Affitto mensile €",
+          priceLabel: "Affitto mensile (€)"
+        };
+      }
+      return {
+        title: "Cosa cerchi? (es. Stanza singola a Milano vicino Statale)",
+        desc: "Zona preferita, budget, quando ti serve, quanti coinquilini preferisci...",
+        pricePlaceholder: "Budget massimo €",
+        priceLabel: "Budget massimo (€)"
+      };
     }
-    if (selectedCat.includes("Libri")) {
-      return { title: "Titolo del Libro e Autore", desc: "Condizioni, sottolineature, edizione..." };
+    if (selectedCat === "libri") {
+      return {
+        title: "Titolo del libro e autore",
+        desc: "Edizione, condizioni, sottolineature presenti, anno di acquisto...",
+        pricePlaceholder: "Prezzo richiesto €",
+        priceLabel: "Prezzo richiesto (€)"
+      };
     }
-    if (selectedCat.includes("Ripetizioni")) {
-      return { title: "Materia e livello", desc: "Le tue competenze, metodo di studio, disponibilità..." };
+    if (selectedCat === "ripetizioni") {
+      return {
+        title: "Materia e livello (es. Analisi Matematica 1 — Ingegneria)",
+        desc: "Le tue competenze, metodo, disponibilità oraria, dove ti trovi...",
+        pricePlaceholder: "Tariffa oraria €",
+        priceLabel: "Tariffa oraria (€)"
+      };
     }
-    if (selectedCat.includes("Consigli")) {
-      return { title: "L'argomento del tuo post", desc: "Di cosa vuoi parlare? Condividi la tua esperienza." };
+    if (selectedCat === "consigli") {
+      return {
+        title: "L'argomento del tuo consiglio",
+        desc: "Condividi la tua esperienza, tips per gli esami, la vita fuori sede...",
+        pricePlaceholder: "",
+        priceLabel: ""
+      };
     }
-    if (selectedCat.includes("Gruppi")) {
-      return { title: "Cosa stiamo studiando?", desc: "Quale esame? Dove vi trovate? Chi state cercando?" };
+    if (selectedCat === "gruppi-studio") {
+      return {
+        title: "Cosa studiate? (es. Gruppo Analisi — Politecnico Milano)",
+        desc: "Quale esame, quando vi trovate, dove, quante persone cercate...",
+        pricePlaceholder: "",
+        priceLabel: ""
+      };
     }
-    return { title: "Titolo", desc: "Descrizione dettagliata" };
+    return {
+      title: "Titolo dell'annuncio",
+      desc: "Descrizione dettagliata",
+      pricePlaceholder: "Prezzo €",
+      priceLabel: "Prezzo (€)"
+    };
   };
 
   const labels = getCustomLabels();
 
   const onSubmit = (data: FormValues) => {
-    // Convert empty string to null for immagineUrl
     const payload = {
       ...data,
-      prezzo: showPrice ? data.prezzo : null, // force null if price shouldn't exist
+      prezzo: showPrice ? data.prezzo : null,
       immagineUrl: data.immagineUrl === "" ? null : data.immagineUrl
     };
 
@@ -126,8 +171,8 @@ export default function Pubblica() {
           <CardContent className="p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                
-                {/* Category Selection - Highlighted */}
+
+                {/* Category Selection */}
                 <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
                   <FormField
                     control={form.control}
@@ -135,11 +180,11 @@ export default function Pubblica() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-base font-bold text-foreground">Scegli la sezione *</FormLabel>
-                        <Select 
+                        <Select
                           onValueChange={(val) => {
                             field.onChange(val);
                             setSelectedCat(val);
-                          }} 
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -149,16 +194,15 @@ export default function Pubblica() {
                           </FormControl>
                           <SelectContent className="rounded-xl">
                             {CATEGORIES.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.name} className="py-3 cursor-pointer">
+                              <SelectItem key={cat.id} value={cat.id} className="py-3 cursor-pointer">
                                 <div className="flex items-center gap-3 font-medium text-base">
-                                  <cat.icon className={`w-5 h-5 ${cat.colorClass.replace('cat-', 'text-')}`} />
+                                  <cat.icon className="w-5 h-5 text-primary" />
                                   {cat.name}
                                 </div>
                               </SelectItem>
                             ))}
-                            {/* Fallback for DB categories not in our constants */}
-                            {dbCategorie?.filter(dbCat => !CATEGORIES.find(c => c.name === dbCat.nome)).map(cat => (
-                               <SelectItem key={cat.id} value={cat.nome} className="py-3 cursor-pointer">
+                            {dbCategorie?.filter(dbCat => !CATEGORIES.find(c => c.id === dbCat.id)).map(cat => (
+                              <SelectItem key={cat.id} value={cat.id} className="py-3 cursor-pointer">
                                 <div className="flex items-center gap-3 font-medium text-base">
                                   <CategoryIcon name={cat.nome} className="w-5 h-5 text-muted-foreground" />
                                   {cat.nome}
@@ -172,6 +216,45 @@ export default function Pubblica() {
                     )}
                   />
                 </div>
+
+                {/* Appartamenti: Cerco / Offro toggle */}
+                {isAppartamenti && (
+                  <div className="p-6 bg-muted/40 rounded-2xl border border-border space-y-3">
+                    <p className="text-base font-bold text-foreground">Stai cercando o hai qualcosa da affittare? *</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setTipoAppartamento("cerco")}
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${
+                          tipoAppartamento === "cerco"
+                            ? "border-primary bg-primary/10 text-primary shadow-[2px_2px_0_0_hsl(var(--primary))]"
+                            : "border-border bg-background text-foreground/70 hover:border-foreground/30"
+                        }`}
+                      >
+                        <Search className="w-5 h-5 shrink-0" strokeWidth={2.5} />
+                        <div className="text-left">
+                          <div className="text-base">Cerco casa</div>
+                          <div className="text-xs font-medium opacity-70">Stai cercando dove vivere</div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTipoAppartamento("offro")}
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${
+                          tipoAppartamento === "offro"
+                            ? "border-accent bg-accent/10 text-accent shadow-[2px_2px_0_0_hsl(var(--accent))]"
+                            : "border-border bg-background text-foreground/70 hover:border-foreground/30"
+                        }`}
+                      >
+                        <Home className="w-5 h-5 shrink-0" strokeWidth={2.5} />
+                        <div className="text-left">
+                          <div className="text-base">Affitto il mio spazio</div>
+                          <div className="text-xs font-medium opacity-70">Hai una stanza o casa libera</div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <FormField
@@ -194,20 +277,20 @@ export default function Pubblica() {
                       name="prezzo"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-base font-bold">Richiesta (€)</FormLabel>
+                          <FormLabel className="text-base font-bold">{labels.priceLabel || "Prezzo (€)"}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                              <Input 
-                                type="number" 
-                                placeholder="0.00" 
-                                className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background font-medium" 
-                                {...field} 
+                              <Input
+                                type="number"
+                                placeholder={labels.pricePlaceholder || "0.00"}
+                                className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background font-medium"
+                                {...field}
                                 value={field.value === null ? '' : field.value}
                               />
                             </div>
                           </FormControl>
-                          <FormDescription className="font-medium">Vuoto = "Da concordare"</FormDescription>
+                          <FormDescription className="font-medium">Lascia vuoto = "Da concordare"</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -222,10 +305,10 @@ export default function Pubblica() {
                     <FormItem>
                       <FormLabel className="text-base font-bold">{labels.desc} *</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="Più dettagli fornisci, più sarà utile agli altri studenti..." 
-                          className="min-h-[160px] resize-y text-lg p-5 rounded-xl bg-muted/50 border-border focus-visible:bg-background leading-relaxed" 
-                          {...field} 
+                        <Textarea
+                          placeholder="Più dettagli fornisci, più sarà utile agli altri studenti..."
+                          className="min-h-[160px] resize-y text-lg p-5 rounded-xl bg-muted/50 border-border focus-visible:bg-background leading-relaxed"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -277,10 +360,10 @@ export default function Pubblica() {
                         <FormControl>
                           <div className="relative">
                             <ImagePlus className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                            <Input 
-                              placeholder="https://..." 
-                              className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" 
-                              {...field} 
+                            <Input
+                              placeholder="https://..."
+                              className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background"
+                              {...field}
                               value={field.value || ''}
                             />
                           </div>
@@ -292,9 +375,9 @@ export default function Pubblica() {
                 </div>
 
                 <div className="pt-10 flex justify-end">
-                  <Button 
-                    type="submit" 
-                    size="lg" 
+                  <Button
+                    type="submit"
+                    size="lg"
                     className="w-full md:w-auto h-16 px-12 text-lg font-bold rounded-2xl shadow-xl hover:-translate-y-1 transition-transform"
                     disabled={createAnnuncio.isPending}
                   >

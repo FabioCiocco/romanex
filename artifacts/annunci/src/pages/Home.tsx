@@ -4,7 +4,7 @@ import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap } from "lucide-react";
+import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap, Home as HomeIcon, PlusCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -116,6 +116,69 @@ export default function Home() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* APPARTAMENTI SPLIT SECTION */}
+      <section className="py-20 border-b-4 border-foreground bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 text-primary font-black text-xs uppercase tracking-widest border border-primary/20 mb-4">
+              <HomeIcon className="w-4 h-4" strokeWidth={2.5} /> Appartamenti & Stanze
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter">
+              Cerchi casa o hai uno <span className="text-primary">spazio libero?</span>
+            </h2>
+            <p className="text-foreground/60 font-medium text-lg mt-3 max-w-2xl">
+              Mettiti in contatto direttamente con studenti e proprietari nella tua città.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Cerco Casa */}
+            <Link href="/annunci?categoria=appartamenti" className="group outline-none block">
+              <div className="relative overflow-hidden rounded-3xl border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] group-hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] group-hover:translate-y-1 group-hover:translate-x-1 transition-all duration-300 bg-primary p-8 md:p-10 h-full flex flex-col justify-between min-h-[240px]">
+                <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '32px 32px'}} />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6 border-2 border-white/30">
+                    <Search className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-black text-white font-display uppercase tracking-tight mb-2">
+                    Cerco casa
+                  </h3>
+                  <p className="text-white/80 font-medium text-base leading-relaxed">
+                    Sfoglia stanze e appartamenti vicino al tuo ateneo, già pubblicati da altri studenti.
+                  </p>
+                </div>
+                <div className="relative z-10 mt-8 inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
+                  Vedi annunci
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" strokeWidth={3} />
+                </div>
+              </div>
+            </Link>
+
+            {/* Affitto il mio spazio */}
+            <Link href="/pubblica?categoria=appartamenti" className="group outline-none block">
+              <div className="relative overflow-hidden rounded-3xl border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] group-hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] group-hover:translate-y-1 group-hover:translate-x-1 transition-all duration-300 bg-accent p-8 md:p-10 h-full flex flex-col justify-between min-h-[240px]">
+                <div className="absolute inset-0 opacity-[0.06]" style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)', backgroundSize: '32px 32px'}} />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-6 border-2 border-white/30">
+                    <HomeIcon className="w-8 h-8 text-white" strokeWidth={2.5} />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-black text-white font-display uppercase tracking-tight mb-2">
+                    Affitto il mio spazio
+                  </h3>
+                  <p className="text-white/80 font-medium text-base leading-relaxed">
+                    Hai una stanza o un appartamento libero? Pubblica il tuo annuncio in 2 minuti, gratis.
+                  </p>
+                </div>
+                <div className="relative z-10 mt-8 inline-flex items-center gap-2 text-white font-black uppercase tracking-widest text-sm">
+                  <PlusCircle className="w-5 h-5" strokeWidth={2.5} />
+                  Pubblica annuncio
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
