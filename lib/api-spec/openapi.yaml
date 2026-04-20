@@ -1,22 +1,26 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API specification for sito annunci
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: annunci
+    description: Annunci operations
+  - name: categorie
+    description: Categorie operations
+  - name: stats
+    description: Statistics operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +28,203 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /annunci:
+    get:
+      operationId: listAnnunci
+      tags: [annunci]
+      summary: Lista annunci con filtri
+      parameters:
+        - name: categoria
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: q
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: prezzoMin
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: prezzoMax
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: citta
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: page
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: limit
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: Lista annunci
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnnunciListResponse"
+    post:
+      operationId: createAnnuncio
+      tags: [annunci]
+      summary: Crea un nuovo annuncio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAnnuncioBody"
+      responses:
+        "201":
+          description: Annuncio creato
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Annuncio"
+        "400":
+          description: Dati non validi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /annunci/recenti:
+    get:
+      operationId: getAnnunciRecenti
+      tags: [annunci]
+      summary: Annunci pubblicati di recente
+      responses:
+        "200":
+          description: Annunci recenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Annuncio"
+
+  /annunci/in-evidenza:
+    get:
+      operationId: getAnnunciInEvidenza
+      tags: [annunci]
+      summary: Annunci in evidenza/sponsorizzati
+      responses:
+        "200":
+          description: Annunci in evidenza
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Annuncio"
+
+  /annunci/{id}:
+    get:
+      operationId: getAnnuncio
+      tags: [annunci]
+      summary: Dettaglio annuncio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Dettaglio annuncio
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Annuncio"
+        "404":
+          description: Annuncio non trovato
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateAnnuncio
+      tags: [annunci]
+      summary: Aggiorna annuncio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAnnuncioBody"
+      responses:
+        "200":
+          description: Annuncio aggiornato
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Annuncio"
+        "404":
+          description: Annuncio non trovato
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteAnnuncio
+      tags: [annunci]
+      summary: Elimina annuncio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Annuncio eliminato
+        "404":
+          description: Annuncio non trovato
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /categorie:
+    get:
+      operationId: listCategorie
+      tags: [categorie]
+      summary: Lista categorie disponibili
+      responses:
+        "200":
+          description: Lista categorie
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Categoria"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Statistiche del sito (totale annunci, per categoria, ecc.)
+      responses:
+        "200":
+          description: Statistiche
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +235,175 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Annuncio:
+      type: object
+      properties:
+        id:
+          type: integer
+        titolo:
+          type: string
+        descrizione:
+          type: string
+        prezzo:
+          type: ["integer", "null"]
+        categoria:
+          type: string
+        citta:
+          type: string
+        contatto:
+          type: string
+        immagineUrl:
+          type: ["string", "null"]
+        inEvidenza:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - titolo
+        - descrizione
+        - categoria
+        - citta
+        - contatto
+        - inEvidenza
+        - createdAt
+        - updatedAt
+
+    AnnunciListResponse:
+      type: object
+      properties:
+        annunci:
+          type: array
+          items:
+            $ref: "#/components/schemas/Annuncio"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - annunci
+        - total
+        - page
+        - limit
+        - totalPages
+
+    CreateAnnuncioBody:
+      type: object
+      properties:
+        titolo:
+          type: string
+        descrizione:
+          type: string
+        prezzo:
+          type: ["integer", "null"]
+        categoria:
+          type: string
+        citta:
+          type: string
+        contatto:
+          type: string
+        immagineUrl:
+          type: ["string", "null"]
+      required:
+        - titolo
+        - descrizione
+        - categoria
+        - citta
+        - contatto
+
+    UpdateAnnuncioBody:
+      type: object
+      properties:
+        titolo:
+          type: string
+        descrizione:
+          type: string
+        prezzo:
+          type: ["integer", "null"]
+        categoria:
+          type: string
+        citta:
+          type: string
+        contatto:
+          type: string
+        immagineUrl:
+          type: ["string", "null"]
+
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: string
+        nome:
+          type: string
+        icona:
+          type: string
+        count:
+          type: integer
+      required:
+        - id
+        - nome
+        - icona
+        - count
+
+    SiteStats:
+      type: object
+      properties:
+        totaleAnnunci:
+          type: integer
+        annunciOggi:
+          type: integer
+        totaleCategorie:
+          type: integer
+        cittaPiuAttive:
+          type: array
+          items:
+            $ref: "#/components/schemas/CittaCount"
+        annunciPerCategoria:
+          type: array
+          items:
+            $ref: "#/components/schemas/CategoriaCount"
+      required:
+        - totaleAnnunci
+        - annunciOggi
+        - totaleCategorie
+        - cittaPiuAttive
+        - annunciPerCategoria
+
+    CittaCount:
+      type: object
+      properties:
+        citta:
+          type: string
+        count:
+          type: integer
+      required:
+        - citta
+        - count
+
+    CategoriaCount:
+      type: object
+      properties:
+        categoria:
+          type: string
+        count:
+          type: integer
+      required:
+        - categoria
+        - count
