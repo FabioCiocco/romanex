@@ -41,9 +41,17 @@ export function Footer() {
         
         <div className="border-t border-background/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/50 font-bold uppercase tracking-wider">
           <p>© {new Date().getFullYear()} RomaNex. {ft.rights}</p>
-          <p className="flex items-center gap-2">
-            {ft.madeWith} <Heart className="h-4 w-4 text-accent fill-accent animate-pulse" /> {ft.inItaly}
-          </p>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/note-legali"
+              className="hover:text-background/80 transition-colors underline underline-offset-4 decoration-background/30 hover:decoration-background/60"
+            >
+              {ft.legal}
+            </Link>
+            <p className="flex items-center gap-2">
+              {ft.madeWith} <Heart className="h-4 w-4 text-accent fill-accent animate-pulse" /> {ft.inItaly}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

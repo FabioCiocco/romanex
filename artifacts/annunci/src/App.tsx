@@ -18,6 +18,7 @@ import Forum from "@/pages/Forum";
 import ForumThread from "@/pages/ForumThread";
 import Profilo from "@/pages/Profilo";
 import CompletaProfilo from "@/pages/CompletaProfilo";
+import NoteLegali from "@/pages/NoteLegali";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useGetMyProfile, getGetMyProfileQueryKey } from "@workspace/api-client-react";
@@ -195,6 +196,7 @@ function Router() {
         <Route path="/forum" component={Forum} />
         <Route path="/profilo" component={Profilo} />
         <Route path="/completa-profilo" component={CompletaProfilo} />
+        <Route path="/note-legali" component={NoteLegali} />
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />
