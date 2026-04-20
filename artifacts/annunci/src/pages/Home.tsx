@@ -45,7 +45,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto space-y-10">
             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-foreground text-background font-bold text-sm uppercase tracking-widest border-2 border-foreground shadow-[4px_4px_0_0_hsl(var(--primary))] rotate-[-2deg] mb-4">
               <GraduationCap className="w-5 h-5" strokeWidth={2.5} />
-              <span>La bacheca della tua università</span>
+              <span>La bacheca degli universitari</span>
             </div>
             
             <h1 className="text-6xl md:text-8xl lg:text-[100px] font-black text-foreground tracking-tighter font-display leading-[0.9] uppercase">
@@ -280,7 +280,7 @@ export default function Home() {
                 <AlertCircle className="w-12 h-12 text-muted-foreground" strokeWidth={2.5} />
               </div>
               <h3 className="text-3xl font-black font-display uppercase tracking-wider mb-4">Bacheca vuota</h3>
-              <p className="text-foreground/60 font-bold max-w-md mx-auto mb-8 text-lg">Nessun annuncio recente. Sii il primo a pubblicare qualcosa sulla bacheca della tua università!</p>
+              <p className="text-foreground/60 font-bold max-w-md mx-auto mb-8 text-lg">Nessun annuncio recente. Sii il primo a pubblicare qualcosa sulla bacheca degli universitari!</p>
               <Link href="/pubblica">
                 <Button size="lg" className="h-16 px-8 rounded-2xl text-xl font-black uppercase tracking-wider bg-accent text-accent-foreground border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
                   Pubblica il primo annuncio
