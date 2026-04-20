@@ -15,6 +15,8 @@ tags:
     description: Categorie operations
   - name: stats
     description: Statistics operations
+  - name: forum
+    description: Forum operations
 paths:
   /healthz:
     get:
@@ -225,6 +227,143 @@ paths:
               schema:
                 $ref: "#/components/schemas/SiteStats"
 
+  /forum/categorie:
+    get:
+      operationId: getForumCategorie
+      tags: [forum]
+      summary: Lista categorie del forum
+      responses:
+        "200":
+          description: Lista categorie
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /forum:
+    get:
+      operationId: listForumThreads
+      tags: [forum]
+      summary: Lista discussioni forum
+      parameters:
+        - name: categoria
+          in: query
+          schema:
+            type: ["string", "null"]
+        - name: page
+          in: query
+          schema:
+            type: ["integer", "null"]
+        - name: limit
+          in: query
+          schema:
+            type: ["integer", "null"]
+      responses:
+        "200":
+          description: Lista discussioni
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumListResponse"
+    post:
+      operationId: createForumThread
+      tags: [forum]
+      summary: Crea nuova discussione
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateForumThreadBody"
+      responses:
+        "201":
+          description: Discussione creata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThread"
+
+  /forum/{id}:
+    get:
+      operationId: getForumThread
+      tags: [forum]
+      summary: Dettaglio discussione con risposte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Discussione con risposte
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumThreadWithReplies"
+        "404":
+          description: Non trovata
+    delete:
+      operationId: deleteForumThread
+      tags: [forum]
+      summary: Elimina discussione
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Eliminata
+
+  /forum/{id}/risposte:
+    post:
+      operationId: createForumReply
+      tags: [forum]
+      summary: Aggiungi risposta a una discussione
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateForumReplyBody"
+      responses:
+        "201":
+          description: Risposta aggiunta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+
+  /forum/{threadId}/risposte/{replyId}:
+    delete:
+      operationId: deleteForumReply
+      tags: [forum]
+      summary: Elimina risposta
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: replyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Eliminata
+
 components:
   schemas:
     HealthStatus:
@@ -410,3 +549,126 @@ components:
       required:
         - categoria
         - count
+
+    ForumThread:
+      type: object
+      properties:
+        id:
+          type: integer
+        titolo:
+          type: string
+        corpo:
+          type: string
+        categoria:
+          type: string
+        autore:
+          type: string
+        autoreClerkId:
+          type: ["string", "null"]
+        risposteCount:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - titolo
+        - corpo
+        - categoria
+        - autore
+        - risposteCount
+        - createdAt
+        - updatedAt
+
+    ForumReply:
+      type: object
+      properties:
+        id:
+          type: integer
+        threadId:
+          type: integer
+        corpo:
+          type: string
+        autore:
+          type: string
+        autoreClerkId:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - threadId
+        - corpo
+        - autore
+        - createdAt
+
+    ForumThreadWithReplies:
+      type: object
+      properties:
+        thread:
+          $ref: "#/components/schemas/ForumThread"
+        replies:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumReply"
+      required:
+        - thread
+        - replies
+
+    ForumListResponse:
+      type: object
+      properties:
+        threads:
+          type: array
+          items:
+            $ref: "#/components/schemas/ForumThread"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - threads
+        - total
+        - page
+        - limit
+        - totalPages
+
+    CreateForumThreadBody:
+      type: object
+      properties:
+        titolo:
+          type: string
+        corpo:
+          type: string
+        categoria:
+          type: string
+        autore:
+          type: string
+        autoreClerkId:
+          type: ["string", "null"]
+      required:
+        - titolo
+        - corpo
+        - categoria
+        - autore
+
+    CreateForumReplyBody:
+      type: object
+      properties:
+        corpo:
+          type: string
+        autore:
+          type: string
+        autoreClerkId:
+          type: ["string", "null"]
+      required:
+        - corpo
+        - autore

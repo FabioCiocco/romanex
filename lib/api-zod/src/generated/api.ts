@@ -193,3 +193,110 @@ export const GetStatsResponse = zod.object({
     }),
   ),
 });
+
+/**
+ * @summary Lista categorie del forum
+ */
+export const GetForumCategorieResponseItem = zod.string();
+export const GetForumCategorieResponse = zod.array(
+  GetForumCategorieResponseItem,
+);
+
+/**
+ * @summary Lista discussioni forum
+ */
+export const ListForumThreadsQueryParams = zod.object({
+  categoria: zod.coerce.string().nullish(),
+  page: zod.coerce.number().nullish(),
+  limit: zod.coerce.number().nullish(),
+});
+
+export const ListForumThreadsResponse = zod.object({
+  threads: zod.array(
+    zod.object({
+      id: zod.number(),
+      titolo: zod.string(),
+      corpo: zod.string(),
+      categoria: zod.string(),
+      autore: zod.string(),
+      autoreClerkId: zod.string().nullish(),
+      risposteCount: zod.number(),
+      createdAt: zod.coerce.date(),
+      updatedAt: zod.coerce.date(),
+    }),
+  ),
+  total: zod.number(),
+  page: zod.number(),
+  limit: zod.number(),
+  totalPages: zod.number(),
+});
+
+/**
+ * @summary Crea nuova discussione
+ */
+export const CreateForumThreadBody = zod.object({
+  titolo: zod.string(),
+  corpo: zod.string(),
+  categoria: zod.string(),
+  autore: zod.string(),
+  autoreClerkId: zod.string().nullish(),
+});
+
+/**
+ * @summary Dettaglio discussione con risposte
+ */
+export const GetForumThreadParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetForumThreadResponse = zod.object({
+  thread: zod.object({
+    id: zod.number(),
+    titolo: zod.string(),
+    corpo: zod.string(),
+    categoria: zod.string(),
+    autore: zod.string(),
+    autoreClerkId: zod.string().nullish(),
+    risposteCount: zod.number(),
+    createdAt: zod.coerce.date(),
+    updatedAt: zod.coerce.date(),
+  }),
+  replies: zod.array(
+    zod.object({
+      id: zod.number(),
+      threadId: zod.number(),
+      corpo: zod.string(),
+      autore: zod.string(),
+      autoreClerkId: zod.string().nullish(),
+      createdAt: zod.coerce.date(),
+    }),
+  ),
+});
+
+/**
+ * @summary Elimina discussione
+ */
+export const DeleteForumThreadParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+/**
+ * @summary Aggiungi risposta a una discussione
+ */
+export const CreateForumReplyParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const CreateForumReplyBody = zod.object({
+  corpo: zod.string(),
+  autore: zod.string(),
+  autoreClerkId: zod.string().nullish(),
+});
+
+/**
+ * @summary Elimina risposta
+ */
+export const DeleteForumReplyParams = zod.object({
+  threadId: zod.coerce.number(),
+  replyId: zod.coerce.number(),
+});

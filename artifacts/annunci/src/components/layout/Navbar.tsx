@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { PlusCircle, Menu, X, GraduationCap, LogIn, LogOut, User } from "lucide-react";
+import { PlusCircle, Menu, X, GraduationCap, LogIn, LogOut, User, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CATEGORIES } from "@/lib/constants";
@@ -95,6 +95,13 @@ export function Navbar() {
             >
               {t.nav.allAds}
             </Link>
+            <Link
+              href="/forum"
+              className={`flex items-center gap-1.5 px-4 h-7 rounded-full text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap border ${location.startsWith('/forum') ? 'bg-accent text-accent-foreground border-accent' : 'text-foreground/50 hover:text-foreground hover:bg-muted border-transparent'}`}
+            >
+              <MessageCircle className="h-3 w-3" strokeWidth={2.5} />
+              {t.nav.forum}
+            </Link>
             {CATEGORIES.map(c => {
               const catT = (t.categories as Record<string, { name: string; description: string }>)[c.id];
               const isActive = location === `/${c.id}` || location.startsWith(`/${c.id}?`);
@@ -138,9 +145,15 @@ export function Navbar() {
           </Show>
 
           <div className="flex items-center justify-between">
-            <Link href="/annunci" className="block text-base font-black uppercase text-foreground/60 hover:text-primary" onClick={() => setIsOpen(false)}>
-              {t.nav.allBoard}
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/annunci" className="block text-base font-black uppercase text-foreground/60 hover:text-primary" onClick={() => setIsOpen(false)}>
+                {t.nav.allBoard}
+              </Link>
+              <Link href="/forum" className="flex items-center gap-1.5 text-base font-black uppercase text-accent hover:text-accent/80" onClick={() => setIsOpen(false)}>
+                <MessageCircle className="h-4 w-4" strokeWidth={2.5} />
+                {t.nav.forum}
+              </Link>
+            </div>
             <LanguageSwitcher />
           </div>
 

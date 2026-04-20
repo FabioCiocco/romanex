@@ -87,6 +87,58 @@ export interface SiteStats {
   annunciPerCategoria: CategoriaCount[];
 }
 
+export interface ForumThread {
+  id: number;
+  titolo: string;
+  corpo: string;
+  categoria: string;
+  autore: string;
+  /** @nullable */
+  autoreClerkId?: string | null;
+  risposteCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ForumReply {
+  id: number;
+  threadId: number;
+  corpo: string;
+  autore: string;
+  /** @nullable */
+  autoreClerkId?: string | null;
+  createdAt: string;
+}
+
+export interface ForumThreadWithReplies {
+  thread: ForumThread;
+  replies: ForumReply[];
+}
+
+export interface ForumListResponse {
+  threads: ForumThread[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface CreateForumThreadBody {
+  titolo: string;
+  corpo: string;
+  categoria: string;
+  autore: string;
+  /** @nullable */
+  autoreClerkId?: string | null;
+}
+
+export interface CreateForumReplyBody {
+  corpo: string;
+  autore: string;
+  /** @nullable */
+  autoreClerkId?: string | null;
+}
+
 export type ListAnnunciParams = {
   /**
    * @nullable
@@ -108,6 +160,21 @@ export type ListAnnunciParams = {
    * @nullable
    */
   citta?: string | null;
+  /**
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @nullable
+   */
+  limit?: number | null;
+};
+
+export type ListForumThreadsParams = {
+  /**
+   * @nullable
+   */
+  categoria?: string | null;
   /**
    * @nullable
    */

@@ -11,6 +11,8 @@ import AnnuncioDetail from "@/pages/AnnuncioDetail";
 import Pubblica from "@/pages/Pubblica";
 import Categorie from "@/pages/Categorie";
 import Sezione from "@/pages/Sezione";
+import Forum from "@/pages/Forum";
+import ForumThread from "@/pages/ForumThread";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
@@ -148,6 +150,8 @@ function Router() {
         <Route path="/ripetizioni">{() => <Sezione catId="ripetizioni" />}</Route>
         <Route path="/consigli">{() => <Sezione catId="consigli" />}</Route>
         <Route path="/gruppi-studio">{() => <Sezione catId="gruppi-studio" />}</Route>
+        <Route path="/forum/:id" component={ForumThread} />
+        <Route path="/forum" component={Forum} />
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />

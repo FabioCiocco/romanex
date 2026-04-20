@@ -3,6 +3,7 @@ import healthRouter from "./health";
 import { annunciRouter } from "./annunci";
 import { categorieRouter } from "./categorie";
 import { statsRouter } from "./stats";
+import { forumRouter } from "./forum";
 
 const router: IRouter = Router();
 
@@ -10,5 +11,6 @@ router.use(healthRouter);
 router.use("/annunci", annunciRouter);
 router.use("/categorie", categorieRouter);
 router.use("/stats", statsRouter);
+router.use("/forum", forumRouter);
 
 export default router;
