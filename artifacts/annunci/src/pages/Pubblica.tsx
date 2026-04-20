@@ -19,7 +19,6 @@ import { useState } from "react";
 import { useUser } from "@clerk/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/lib/i18n";
-import { BackBanner } from "@/components/layout/BackBanner";
 
 const formSchema = z.object({
   titolo: z.string().min(5).max(100),
@@ -162,7 +161,6 @@ export default function Pubblica() {
 
   return (
     <Layout>
-      <BackBanner crumbs={[{ label: t.nav.publish }]} backHref="/" />
       <div className="container mx-auto px-4 md:px-6 py-12 max-w-4xl">
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">
