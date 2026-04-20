@@ -102,7 +102,7 @@ export default function Home() {
             <div>
               <p className="text-background/40 font-black text-xs uppercase tracking-[0.3em] mb-3">— 5 sezioni</p>
               <h2 className="text-5xl md:text-7xl font-black font-display uppercase tracking-tighter text-background leading-[0.9]">
-                Scegli dove <span className="text-accent">andare</span>
+                Cosa stai <span className="text-accent">cercando?</span>
               </h2>
             </div>
             <Link href="/categorie" className="inline-flex items-center gap-2 text-background/50 hover:text-accent font-black uppercase tracking-wider text-sm transition-colors group w-max">
