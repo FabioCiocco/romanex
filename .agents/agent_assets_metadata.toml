@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "VnyaVWLFFUe6rN3UIIzZH"
+uri = "file://romanex-qr.png"
+type = "image"
+title = "QR Code — romanex.it"
