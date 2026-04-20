@@ -1,7 +1,7 @@
 import { Annuncio } from "@workspace/api-client-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, MessageCircle, ArrowUpRight } from "lucide-react";
+import { Clock, MessageCircle, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
 import { it, enUS, es } from "date-fns/locale";
@@ -107,11 +107,7 @@ export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
           </div>
         </CardContent>
         
-        <CardFooter className={`${compact ? 'px-4 py-3' : 'px-6 py-5'} border-t border-border bg-muted/20 flex items-center justify-between text-xs text-foreground/70 font-bold uppercase tracking-wider relative z-20`}>
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" strokeWidth={2.5} />
-            <span className="truncate max-w-[120px]">{annuncio.citta}</span>
-          </div>
+        <CardFooter className={`${compact ? 'px-4 py-3' : 'px-6 py-5'} border-t border-border bg-muted/20 flex items-center justify-end text-xs text-foreground/70 font-bold uppercase tracking-wider relative z-20`}>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" strokeWidth={2.5} />
             <span>{formatDistanceToNow(new Date(annuncio.createdAt), { locale: dateLocale, addSuffix: true })}</span>

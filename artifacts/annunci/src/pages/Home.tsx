@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap, MessageCircle } from "lucide-react";
+import { Search, TrendingUp, AlertCircle, ArrowRight, GraduationCap, MessageCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,7 +15,6 @@ import { LanguageBanner } from "@/components/layout/LanguageBanner";
 export default function Home() {
   const [, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchCity, setSearchCity] = useState("");
   const { t } = useLanguage();
   const h = t.home;
 
@@ -27,7 +26,6 @@ export default function Home() {
     e.preventDefault();
     const params = new URLSearchParams();
     if (searchQuery) params.set("q", searchQuery);
-    if (searchCity) params.set("citta", searchCity);
     setLocation(`/annunci?${params.toString()}`);
   };
 
@@ -69,15 +67,6 @@ export default function Home() {
                   className="pl-11 md:pl-14 h-12 md:h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-base md:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <div className="flex-1 relative md:max-w-[240px]">
-                <MapPin className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-foreground w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
-                <Input 
-                  placeholder={h.cityPlaceholder}
-                  className="pl-11 md:pl-14 h-12 md:h-16 border-2 border-transparent focus-visible:border-foreground rounded-2xl shadow-none text-base md:text-xl focus-visible:ring-0 focus-visible:ring-offset-0 bg-muted/50 font-bold"
-                  value={searchCity}
-                  onChange={(e) => setSearchCity(e.target.value)}
                 />
               </div>
               <Button type="submit" size="lg" className="h-12 md:h-16 px-6 md:px-10 rounded-2xl text-base md:text-xl font-black uppercase tracking-wider bg-primary text-primary-foreground border-4 border-transparent hover:border-foreground hover:bg-primary transition-all bouncy-active shadow-[4px_4px_0_0_hsl(var(--foreground))]">

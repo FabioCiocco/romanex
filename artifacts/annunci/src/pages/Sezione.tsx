@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Search, MapPin, PlusCircle, ArrowRight, Filter,
+  Search, PlusCircle, ArrowRight, Filter,
   AlertCircle, X, SlidersHorizontal, ChevronLeft,
   CheckCircle, Tag
 } from "lucide-react";
@@ -39,7 +39,6 @@ export default function Sezione({ catId }: SezioneProps) {
   const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
 
   const [q, setQ] = useState(params.get("q") || "");
-  const [citta, setCitta] = useState(params.get("citta") || "");
   const [prezzoMin, setPrezzoMin] = useState(params.get("prezzoMin") || "");
   const [prezzoMax, setPrezzoMax] = useState(params.get("prezzoMax") || "");
   const page = parseInt(params.get("page") || "1", 10);
@@ -47,7 +46,6 @@ export default function Sezione({ catId }: SezioneProps) {
 
   useEffect(() => {
     setQ(params.get("q") || "");
-    setCitta(params.get("citta") || "");
     setPrezzoMin(params.get("prezzoMin") || "");
     setPrezzoMax(params.get("prezzoMax") || "");
   }, [searchString]);
@@ -62,7 +60,6 @@ export default function Sezione({ catId }: SezioneProps) {
   const queryParams = {
     categoria: catId,
     ...(params.get("q") ? { q: params.get("q")! } : {}),
-    ...(params.get("citta") ? { citta: params.get("citta")! } : {}),
     ...(params.get("prezzoMin") ? { prezzoMin: parseInt(params.get("prezzoMin")!, 10) } : {}),
     ...(params.get("prezzoMax") ? { prezzoMax: parseInt(params.get("prezzoMax")!, 10) } : {}),
     page,
@@ -77,9 +74,8 @@ export default function Sezione({ catId }: SezioneProps) {
 
   const buildUrl = (overrides: Record<string, string>) => {
     const next = new URLSearchParams();
-    const cur = { q, citta, prezzoMin, prezzoMax, ...overrides };
+    const cur = { q, prezzoMin, prezzoMax, ...overrides };
     if (cur.q) next.set("q", cur.q);
-    if (cur.citta) next.set("citta", cur.citta);
     if (cur.prezzoMin) next.set("prezzoMin", cur.prezzoMin);
     if (cur.prezzoMax) next.set("prezzoMax", cur.prezzoMax);
     return `/${catId}${next.toString() ? "?" + next.toString() : ""}`;
@@ -91,7 +87,7 @@ export default function Sezione({ catId }: SezioneProps) {
   };
 
   const clearAll = () => {
-    setQ(""); setCitta(""); setPrezzoMin(""); setPrezzoMax("");
+    setQ(""); setPrezzoMin(""); setPrezzoMax("");
     setLocation(`/${catId}`);
   };
 
@@ -101,7 +97,7 @@ export default function Sezione({ catId }: SezioneProps) {
     setLocation(buildUrl({ q: next }));
   };
 
-  const hasActiveFilters = !!(params.get("q") || params.get("citta") || params.get("prezzoMin") || params.get("prezzoMax"));
+  const hasActiveFilters = !!(params.get("q") || params.get("prezzoMin") || params.get("prezzoMax"));
 
   const Icon = catConfig.icon;
   const tc = t.common;
@@ -113,13 +109,6 @@ export default function Sezione({ catId }: SezioneProps) {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input placeholder={tc.searchPlaceholder} className="pl-9 h-10 rounded-xl bg-muted/50" value={q} onChange={e => setQ(e.target.value)} />
-        </div>
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm font-black uppercase tracking-wider">{tc.city}</label>
-        <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input placeholder={tc.citySearchPlaceholder} className="pl-9 h-10 rounded-xl bg-muted/50" value={citta} onChange={e => setCitta(e.target.value)} />
         </div>
       </div>
       {hasPrice && (
@@ -199,10 +188,6 @@ export default function Sezione({ catId }: SezioneProps) {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground w-5 h-5" strokeWidth={2.5} />
                     <Input placeholder={tc.searchPlaceholder} className="pl-12 h-12 rounded-xl border-2 focus-visible:border-foreground text-base font-bold" value={q} onChange={e => setQ(e.target.value)} />
                   </div>
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" strokeWidth={2.5} />
-                    <Input placeholder={tc.citySearchPlaceholder} className="pl-12 h-12 rounded-xl border-2 text-base" value={citta} onChange={e => setCitta(e.target.value)} />
-                  </div>
                   <Button type="submit" className="w-full h-12 rounded-xl font-black uppercase tracking-wider text-base" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
                     {tc.search} <ArrowRight className="ml-2 w-5 h-5" strokeWidth={3} />
                   </Button>
@@ -222,12 +207,6 @@ export default function Sezione({ catId }: SezioneProps) {
               <Badge variant="secondary" className="px-3 py-1.5 rounded-full font-bold gap-2">
                 "{params.get("q")}"
                 <button onClick={() => { setQ(""); setLocation(buildUrl({ q: "" })); }}><X className="w-3 h-3" /></button>
-              </Badge>
-            )}
-            {params.get("citta") && (
-              <Badge variant="secondary" className="px-3 py-1.5 rounded-full font-bold gap-2">
-                <MapPin className="w-3.5 h-3.5" /> {params.get("citta")}
-                <button onClick={() => { setCitta(""); setLocation(buildUrl({ citta: "" })); }}><X className="w-3 h-3" /></button>
               </Badge>
             )}
             {(params.get("prezzoMin") || params.get("prezzoMax")) && (

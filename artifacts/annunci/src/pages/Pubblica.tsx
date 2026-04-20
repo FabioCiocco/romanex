@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, Search, LogIn, ShieldCheck } from "lucide-react";
+import { ImagePlus, Tag, Edit3, Loader2, Home, Search, LogIn, ShieldCheck } from "lucide-react";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { useState } from "react";
@@ -102,7 +102,7 @@ export default function Pubblica() {
     defaultValues: {
       titolo: "", descrizione: "", prezzo: null,
       categoria: (() => { const p = new URLSearchParams(searchString); return p.get("categoria") || ""; })(),
-      citta: "", contatto: "", immagineUrl: "",
+      citta: "Roma", contatto: "", immagineUrl: "",
     },
   });
 
@@ -338,24 +338,8 @@ export default function Pubblica() {
                   )}
                 />
 
-                {/* City + Contact */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border">
-                  <FormField
-                    control={form.control}
-                    name="citta"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-bold">{s("Città / Polo *", "City / Campus *", "Ciudad / Campus *")}</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                            <Input placeholder={s("Es. Milano Bovisa", "e.g. Milan Bovisa", "Ej. Milán Bovisa")} className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                {/* Contact */}
+                <div className="pt-8 border-t border-border">
                   <FormField
                     control={form.control}
                     name="contatto"

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Filter, SlidersHorizontal, AlertCircle, X, MapPin } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, AlertCircle, X } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -24,28 +24,24 @@ export default function Annunci() {
   const params = useMemo(() => new URLSearchParams(searchString), [searchString]);
   const initialQ = params.get("q") || "";
   const initialCategoria = params.get("categoria") || "Tutti";
-  const initialCitta = params.get("citta") || "";
   const initialPrezzoMin = params.get("prezzoMin") || "";
   const initialPrezzoMax = params.get("prezzoMax") || "";
   const page = parseInt(params.get("page") || "1", 10);
   const limit = 12;
 
   const [q, setQ] = useState(initialQ);
-  const [citta, setCitta] = useState(initialCitta);
   const [prezzoMin, setPrezzoMin] = useState(initialPrezzoMin);
   const [prezzoMax, setPrezzoMax] = useState(initialPrezzoMax);
 
   useEffect(() => {
     setQ(initialQ);
-    setCitta(initialCitta);
     setPrezzoMin(initialPrezzoMin);
     setPrezzoMax(initialPrezzoMax);
-  }, [initialQ, initialCitta, initialPrezzoMin, initialPrezzoMax]);
+  }, [initialQ, initialPrezzoMin, initialPrezzoMax]);
 
   const queryParams = {
     ...(initialQ ? { q: initialQ } : {}),
     ...(initialCategoria !== "Tutti" ? { categoria: initialCategoria } : {}),
-    ...(initialCitta ? { citta: initialCitta } : {}),
     ...(initialPrezzoMin ? { prezzoMin: parseInt(initialPrezzoMin, 10) } : {}),
     ...(initialPrezzoMax ? { prezzoMax: parseInt(initialPrezzoMax, 10) } : {}),
     page,
@@ -63,7 +59,6 @@ export default function Annunci() {
     const newParams = new URLSearchParams();
     if (q) newParams.set("q", q);
     if (initialCategoria !== "Tutti") newParams.set("categoria", initialCategoria);
-    if (citta) newParams.set("citta", citta);
     if (prezzoMin) newParams.set("prezzoMin", prezzoMin);
     if (prezzoMax) newParams.set("prezzoMax", prezzoMax);
     
@@ -91,7 +86,6 @@ export default function Annunci() {
 
   const clearFilters = () => {
     setQ("");
-    setCitta("");
     setPrezzoMin("");
     setPrezzoMax("");
     const newParams = new URLSearchParams();
@@ -112,19 +106,6 @@ export default function Annunci() {
             className="pl-9 bg-muted/50 border-border/50 focus-visible:bg-background h-10 rounded-xl"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-sm font-semibold">{tc.city}</label>
-        <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input 
-            placeholder={tc.citySearchPlaceholder}
-            className="pl-9 bg-muted/50 border-border/50 focus-visible:bg-background h-10 rounded-xl"
-            value={citta}
-            onChange={(e) => setCitta(e.target.value)}
           />
         </div>
       </div>
@@ -242,24 +223,13 @@ export default function Annunci() {
           {/* Results Area */}
           <div className="flex-1 w-full min-w-0">
             {/* Active Filters Display */}
-            {(initialQ || initialCitta || initialPrezzoMin || initialPrezzoMax) && (
+            {(initialQ || initialPrezzoMin || initialPrezzoMax) && (
               <div className="flex flex-wrap gap-2 mb-6">
                 {initialQ && (
                   <Badge variant="secondary" className="px-3 py-1.5 rounded-full text-sm font-medium gap-2">
                     "{initialQ}"
                     <button onClick={() => {
                       const p = new URLSearchParams(params.toString()); p.delete("q"); p.delete("page");
-                      setLocation(`/annunci${p.toString() ? '?' + p.toString() : ''}`);
-                    }} className="hover:text-destructive transition-colors">
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </Badge>
-                )}
-                {initialCitta && (
-                  <Badge variant="secondary" className="px-3 py-1.5 rounded-full text-sm font-medium gap-2">
-                    <MapPin className="w-3.5 h-3.5" /> {initialCitta}
-                    <button onClick={() => {
-                      const p = new URLSearchParams(params.toString()); p.delete("citta"); p.delete("page");
                       setLocation(`/annunci${p.toString() ? '?' + p.toString() : ''}`);
                     }} className="hover:text-destructive transition-colors">
                       <X className="w-3.5 h-3.5" />

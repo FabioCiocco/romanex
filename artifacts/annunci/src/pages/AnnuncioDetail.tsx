@@ -208,7 +208,7 @@ export default function AnnuncioDetail() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-muted-foreground">{tc.position}</p>
-                    <p className="text-foreground font-bold text-lg">{annuncio.citta}</p>
+                    <p className="text-foreground font-bold text-lg">Roma</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-5 rounded-2xl bg-muted/50 border border-border/50">
