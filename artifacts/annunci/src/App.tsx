@@ -10,6 +10,7 @@ import Annunci from "@/pages/Annunci";
 import AnnuncioDetail from "@/pages/AnnuncioDetail";
 import Pubblica from "@/pages/Pubblica";
 import Categorie from "@/pages/Categorie";
+import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -132,16 +133,19 @@ function ClerkQueryClientCacheInvalidator() {
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/annunci" component={Annunci} />
-      <Route path="/annunci/:id" component={AnnuncioDetail} />
-      <Route path="/pubblica" component={Pubblica} />
-      <Route path="/categorie" component={Categorie} />
-      <Route path="/sign-in/*?" component={SignInPage} />
-      <Route path="/sign-up/*?" component={SignUpPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <WelcomeBanner />
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/annunci" component={Annunci} />
+        <Route path="/annunci/:id" component={AnnuncioDetail} />
+        <Route path="/pubblica" component={Pubblica} />
+        <Route path="/categorie" component={Categorie} />
+        <Route path="/sign-in/*?" component={SignInPage} />
+        <Route path="/sign-up/*?" component={SignUpPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 
