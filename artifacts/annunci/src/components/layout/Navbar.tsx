@@ -1,11 +1,74 @@
 import { Link, useLocation } from "wouter";
-import { PlusCircle, Menu, X, GraduationCap, LogIn, LogOut, User, MessageCircle } from "lucide-react";
+import { PlusCircle, Menu, X, GraduationCap, LogIn, LogOut, User, MessageCircle, ChevronDown, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/lib/constants";
 import { useUser, useClerk, Show } from "@clerk/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+
+function CategorieDropdown() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-black uppercase tracking-wide text-foreground/70 hover:text-foreground hover:bg-muted transition-all border-2 border-transparent hover:border-foreground/20"
+      >
+        <LayoutGrid className="w-4 h-4" strokeWidth={2.5} />
+        {t.footer.explore}
+        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`} strokeWidth={3} />
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-full mt-2 bg-background border-2 border-foreground rounded-2xl shadow-[4px_4px_0_0_hsl(var(--foreground))] overflow-hidden z-50 min-w-[220px]">
+          <div className="p-2 space-y-0.5">
+            {CATEGORIES.map(c => {
+              const catT = (t.categories as Record<string, { name: string }>)[c.id];
+              const Icon = c.icon;
+              return (
+                <Link
+                  key={c.id}
+                  href={`/${c.id}`}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-black uppercase tracking-wide text-foreground hover:bg-muted transition-colors"
+                >
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}
+                  >
+                    <Icon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  </div>
+                  {catT?.name ?? c.name}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="border-t-2 border-foreground/10 p-2">
+            <Link
+              href="/annunci"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-foreground/50 hover:text-foreground hover:bg-muted transition-colors"
+            >
+              {t.footer.allCategories} →
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +91,18 @@ export function Navbar() {
               Roma<span className="text-accent">Nex</span>
             </span>
           </Link>
+
+          {/* Desktop nav links */}
+          <div className="hidden md:flex items-center gap-1 ml-4">
+            <CategorieDropdown />
+            <Link
+              href="/forum"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-black uppercase tracking-wide text-foreground/70 hover:text-foreground hover:bg-muted transition-all border-2 border-transparent hover:border-foreground/20"
+            >
+              <MessageCircle className="w-4 h-4" strokeWidth={2.5} />
+              {t.nav.forum}
+            </Link>
+          </div>
 
           {/* Desktop actions */}
           <div className="hidden md:flex items-center gap-2 ml-auto">

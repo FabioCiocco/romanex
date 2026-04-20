@@ -26,7 +26,7 @@ export function LanguageSwitcher() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200 border border-transparent hover:border-white/15"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-black uppercase tracking-wide text-foreground/70 hover:text-foreground hover:bg-muted transition-all duration-200 border-2 border-transparent hover:border-foreground/20"
       >
         <Globe className="w-4 h-4" strokeWidth={2.5} />
         <span className="text-base">{current.flag}</span>
@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 bg-slate-900/95 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden z-50 min-w-[160px]">
+        <div className="absolute right-0 top-full mt-2 bg-background border-2 border-foreground rounded-2xl shadow-[4px_4px_0_0_hsl(var(--foreground))] overflow-hidden z-50 min-w-[160px]">
           <div className="p-1">
             {LANGS.map((l) => {
               const { flag, label } = LANG_LABELS[l];
@@ -43,10 +43,10 @@ export function LanguageSwitcher() {
                 <button
                   key={l}
                   onClick={() => { setLang(l); setOpen(false); }}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-150 ${
                     active
-                      ? "bg-violet-600/20 text-violet-300"
-                      : "text-white/70 hover:bg-white/8 hover:text-white"
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/70 hover:bg-muted hover:text-foreground"
                   }`}
                 >
                   <span className="text-base">{flag}</span>
