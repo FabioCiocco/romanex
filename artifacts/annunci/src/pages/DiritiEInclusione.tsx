@@ -48,6 +48,7 @@ function ResourceCard({
   tag: string;
   tagColor?: string;
 }) {
+  const { t } = useLanguage();
   return (
     <div className="border-2 border-foreground/10 rounded-xl p-4 space-y-2 hover:border-foreground/30 transition-colors bg-background/50">
       <div className="flex items-start justify-between gap-3">
@@ -75,7 +76,7 @@ function ResourceCard({
             className="inline-flex items-center gap-1.5 text-xs font-bold text-foreground/50 hover:text-foreground transition-colors"
           >
             <ExternalLink className="w-3 h-3" />
-            Sito web
+            {t.footer.website}
           </a>
         )}
       </div>

@@ -84,6 +84,7 @@ const T = {
       rights: "Tutti i diritti riservati al creatore del sito.",
       madeWith: "Fatto con",
       inItaly: "in Italia",
+      website: "Sito web",
     },
     adBanner: {
       label: "Spazio Pubblicitario",
@@ -297,6 +298,7 @@ const T = {
       continueToApp: "Vai alla bacheca",
       profileComplete: "Profilo completo",
       profileIncomplete: "Profilo incompleto",
+      profileIncompleteDesc: "Completa tutti i campi obbligatori per sbloccare tutte le funzioni.",
       autoSaved: "Salvato",
       autoSaving: "Salvataggio...",
       sectionIdentita: "Identità",
@@ -388,6 +390,7 @@ const T = {
       rights: "All rights reserved by the site creator.",
       madeWith: "Made with",
       inItaly: "in Italy",
+      website: "Website",
     },
     adBanner: {
       label: "Advertising Space",
@@ -601,6 +604,7 @@ const T = {
       continueToApp: "Go to the board",
       profileComplete: "Profile complete",
       profileIncomplete: "Profile incomplete",
+      profileIncompleteDesc: "Complete all required fields to unlock all features.",
       autoSaved: "Saved",
       autoSaving: "Saving...",
       sectionIdentita: "Identity",
@@ -692,6 +696,7 @@ const T = {
       rights: "Todos los derechos reservados al creador del sitio.",
       madeWith: "Hecho con",
       inItaly: "en Italia",
+      website: "Sitio web",
     },
     adBanner: {
       label: "Espacio Publicitario",
@@ -905,6 +910,7 @@ const T = {
       continueToApp: "Ir al tablón",
       profileComplete: "Perfil completo",
       profileIncomplete: "Perfil incompleto",
+      profileIncompleteDesc: "Completa todos los campos obligatorios para desbloquear todas las funciones.",
       autoSaved: "Guardado",
       autoSaving: "Guardando...",
       sectionIdentita: "Identidad",

@@ -23,7 +23,7 @@ type SaveStatus = "idle" | "saving" | "saved" | "error";
 
 export default function Profilo() {
   const { t } = useLanguage();
-  const tp = t.profilo as Record<string, unknown> & typeof t.profilo;
+  const tp = t.profilo;
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
   const [, setLocation] = useLocation();
@@ -188,12 +188,12 @@ export default function Profilo() {
                 <div className="shrink-0">
                   {saveStatus === "saving" && (
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-white/20 text-white border border-white/30 px-3 py-1.5 rounded-full">
-                      <Loader2 className="w-3 h-3 animate-spin" /> {(tp as any).autoSaving}
+                      <Loader2 className="w-3 h-3 animate-spin" /> {tp.autoSaving}
                     </span>
                   )}
                   {saveStatus === "saved" && (
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-green-400/30 text-white border border-green-300/40 px-3 py-1.5 rounded-full">
-                      <Check className="w-3 h-3" strokeWidth={3} /> {(tp as any).autoSaved}
+                      <Check className="w-3 h-3" strokeWidth={3} /> {tp.autoSaved}
                     </span>
                   )}
                 </div>
@@ -202,7 +202,7 @@ export default function Profilo() {
               {/* Completeness bar */}
               <div className="mt-5">
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-xs font-bold text-white/70 uppercase tracking-wider">{(tp as any).completeness}</span>
+                  <span className="text-xs font-bold text-white/70 uppercase tracking-wider">{tp.completeness}</span>
                   <span className="text-xs font-black text-white">{completeness}%</span>
                 </div>
                 <div className="h-2.5 bg-white/20 rounded-full overflow-hidden border border-white/10">
@@ -216,7 +216,7 @@ export default function Profilo() {
                 </div>
                 {!isComplete && (
                   <p className="text-white/50 text-xs font-medium mt-1.5">
-                    {tp.profileIncomplete as string} — completa tutti i campi obbligatori per sbloccare tutte le funzioni.
+                    {tp.profileIncomplete} — {tp.profileIncompleteDesc}
                   </p>
                 )}
               </div>
@@ -230,7 +230,7 @@ export default function Profilo() {
             <div className="border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] bg-card rounded-2xl p-6 space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b-2 border-foreground/10">
                 <User className="w-4 h-4" />
-                <h2 className="text-sm font-black uppercase tracking-wider">{(tp as any).sectionIdentita}</h2>
+                <h2 className="text-sm font-black uppercase tracking-wider">{tp.sectionIdentita}</h2>
               </div>
 
               <div>
@@ -296,7 +296,7 @@ export default function Profilo() {
             <div className="border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] bg-card rounded-2xl p-6 space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b-2 border-foreground/10">
                 <GraduationCap className="w-4 h-4" />
-                <h2 className="text-sm font-black uppercase tracking-wider">{(tp as any).sectionUniversita}</h2>
+                <h2 className="text-sm font-black uppercase tracking-wider">{tp.sectionUniversita}</h2>
               </div>
 
               <div>
@@ -353,7 +353,7 @@ export default function Profilo() {
           <div className="border-4 border-foreground shadow-[4px_4px_0_0_hsl(var(--foreground))] bg-card rounded-2xl p-6 space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b-2 border-foreground/10">
               <Phone className="w-4 h-4" />
-              <h2 className="text-sm font-black uppercase tracking-wider">{(tp as any).sectionContatti}</h2>
+              <h2 className="text-sm font-black uppercase tracking-wider">{tp.sectionContatti}</h2>
             </div>
             <div>
               <label className={labelClass}>

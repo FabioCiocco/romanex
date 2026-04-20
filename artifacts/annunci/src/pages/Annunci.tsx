@@ -202,7 +202,7 @@ export default function Annunci() {
           {/* Mobile Filters */}
           <div className="md:hidden w-full flex items-center justify-between bg-card border rounded-2xl p-3 px-5 mb-4 shadow-sm">
             <span className="text-sm font-bold text-foreground">
-              {tc.postFilters}
+              {tc.filters}
             </span>
             <Sheet>
               <SheetTrigger asChild>

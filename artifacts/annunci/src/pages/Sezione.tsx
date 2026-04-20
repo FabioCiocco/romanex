@@ -335,10 +335,10 @@ export default function Sezione({ catId }: SezioneProps) {
                   </div>
                   <div>
                     <h3 className="text-3xl font-black font-display uppercase tracking-tighter text-white mb-2">
-                      {(tc as any).searchEmptyTitle}
+                      {tc.searchEmptyTitle}
                     </h3>
                     <p className="text-white/70 max-w-xs mx-auto font-medium leading-relaxed text-sm">
-                      {(tc as any).searchEmptyDesc}
+                      {tc.searchEmptyDesc}
                     </p>
                   </div>
                   {sectionCfg.quickTags?.length > 0 && (
