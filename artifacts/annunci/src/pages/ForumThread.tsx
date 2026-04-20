@@ -36,7 +36,7 @@ export default function ForumThread() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const { t, lang } = useLanguage();
-  const tf = (t as any).forum as Record<string, string>;
+  const tf = t.forum;
   const { user, isSignedIn } = useUser();
   const dateLocale = DATE_LOCALES[lang] ?? itLocale;
 
@@ -253,7 +253,7 @@ export default function ForumThread() {
                 <p className="text-sm font-semibold text-foreground/60">{tf.loginToReply}</p>
                 <Link href="/sign-in">
                   <Button variant="outline" className="border-2 border-foreground rounded-xl font-black text-sm uppercase tracking-wide h-10">
-                    {(t as any).nav.signIn}
+                    {t.nav.signIn}
                   </Button>
                 </Link>
               </div>

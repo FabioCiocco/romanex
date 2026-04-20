@@ -224,10 +224,10 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="font-display font-black text-xl md:text-2xl text-background uppercase tracking-tight leading-none">
-                      {(t as any).forum?.title ?? "Forum"}
+                      {t.forum.title}
                     </h3>
                     <p className="text-background/50 font-medium text-sm mt-0.5">
-                      {(t as any).forum?.description ?? "Discussioni, domande e risposte tra studenti"}
+                      {t.forum.subtitle}
                     </p>
                   </div>
                 </div>

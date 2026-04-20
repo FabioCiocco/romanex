@@ -45,7 +45,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function Forum() {
   const { t, lang } = useLanguage();
-  const tf = (t as any).forum as Record<string, string>;
+  const tf = t.forum;
   const { user, isSignedIn } = useUser();
   const searchString = useSearch();
   const [, setLocation] = useLocation();
