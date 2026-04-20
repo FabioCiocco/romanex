@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap } from "lucide-react";
+import { Search, MapPin, TrendingUp, AlertCircle, ArrowRight, GraduationCap, MessageCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -186,6 +186,29 @@ export default function Home() {
                 </Link>
               );
             })}
+
+            {/* Forum — full-width banner card */}
+            <Link href="/forum" className="col-span-2 md:col-span-4 group outline-none block">
+              <div className="h-full flex flex-col sm:flex-row items-center justify-between gap-6 p-7 md:p-8 rounded-3xl border-4 border-accent/60 bg-accent/10 hover:bg-accent/20 relative overflow-hidden transition-all duration-300 group-hover:border-accent" style={{minHeight: '120px'}}>
+                <div className="absolute -bottom-6 -right-4 text-[140px] font-black text-accent/5 leading-none select-none pointer-events-none font-display">06</div>
+                <div className="flex items-center gap-5 relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-accent/20 border-2 border-accent/40 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shrink-0">
+                    <MessageCircle className="w-7 h-7 text-accent" strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-black text-2xl md:text-3xl text-background uppercase tracking-tight leading-none">
+                      {(t as any).forum?.title ?? "Forum"}
+                    </h3>
+                    <p className="text-background/60 font-medium text-sm mt-1">
+                      {(t as any).forum?.subtitle ?? "Discuti con altri studenti"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-accent font-black uppercase tracking-widest text-sm group-hover:gap-4 transition-all relative z-10 shrink-0">
+                  {t.common.explore} <ArrowRight className="w-5 h-5" strokeWidth={3} />
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
