@@ -18,7 +18,7 @@ export function Navbar() {
                 <GraduationCap className="h-7 w-7" strokeWidth={2.5} />
               </div>
               <span className="font-display text-2xl font-black text-foreground tracking-tighter uppercase">
-                Campus<span className="text-accent">Board</span>
+                Roma<span className="text-accent">Nex</span>
               </span>
             </Link>
             

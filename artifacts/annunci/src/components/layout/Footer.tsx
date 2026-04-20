@@ -16,7 +16,7 @@ export function Footer() {
                 <GraduationCap className="h-8 w-8" strokeWidth={2.5} />
               </div>
               <span className="font-display text-3xl font-black text-background tracking-tighter uppercase">
-                Campus<span className="text-accent">Board</span>
+                Roma<span className="text-accent">Nex</span>
               </span>
             </Link>
             <p className="text-background/70 text-lg font-medium max-w-md leading-relaxed">
@@ -41,7 +41,7 @@ export function Footer() {
             <ul className="space-y-4 text-base font-medium text-background/70">
               {CATEGORIES.map(c => (
                 <li key={c.id}>
-                  <Link href={`/annunci?categoria=${encodeURIComponent(c.name)}`} className="hover:text-primary transition-colors flex items-center group w-max">
+                  <Link href={`/annunci?categoria=${encodeURIComponent(c.id)}`} className="hover:text-primary transition-colors flex items-center group w-max">
                     <span className="group-hover:translate-x-2 transition-transform">{c.name}</span>
                   </Link>
                 </li>
@@ -86,7 +86,7 @@ export function Footer() {
         </div>
         
         <div className="border-t-2 border-background/10 mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-background/50 font-bold uppercase tracking-wider">
-          <p>© {new Date().getFullYear()} CampusBoard. Tutti i diritti riservati.</p>
+          <p>© {new Date().getFullYear()} RomaNex. Tutti i diritti riservati.</p>
           <p className="flex items-center gap-2">
             Fatto con <Heart className="h-5 w-5 text-accent fill-accent animate-pulse" /> in Italia
           </p>

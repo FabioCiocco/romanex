@@ -109,7 +109,7 @@ export default function Pubblica() {
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">Crea un Post</h1>
           <p className="text-xl text-muted-foreground font-medium">
-            Scrivi sulla bacheca di CampusBoard. Gratis, sempre.
+            Scrivi sulla bacheca di RomaNex. Gratis, sempre.
           </p>
         </div>
 

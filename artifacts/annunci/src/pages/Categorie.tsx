@@ -36,7 +36,7 @@ export default function Categorie() {
               Tutte le <span className="text-accent">Bacheche</span>
             </h1>
             <p className="text-2xl text-background/80 font-bold leading-relaxed">
-              Esplora le sezioni di CampusBoard.
+              Esplora le sezioni di RomaNex.
             </p>
             
             <div className="relative max-w-2xl mx-auto mt-12">

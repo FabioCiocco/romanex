@@ -247,7 +247,7 @@ export default function AnnuncioDetail() {
                   <div className="space-y-5">
                     <h3 className="font-bold text-xl font-display">Contatta lo studente</h3>
                     <p className="text-sm text-muted-foreground font-medium mb-4">
-                      Scrivi o chiama per maggiori informazioni. Ricorda di menzionare CampusBoard!
+                      Scrivi o chiama per maggiori informazioni. Ricorda di menzionare RomaNex!
                     </p>
                     
                     <div className="space-y-3">
