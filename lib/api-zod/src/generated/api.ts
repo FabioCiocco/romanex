@@ -300,3 +300,45 @@ export const DeleteForumReplyParams = zod.object({
   threadId: zod.coerce.number(),
   replyId: zod.coerce.number(),
 });
+
+/**
+ * @summary Get current user profile
+ */
+export const GetMyProfileResponse = zod.object({
+  clerkId: zod.string(),
+  nome: zod.string(),
+  cognome: zod.string(),
+  email: zod.string(),
+  universita: zod.string(),
+  annoCorso: zod.string(),
+  corsoDiLaurea: zod.string(),
+  telefono: zod.string().nullish(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
+});
+
+/**
+ * @summary Create or update current user profile
+ */
+export const UpsertMyProfileBody = zod.object({
+  nome: zod.string(),
+  cognome: zod.string(),
+  email: zod.string(),
+  universita: zod.string(),
+  annoCorso: zod.string(),
+  corsoDiLaurea: zod.string(),
+  telefono: zod.string().nullish(),
+});
+
+export const UpsertMyProfileResponse = zod.object({
+  clerkId: zod.string(),
+  nome: zod.string(),
+  cognome: zod.string(),
+  email: zod.string(),
+  universita: zod.string(),
+  annoCorso: zod.string(),
+  corsoDiLaurea: zod.string(),
+  telefono: zod.string().nullish(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
+});

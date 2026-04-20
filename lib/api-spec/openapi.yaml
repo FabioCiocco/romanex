@@ -17,6 +17,8 @@ tags:
     description: Statistics operations
   - name: forum
     description: Forum operations
+  - name: profilo
+    description: User profile operations
 paths:
   /healthz:
     get:
@@ -364,6 +366,54 @@ paths:
         "204":
           description: Eliminata
 
+  /profilo:
+    get:
+      operationId: getMyProfile
+      tags: [profilo]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "404":
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: upsertMyProfile
+      tags: [profilo]
+      summary: Create or update current user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertUserProfileBody"
+      responses:
+        "200":
+          description: Profile upserted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -672,3 +722,64 @@ components:
       required:
         - corpo
         - autore
+
+    UserProfile:
+      type: object
+      properties:
+        clerkId:
+          type: string
+        nome:
+          type: string
+        cognome:
+          type: string
+        email:
+          type: string
+        universita:
+          type: string
+        annoCorso:
+          type: string
+        corsoDiLaurea:
+          type: string
+        telefono:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - clerkId
+        - nome
+        - cognome
+        - email
+        - universita
+        - annoCorso
+        - corsoDiLaurea
+        - createdAt
+        - updatedAt
+
+    UpsertUserProfileBody:
+      type: object
+      properties:
+        nome:
+          type: string
+        cognome:
+          type: string
+        email:
+          type: string
+        universita:
+          type: string
+        annoCorso:
+          type: string
+        corsoDiLaurea:
+          type: string
+        telefono:
+          type: ["string", "null"]
+      required:
+        - nome
+        - cognome
+        - email
+        - universita
+        - annoCorso
+        - corsoDiLaurea

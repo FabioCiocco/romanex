@@ -46,6 +46,15 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Translated components**: Navbar, Home, Footer, WelcomeBanner, GuestBar, Sezione, Categorie
 - **Category names**: fetched from `t.categories[id]` to avoid hardcoding Italian names
 
+## User Profiles
+
+- **Table**: `user_profiles` in PostgreSQL — `clerkId` (PK), `nome`, `cognome`, `email`, `universita`, `annoCorso`, `corsoDiLaurea`, `telefono?`, timestamps
+- **API**: `GET /api/profilo` + `PUT /api/profilo` (upsert) — Clerk auth required via `getAuth(req)`
+- **Route file**: `artifacts/api-server/src/routes/profilo.ts`
+- **Profile completion page**: `/completa-profilo` — shown automatically after sign-in if profile doesn't exist
+- **Profile page**: `/profilo` — view/edit profile, accessible from Navbar avatar click
+- **Auto-redirect**: `ProfileCompletionGuard` component in App.tsx checks profile on sign-in and redirects to `/completa-profilo` if not found
+
 ## Features
 
 - **Platform**: RomaNex — bulletin board for Italian university students
@@ -53,3 +62,4 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Guest mode**: WelcomeBanner modal on first visit + persistent GuestBar for guests
 - **Search & filters**: keyword, city/campus, price range (where applicable)
 - **Listing detail**: full page at `/annunci/:id` with contact reveal (auth-gated)
+- **User profile system**: profile completion on sign-up, editable at `/profilo`

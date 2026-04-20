@@ -139,6 +139,31 @@ export interface CreateForumReplyBody {
   autoreClerkId?: string | null;
 }
 
+export interface UserProfile {
+  clerkId: string;
+  nome: string;
+  cognome: string;
+  email: string;
+  universita: string;
+  annoCorso: string;
+  corsoDiLaurea: string;
+  /** @nullable */
+  telefono?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertUserProfileBody {
+  nome: string;
+  cognome: string;
+  email: string;
+  universita: string;
+  annoCorso: string;
+  corsoDiLaurea: string;
+  /** @nullable */
+  telefono?: string | null;
+}
+
 export type ListAnnunciParams = {
   /**
    * @nullable

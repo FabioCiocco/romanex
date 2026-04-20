@@ -24,3 +24,5 @@ export * from "./listAnnunciParams";
 export * from "./listForumThreadsParams";
 export * from "./siteStats";
 export * from "./updateAnnuncioBody";
+export * from "./upsertUserProfileBody";
+export * from "./userProfile";

@@ -44,18 +44,20 @@ export function Navbar() {
 
             <Show when="signed-in">
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-foreground bg-muted/50">
-                  {user?.imageUrl ? (
-                    <img src={user.imageUrl} alt={user.firstName || "User"} className="w-7 h-7 rounded-full border border-foreground object-cover" />
-                  ) : (
-                    <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center border border-foreground">
-                      <User className="w-4 h-4 text-white" strokeWidth={2.5} />
-                    </div>
-                  )}
-                  <span className="font-black text-sm text-foreground max-w-[100px] truncate">
-                    {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0]}
-                  </span>
-                </div>
+                <Link href="/profilo">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-foreground bg-muted/50 hover:bg-muted cursor-pointer transition-colors">
+                    {user?.imageUrl ? (
+                      <img src={user.imageUrl} alt={user.firstName || "User"} className="w-7 h-7 rounded-full border border-foreground object-cover" />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center border border-foreground">
+                        <User className="w-4 h-4 text-white" strokeWidth={2.5} />
+                      </div>
+                    )}
+                    <span className="font-black text-sm text-foreground max-w-[100px] truncate">
+                      {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0]}
+                    </span>
+                  </div>
+                </Link>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -91,19 +93,21 @@ export function Navbar() {
         <div className="md:hidden border-t-2 border-foreground p-5 space-y-4 bg-background shadow-xl absolute w-full left-0 animate-in slide-in-from-top-2">
 
           <Show when="signed-in">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted border-2 border-foreground">
-              {user?.imageUrl ? (
-                <img src={user.imageUrl} alt={user.firstName || "User"} className="w-10 h-10 rounded-full border-2 border-foreground object-cover" />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
-                  <User className="w-5 h-5 text-white" strokeWidth={2.5} />
+            <Link href="/profilo" onClick={() => setIsOpen(false)}>
+              <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted border-2 border-foreground hover:bg-muted/80 transition-colors">
+                {user?.imageUrl ? (
+                  <img src={user.imageUrl} alt={user.firstName || "User"} className="w-10 h-10 rounded-full border-2 border-foreground object-cover" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
+                    <User className="w-5 h-5 text-white" strokeWidth={2.5} />
+                  </div>
+                )}
+                <div>
+                  <p className="font-black text-sm uppercase tracking-wide">{user?.firstName || "Utente"}</p>
+                  <p className="text-xs text-foreground/50 font-medium truncate">{user?.emailAddresses?.[0]?.emailAddress}</p>
                 </div>
-              )}
-              <div>
-                <p className="font-black text-sm uppercase tracking-wide">{user?.firstName || "Utente"}</p>
-                <p className="text-xs text-foreground/50 font-medium truncate">{user?.emailAddresses?.[0]?.emailAddress}</p>
               </div>
-            </div>
+            </Link>
           </Show>
 
           <div className="flex items-center justify-between">

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ClerkProvider, SignIn, SignUp, Show, useClerk } from "@clerk/react";
+import { useUser } from "@clerk/react";
 import { Switch, Route, useLocation, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -13,8 +14,11 @@ import Categorie from "@/pages/Categorie";
 import Sezione from "@/pages/Sezione";
 import Forum from "@/pages/Forum";
 import ForumThread from "@/pages/ForumThread";
+import Profilo from "@/pages/Profilo";
+import CompletaProfilo from "@/pages/CompletaProfilo";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { useGetMyProfile, getGetMyProfileQueryKey } from "@workspace/api-client-react";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -143,10 +147,36 @@ function ScrollToTop() {
   return null;
 }
 
+const AUTH_PATHS = ["/sign-in", "/sign-up", "/completa-profilo"];
+
+function ProfileCompletionGuard() {
+  const { user, isLoaded } = useUser();
+  const [location, setLocation] = useLocation();
+  const isAuthPage = AUTH_PATHS.some(p => location.startsWith(p));
+
+  const { data: profile, isLoading, isError } = useGetMyProfile({
+    query: {
+      queryKey: getGetMyProfileQueryKey(),
+      enabled: !!user && isLoaded && !isAuthPage,
+      retry: false,
+    },
+  });
+
+  useEffect(() => {
+    if (!isLoaded || !user || isAuthPage || isLoading) return;
+    if (isError || !profile) {
+      setLocation("/completa-profilo");
+    }
+  }, [isLoaded, user, isAuthPage, isLoading, isError, profile, setLocation]);
+
+  return null;
+}
+
 function Router() {
   return (
     <>
       <ScrollToTop />
+      <ProfileCompletionGuard />
       <WelcomeBanner />
       <Switch>
         <Route path="/" component={Home} />
@@ -161,6 +191,8 @@ function Router() {
         <Route path="/gruppi-studio">{() => <Sezione catId="gruppi-studio" />}</Route>
         <Route path="/forum/:id" component={ForumThread} />
         <Route path="/forum" component={Forum} />
+        <Route path="/profilo" component={Profilo} />
+        <Route path="/completa-profilo" component={CompletaProfilo} />
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />
