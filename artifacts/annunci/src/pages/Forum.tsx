@@ -76,12 +76,13 @@ export default function Forum() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim() || !newBody.trim() || !newCat) return;
+    const cat = newCat || categories?.[0] || "";
+    if (!newTitle.trim() || !newBody.trim() || !cat) return;
     createThread({
       data: {
         titolo: newTitle.trim(),
         corpo: newBody.trim(),
-        categoria: newCat,
+        categoria: cat,
         autore: newAuthor.trim() || tf.guestName,
         autoreClerkId: user?.id ?? null,
       },
@@ -136,7 +137,7 @@ export default function Forum() {
                   <form onSubmit={handleSubmit} className="space-y-4 pt-2">
                     <div>
                       <label className="block text-xs font-black uppercase tracking-wider mb-1.5 text-foreground/70">{tf.category}</label>
-                      <Select value={newCat} onValueChange={setNewCat}>
+                      <Select value={newCat || categories?.[0] || ""} onValueChange={setNewCat}>
                         <SelectTrigger className="border-2 border-foreground rounded-xl h-11 font-semibold">
                           <SelectValue />
                         </SelectTrigger>

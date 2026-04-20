@@ -278,7 +278,7 @@ export default function Sezione({ catId }: SezioneProps) {
                   </div>
                   <span className="font-black text-sm uppercase tracking-wider text-accent">{sectionCfg.publishLabel}</span>
                 </div>
-                <p className="text-xs text-foreground/60 font-medium">Gratis, in meno di 2 minuti.</p>
+                <p className="text-xs text-foreground/60 font-medium">{tc.publishFreeHint}</p>
               </div>
             </Link>
           </aside>

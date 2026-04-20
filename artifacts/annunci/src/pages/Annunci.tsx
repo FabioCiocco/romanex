@@ -16,7 +16,7 @@ import { BackBanner } from "@/components/layout/BackBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Annunci() {
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   const { t } = useLanguage();
   const searchString = useSearch();
   
@@ -98,14 +98,16 @@ export default function Annunci() {
     setLocation(`/annunci${newParams.toString() ? '?' + newParams.toString() : ''}`);
   };
 
+  const tc = t.common;
+
   const FiltersForm = () => (
     <form onSubmit={handleApplyFilters} className="space-y-6">
       <div className="space-y-2">
-        <label className="text-sm font-semibold">Cerca parole chiave</label>
+        <label className="text-sm font-semibold">{tc.keyword}</label>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input 
-            placeholder="Es. Libro Analisi, Stanza..." 
+            placeholder={tc.searchPlaceholder}
             className="pl-9 bg-muted/50 border-border/50 focus-visible:bg-background h-10 rounded-xl"
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -114,11 +116,11 @@ export default function Annunci() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-semibold">Città o Polo Universitario</label>
+        <label className="text-sm font-semibold">{tc.city}</label>
         <div className="relative">
           <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input 
-            placeholder="Es. Milano, Bovisa..." 
+            placeholder={tc.citySearchPlaceholder}
             className="pl-9 bg-muted/50 border-border/50 focus-visible:bg-background h-10 rounded-xl"
             value={citta}
             onChange={(e) => setCitta(e.target.value)}
@@ -128,7 +130,7 @@ export default function Annunci() {
 
       {(!activeCategoryConfig || activeCategoryConfig.hasPrice) && (
         <div className="space-y-2">
-          <label className="text-sm font-semibold">Prezzo (€)</label>
+          <label className="text-sm font-semibold">{tc.priceRange}</label>
           <div className="flex items-center gap-2">
             <Input 
               type="number" 
@@ -150,9 +152,9 @@ export default function Annunci() {
       )}
 
       <div className="flex flex-col gap-2 pt-4">
-        <Button type="submit" className="w-full rounded-xl h-11 font-bold">Applica Filtri</Button>
+        <Button type="submit" className="w-full rounded-xl h-11 font-bold">{tc.apply}</Button>
         <Button type="button" variant="ghost" onClick={clearFilters} className="w-full rounded-xl h-11 font-medium">
-          Cancella Filtri
+          {tc.clearFilters}
         </Button>
       </div>
     </form>
@@ -242,7 +244,10 @@ export default function Annunci() {
                 {initialQ && (
                   <Badge variant="secondary" className="px-3 py-1.5 rounded-full text-sm font-medium gap-2">
                     "{initialQ}"
-                    <button onClick={() => { setQ(""); handleApplyFilters(); }} className="hover:text-destructive transition-colors">
+                    <button onClick={() => {
+                      const p = new URLSearchParams(params.toString()); p.delete("q"); p.delete("page");
+                      setLocation(`/annunci${p.toString() ? '?' + p.toString() : ''}`);
+                    }} className="hover:text-destructive transition-colors">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </Badge>
@@ -250,7 +255,10 @@ export default function Annunci() {
                 {initialCitta && (
                   <Badge variant="secondary" className="px-3 py-1.5 rounded-full text-sm font-medium gap-2">
                     <MapPin className="w-3.5 h-3.5" /> {initialCitta}
-                    <button onClick={() => { setCitta(""); handleApplyFilters(); }} className="hover:text-destructive transition-colors">
+                    <button onClick={() => {
+                      const p = new URLSearchParams(params.toString()); p.delete("citta"); p.delete("page");
+                      setLocation(`/annunci${p.toString() ? '?' + p.toString() : ''}`);
+                    }} className="hover:text-destructive transition-colors">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </Badge>
@@ -258,13 +266,16 @@ export default function Annunci() {
                 {(initialPrezzoMin || initialPrezzoMax) && (
                   <Badge variant="secondary" className="px-3 py-1.5 rounded-full text-sm font-medium gap-2">
                     {initialPrezzoMin ? `€${initialPrezzoMin}` : '€0'} - {initialPrezzoMax ? `€${initialPrezzoMax}` : 'Max'}
-                    <button onClick={() => { setPrezzoMin(""); setPrezzoMax(""); handleApplyFilters(); }} className="hover:text-destructive transition-colors">
+                    <button onClick={() => {
+                      const p = new URLSearchParams(params.toString()); p.delete("prezzoMin"); p.delete("prezzoMax"); p.delete("page");
+                      setLocation(`/annunci${p.toString() ? '?' + p.toString() : ''}`);
+                    }} className="hover:text-destructive transition-colors">
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </Badge>
                 )}
                 <Button variant="ghost" size="sm" onClick={clearFilters} className="text-xs h-8 text-muted-foreground rounded-full hover:bg-destructive/10 hover:text-destructive">
-                  Cancella tutti
+                  {tc.clearAll}
                 </Button>
               </div>
             )}
