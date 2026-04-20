@@ -13,7 +13,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 export default function Categorie() {
   const { data: dbCategorie, isLoading } = useListCategorie();
   const [search, setSearch] = useState("");
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
+  const tc = t.common;
 
   const displayCategories = CATEGORIES.map(cat => {
     const dbCat = dbCategorie?.find(c => c.nome === cat.name);
@@ -39,16 +41,16 @@ export default function Categorie() {
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <h1 className="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter leading-[0.9]">
-              Tutte le <span className="text-accent">Bacheche</span>
+              {tc.allBoardsTitle} <span className="text-accent">{tc.allBoardsHighlight}</span>
             </h1>
             <p className="text-2xl text-background/80 font-bold leading-relaxed">
-              Esplora le sezioni di RomaNex.
+              {tc.allBoardsSub}
             </p>
             
             <div className="relative max-w-2xl mx-auto mt-12">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-foreground w-6 h-6" strokeWidth={3} />
               <Input 
-                placeholder="Cerca una categoria..." 
+                placeholder={tc.searchCategories} 
                 className="pl-16 h-20 text-2xl rounded-2xl bg-background border-4 border-background shadow-[8px_8px_0_0_hsl(var(--primary))] focus-visible:border-primary focus-visible:ring-0 text-foreground font-black uppercase tracking-wider placeholder:text-foreground/40"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -79,7 +81,7 @@ export default function Categorie() {
                         <Icon className="w-10 h-10" strokeWidth={2.5} />
                       </div>
                       <div className="bg-foreground text-background px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest border-2 border-foreground shadow-[4px_4px_0_0_rgba(0,0,0,0.2)]">
-                        {cat.count.toLocaleString('it-IT')} {t.common.adsAvailable}
+                        {cat.count.toLocaleString(locale)} {tc.adsAvailable}
                       </div>
                     </div>
                     <div className="relative z-10">
@@ -101,12 +103,12 @@ export default function Categorie() {
           </div>
         ) : (
           <div className="text-center py-32 bg-background rounded-3xl border-4 border-dashed border-foreground max-w-3xl mx-auto">
-            <h3 className="text-4xl font-black font-display text-foreground mb-6 uppercase tracking-tighter">Nessuna categoria trovata</h3>
+            <h3 className="text-4xl font-black font-display text-foreground mb-6 uppercase tracking-tighter">{tc.notFoundCat}</h3>
             <p className="text-foreground/60 text-xl font-bold mb-10">
-              Prova a cercare con un altro termine o esplora tutta la bacheca.
+              {tc.notFoundCatDesc}
             </p>
             <Link href="/annunci" className="inline-flex items-center px-8 py-4 bg-foreground text-background rounded-xl font-black text-lg uppercase tracking-wider hover:bg-primary transition-colors bouncy-active">
-              Vedi tutti gli annunci <ArrowRight className="ml-3 w-6 h-6" strokeWidth={3} />
+              {tc.seeAllAds} <ArrowRight className="ml-3 w-6 h-6" strokeWidth={3} />
             </Link>
           </div>
         )}

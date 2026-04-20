@@ -4,9 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, MessageCircle, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import { formatDistanceToNow } from "date-fns";
-import { it } from "date-fns/locale";
+import { it, enUS, es } from "date-fns/locale";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const DATE_LOCALES = { it, en: enUS, es };
 
 interface AnnuncioCardProps {
   annuncio: Annuncio;
@@ -14,12 +17,17 @@ interface AnnuncioCardProps {
 }
 
 export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
+  const { t, lang } = useLanguage();
+  const tc = t.common;
+  const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
+  const dateLocale = DATE_LOCALES[lang] ?? it;
+
   const categoryConfig = getCategoryConfig(annuncio.categoria.toLowerCase().replace(/\s+/g, '-'));
   const hasImage = !!annuncio.immagineUrl;
   const hasPrice = categoryConfig.hasPrice;
   const formattedPrice = hasPrice && annuncio.prezzo !== null && annuncio.prezzo !== undefined
-    ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
-    : hasPrice ? 'Contatta' : 'Gratis';
+    ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
+    : hasPrice ? tc.onRequest : tc.free;
 
   return (
     <Link href={`/annunci/${annuncio.id}`} className="block h-full outline-none group hover-lift">
@@ -106,7 +114,7 @@ export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" strokeWidth={2.5} />
-            <span>{formatDistanceToNow(new Date(annuncio.createdAt), { locale: it }).replace('circa ', '')}</span>
+            <span>{formatDistanceToNow(new Date(annuncio.createdAt), { locale: dateLocale, addSuffix: true })}</span>
           </div>
         </CardFooter>
       </Card>

@@ -35,7 +35,8 @@ export default function Sezione({ catId }: SezioneProps) {
   const [, setLocation] = useLocation();
   const searchString = useSearch();
   const params = useMemo(() => new URLSearchParams(searchString), [searchString]);
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
 
   const [q, setQ] = useState(params.get("q") || "");
   const [citta, setCitta] = useState(params.get("citta") || "");
@@ -310,7 +311,7 @@ export default function Sezione({ catId }: SezioneProps) {
             {/* Results count — desktop */}
             <div className="hidden md:flex items-center justify-between">
               <p className="text-foreground/60 font-bold text-sm">
-                {isLoading ? tc.loading : data?.total !== undefined ? `${data.total.toLocaleString("it-IT")} ${tc.announceAds}` : ""}
+                {isLoading ? tc.loading : data?.total !== undefined ? `${data.total.toLocaleString(locale)} ${tc.announceAds}` : ""}
               </p>
             </div>
 

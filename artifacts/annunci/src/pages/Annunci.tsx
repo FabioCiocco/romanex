@@ -17,7 +17,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Annunci() {
   const [, setLocation] = useLocation();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
   const searchString = useSearch();
   
   const params = useMemo(() => new URLSearchParams(searchString), [searchString]);
@@ -168,10 +169,12 @@ export default function Annunci() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h1 className="text-3xl md:text-5xl font-bold font-display text-foreground tracking-tight">
-                {initialCategoria !== "Tutti" ? (getCategoryConfig(initialCategoria)?.name || initialCategoria) : "La Bacheca"}
+                {initialCategoria !== "Tutti"
+                  ? ((t.categories as Record<string, {name:string}>)[initialCategoria]?.name || getCategoryConfig(initialCategoria)?.name || initialCategoria)
+                  : tc.board}
               </h1>
               <p className="text-muted-foreground mt-3 text-lg font-medium">
-                {data?.total ? `${data.total.toLocaleString('it-IT')} annunci disponibili` : "Cerca nella bacheca"}
+                {data?.total ? `${data.total.toLocaleString(locale)} ${tc.adsAvailable}` : t.footer.searchBoard}
               </p>
             </div>
           </div>
@@ -183,7 +186,7 @@ export default function Annunci() {
                   value="Tutti" 
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-6 py-2.5 text-sm font-semibold border shadow-sm data-[state=inactive]:bg-card hover:bg-muted transition-colors"
                 >
-                  Tutti gli annunci
+                  {tc.backToAll}
                 </TabsTrigger>
                 {CATEGORIES.map(cat => (
                   <TabsTrigger 
@@ -192,7 +195,7 @@ export default function Annunci() {
                     className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-6 py-2.5 text-sm font-semibold border shadow-sm data-[state=inactive]:bg-card hover:bg-muted transition-colors"
                   >
                     <cat.icon className="w-4 h-4 mr-2" />
-                    {cat.name}
+                    {(t.categories as Record<string, {name:string}>)[cat.id]?.name ?? cat.name}
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -209,7 +212,7 @@ export default function Annunci() {
             <div className="bg-card border rounded-3xl p-6 shadow-sm">
               <div className="flex items-center gap-2 mb-6 pb-4 border-b">
                 <Filter className="w-5 h-5 text-primary" />
-                <h2 className="font-display font-bold text-xl">Filtra</h2>
+                <h2 className="font-display font-bold text-xl">{tc.postFilters}</h2>
               </div>
               <FiltersForm />
             </div>
@@ -218,18 +221,18 @@ export default function Annunci() {
           {/* Mobile Filters */}
           <div className="md:hidden w-full flex items-center justify-between bg-card border rounded-2xl p-3 px-5 mb-4 shadow-sm">
             <span className="text-sm font-bold text-foreground">
-              Filtri
+              {tc.postFilters}
             </span>
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="secondary" size="sm" className="gap-2 rounded-xl font-bold">
                   <SlidersHorizontal className="w-4 h-4" />
-                  Imposta
+                  {tc.postFilters}
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto">
                 <SheetHeader className="mb-6 text-left">
-                  <SheetTitle className="font-display text-2xl">Filtra risultati</SheetTitle>
+                  <SheetTitle className="font-display text-2xl">{tc.filters}</SheetTitle>
                 </SheetHeader>
                 <FiltersForm />
               </SheetContent>
@@ -283,9 +286,9 @@ export default function Annunci() {
             {error ? (
               <Alert variant="destructive" className="rounded-2xl">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Errore di caricamento</AlertTitle>
+                <AlertTitle>{tc.loadError}</AlertTitle>
                 <AlertDescription>
-                  Si è verificato un errore nel caricamento degli annunci. Riprova.
+                  {tc.noResultsDesc}
                 </AlertDescription>
               </Alert>
             ) : isLoading ? (
@@ -314,11 +317,11 @@ export default function Annunci() {
                       }}
                       className="rounded-full font-semibold"
                     >
-                      Precedente
+                      {tc.previous}
                     </Button>
                     <div className="flex items-center gap-2 text-sm font-bold bg-muted px-4 py-2 rounded-full">
                       <span>{page}</span>
-                      <span className="text-muted-foreground">di</span>
+                      <span className="text-muted-foreground">{tc.of}</span>
                       <span>{data.totalPages}</span>
                     </div>
                     <Button 
@@ -332,7 +335,7 @@ export default function Annunci() {
                       }}
                       className="rounded-full font-semibold"
                     >
-                      Successiva
+                      {tc.next}
                     </Button>
                   </div>
                 )}
@@ -342,11 +345,11 @@ export default function Annunci() {
                 <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
                   <Search className="w-10 h-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-2xl font-bold font-display text-foreground mb-2">Bacheca vuota</h3>
+                <h3 className="text-2xl font-bold font-display text-foreground mb-2">{tc.noResults}</h3>
                 <p className="text-muted-foreground max-w-md mx-auto mb-8 font-medium">
-                  Nessun annuncio trovato con questi criteri. Prova a rimuovere qualche filtro o cambia categoria.
+                  {tc.noResultsDesc}
                 </p>
-                <Button onClick={clearFilters} size="lg" className="rounded-full">Rimuovi filtri</Button>
+                <Button onClick={clearFilters} size="lg" className="rounded-full">{tc.removeFilters}</Button>
               </div>
             )}
           </div>

@@ -28,6 +28,7 @@ export default function AnnuncioDetail() {
   const { t, lang } = useLanguage();
   const tc = t.common;
   const dateLocale = DATE_LOCALE[lang];
+  const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
 
   const { data: annuncio, isLoading, error } = useGetAnnuncio(id, {
     query: {
@@ -178,7 +179,7 @@ export default function AnnuncioDetail() {
                       <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{tc.request}</p>
                       <p className="text-3xl font-display font-bold text-primary">
                         {annuncio.prezzo !== null && annuncio.prezzo !== undefined
-                          ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
+                          ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
                           : tc.toAgree}
                       </p>
                     </div>
@@ -236,7 +237,7 @@ export default function AnnuncioDetail() {
                         <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{tc.request}</p>
                         <p className="text-5xl font-display font-bold text-primary">
                           {annuncio.prezzo !== null && annuncio.prezzo !== undefined
-                            ? new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
+                            ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(annuncio.prezzo)
                             : tc.toAgree}
                         </p>
                       </div>
