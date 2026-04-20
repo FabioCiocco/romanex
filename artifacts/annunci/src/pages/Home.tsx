@@ -103,7 +103,6 @@ export default function Home() {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-              <p className="text-background/40 font-black text-xs uppercase tracking-[0.3em] mb-3">{h.categoriesLabel}</p>
               <h2 className="text-5xl md:text-7xl font-black font-display uppercase tracking-tighter text-background leading-[0.9]">
                 {h.categoriesTitle} <span className="text-accent">{h.categoriesHighlight}</span>
               </h2>
