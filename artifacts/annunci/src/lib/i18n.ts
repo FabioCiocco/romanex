@@ -81,9 +81,14 @@ const T = {
       inclusion: "Diritti & Inclusione",
       guidelines: "Linee Guida",
       privacy: "Privacy",
-      rights: "Tutti i diritti riservati.",
+      rights: "Tutti i diritti riservati al creatore del sito.",
       madeWith: "Fatto con",
       inItaly: "in Italia",
+    },
+    adBanner: {
+      label: "Spazio Pubblicitario",
+      slot: "Il tuo banner qui — 728 × 90",
+      cta: "Fare Pubblicità",
     },
     categories: {
       appartamenti: { name: "Case e Stanze", description: "Cerca e pubblica annunci di stanze e appartamenti in affitto" },
@@ -380,9 +385,14 @@ const T = {
       inclusion: "Rights & Inclusion",
       guidelines: "Guidelines",
       privacy: "Privacy",
-      rights: "All rights reserved.",
+      rights: "All rights reserved by the site creator.",
       madeWith: "Made with",
       inItaly: "in Italy",
+    },
+    adBanner: {
+      label: "Advertising Space",
+      slot: "Your banner here — 728 × 90",
+      cta: "Advertise Here",
     },
     categories: {
       appartamenti: { name: "Rooms & Apartments", description: "Find and post room and apartment rental listings" },
@@ -679,9 +689,14 @@ const T = {
       inclusion: "Derechos e Inclusión",
       guidelines: "Directrices",
       privacy: "Privacidad",
-      rights: "Todos los derechos reservados.",
+      rights: "Todos los derechos reservados al creador del sitio.",
       madeWith: "Hecho con",
       inItaly: "en Italia",
+    },
+    adBanner: {
+      label: "Espacio Publicitario",
+      slot: "Tu banner aquí — 728 × 90",
+      cta: "Anunciarse",
     },
     categories: {
       appartamenti: { name: "Casas y Habitaciones", description: "Encuentra y publica anuncios de habitaciones y pisos en alquiler" },
