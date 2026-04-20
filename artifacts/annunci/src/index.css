@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -43,42 +43,43 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 12px);
+  --radius-3xl: calc(var(--radius) + 20px);
 }
 
 :root {
-  /* CampusBoard Palette - Vibrant, Youthful, Italian */
-  --background: 45 40% 98%; /* Warm paper */
-  --foreground: 240 10% 10%; /* Deep ink */
+  /* CampusBoard Palette - BOLD, Energetic, Giovanile */
+  --background: 45 33% 98%; /* #fdfbf7 warm base */
+  --foreground: 222 47% 11%; /* deep ink */
 
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 10%;
-  --card-border: 45 20% 90%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 222 47% 11%; /* Bolder borders for cards */
 
   --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 10%;
-  --popover-border: 45 20% 90%;
+  --popover-foreground: 222 47% 11%;
+  --popover-border: 222 47% 11%;
 
-  /* Primary: "Azzurro" vibrant blue */
-  --primary: 220 90% 55%;
+  /* Primary: deep vibrant violet/indigo #5B21B6 */
+  --primary: 263 70% 42%;
   --primary-foreground: 0 0% 100%;
 
-  /* Secondary: "Giallo" energetic yellow */
-  --secondary: 45 100% 55%;
-  --secondary-foreground: 240 10% 10%;
+  /* Secondary: electric lime/teal #10B981 */
+  --secondary: 160 84% 39%;
+  --secondary-foreground: 0 0% 100%;
 
-  --muted: 45 20% 94%;
-  --muted-foreground: 240 5% 40%;
+  --muted: 45 20% 92%;
+  --muted-foreground: 222 20% 40%;
 
-  /* Accent: "Arancio" warm orange */
-  --accent: 20 90% 60%;
+  /* Accent: hot coral/orange #F97316 */
+  --accent: 25 95% 53%;
   --accent-foreground: 0 0% 100%;
 
-  --destructive: 350 85% 55%;
+  --destructive: 348 83% 47%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 45 20% 88%;
-  --input: 45 20% 88%;
-  --ring: 220 90% 55%;
+  --border: 222 20% 85%;
+  --input: 222 20% 85%;
+  --ring: 263 70% 42%;
 
   --app-font-sans: 'Outfit', sans-serif;
   --app-font-display: 'Bricolage Grotesque', sans-serif;
@@ -87,35 +88,35 @@
 }
 
 .dark {
-  --background: 240 15% 10%;
-  --foreground: 45 30% 95%;
+  --background: 222 47% 7%;
+  --foreground: 45 33% 98%;
 
-  --card: 240 12% 14%;
-  --card-foreground: 45 30% 95%;
-  --card-border: 240 10% 20%;
+  --card: 222 40% 12%;
+  --card-foreground: 45 33% 98%;
+  --card-border: 222 30% 20%;
 
-  --popover: 240 12% 14%;
-  --popover-foreground: 45 30% 95%;
-  --popover-border: 240 10% 20%;
+  --popover: 222 40% 12%;
+  --popover-foreground: 45 33% 98%;
+  --popover-border: 222 30% 20%;
 
-  --primary: 220 85% 65%;
-  --primary-foreground: 240 15% 10%;
+  --primary: 263 80% 65%;
+  --primary-foreground: 222 47% 7%;
 
-  --secondary: 45 90% 60%;
-  --secondary-foreground: 240 15% 10%;
+  --secondary: 160 80% 50%;
+  --secondary-foreground: 222 47% 7%;
 
-  --muted: 240 10% 20%;
-  --muted-foreground: 240 5% 70%;
+  --muted: 222 30% 18%;
+  --muted-foreground: 222 20% 70%;
 
-  --accent: 20 85% 65%;
-  --accent-foreground: 240 15% 10%;
+  --accent: 25 90% 60%;
+  --accent-foreground: 222 47% 7%;
 
-  --destructive: 350 80% 65%;
-  --destructive-foreground: 240 15% 10%;
+  --destructive: 348 80% 60%;
+  --destructive-foreground: 222 47% 7%;
 
-  --border: 240 10% 24%;
-  --input: 240 10% 24%;
-  --ring: 220 85% 65%;
+  --border: 222 30% 25%;
+  --input: 222 30% 25%;
+  --ring: 263 80% 65%;
 }
 
 @layer base {
@@ -126,19 +127,53 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight font-semibold;
+    @apply font-display tracking-tight font-extrabold;
   }
 }
 
-/* Category specific colors */
-.cat-appartamenti { --cat-bg: 220 90% 95%; --cat-fg: 220 90% 40%; }
-.cat-libri { --cat-bg: 20 90% 95%; --cat-fg: 20 90% 45%; }
-.cat-ripetizioni { --cat-bg: 140 70% 95%; --cat-fg: 140 70% 35%; }
-.cat-consigli { --cat-bg: 280 80% 95%; --cat-fg: 280 80% 50%; }
-.cat-gruppi-studio { --cat-bg: 340 90% 95%; --cat-fg: 340 90% 50%; }
+/* 
+  Category specific bold colors 
+  - Appartamenti: deep indigo/violet (#4C1D95) -> 264, 67%, 35%
+  - Libri: warm amber/burnt orange (#D97706) -> 38, 92%, 44%
+  - Ripetizioni: emerald green (#047857) -> 163, 94%, 24%
+  - Consigli: sky blue / cyan (#0284C7) -> 200, 98%, 39%
+  - Gruppi Studio: hot pink / rose (#BE185D) -> 335, 78%, 42%
+*/
 
-.dark .cat-appartamenti { --cat-bg: 220 50% 20%; --cat-fg: 220 90% 80%; }
-.dark .cat-libri { --cat-bg: 20 50% 20%; --cat-fg: 20 90% 80%; }
-.dark .cat-ripetizioni { --cat-bg: 140 40% 20%; --cat-fg: 140 70% 80%; }
-.dark .cat-consigli { --cat-bg: 280 40% 20%; --cat-fg: 280 80% 85%; }
-.dark .cat-gruppi-studio { --cat-bg: 340 50% 20%; --cat-fg: 340 90% 85%; }
+.cat-appartamenti { --cat-bg: 264 67% 35%; --cat-fg: 0 0% 100%; }
+.cat-libri { --cat-bg: 38 92% 44%; --cat-fg: 0 0% 100%; }
+.cat-ripetizioni { --cat-bg: 163 94% 24%; --cat-fg: 0 0% 100%; }
+.cat-consigli { --cat-bg: 200 98% 39%; --cat-fg: 0 0% 100%; }
+.cat-gruppi-studio { --cat-bg: 335 78% 42%; --cat-fg: 0 0% 100%; }
+
+.dark .cat-appartamenti { --cat-bg: 264 70% 55%; --cat-fg: 264 90% 10%; }
+.dark .cat-libri { --cat-bg: 38 90% 55%; --cat-fg: 38 90% 10%; }
+.dark .cat-ripetizioni { --cat-bg: 163 80% 45%; --cat-fg: 163 90% 10%; }
+.dark .cat-consigli { --cat-bg: 200 90% 55%; --cat-fg: 200 90% 10%; }
+.dark .cat-gruppi-studio { --cat-bg: 335 80% 60%; --cat-fg: 335 90% 10%; }
+
+/* Utilities for cards and shadows */
+.shadow-appartamenti { box-shadow: 0 10px 40px -10px hsl(264 67% 35% / 0.4); }
+.shadow-libri { box-shadow: 0 10px 40px -10px hsl(38 92% 44% / 0.4); }
+.shadow-ripetizioni { box-shadow: 0 10px 40px -10px hsl(163 94% 24% / 0.4); }
+.shadow-consigli { box-shadow: 0 10px 40px -10px hsl(200 98% 39% / 0.4); }
+.shadow-gruppi-studio { box-shadow: 0 10px 40px -10px hsl(335 78% 42% / 0.4); }
+
+.border-appartamenti { border-color: hsl(264 67% 35%); }
+.border-libri { border-color: hsl(38 92% 44%); }
+.border-ripetizioni { border-color: hsl(163 94% 24%); }
+.border-consigli { border-color: hsl(200 98% 39%); }
+.border-gruppi-studio { border-color: hsl(335 78% 42%); }
+
+/* Bouncy animations */
+.bouncy-active:active {
+  transform: scale(0.95);
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+}

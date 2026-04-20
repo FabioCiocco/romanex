@@ -161,7 +161,7 @@ export default function Annunci() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
               <h1 className="text-3xl md:text-5xl font-bold font-display text-foreground tracking-tight">
-                {initialCategoria !== "Tutti" ? initialCategoria : "La Bacheca"}
+                {initialCategoria !== "Tutti" ? (getCategoryConfig(initialCategoria)?.name || initialCategoria) : "La Bacheca"}
               </h1>
               <p className="text-muted-foreground mt-3 text-lg font-medium">
                 {data?.total ? `${data.total.toLocaleString('it-IT')} annunci disponibili` : "Cerca nella bacheca"}
@@ -181,7 +181,7 @@ export default function Annunci() {
                 {CATEGORIES.map(cat => (
                   <TabsTrigger 
                     key={cat.id} 
-                    value={cat.name}
+                    value={cat.id}
                     className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-6 py-2.5 text-sm font-semibold border shadow-sm data-[state=inactive]:bg-card hover:bg-muted transition-colors"
                   >
                     <cat.icon className="w-4 h-4 mr-2" />
