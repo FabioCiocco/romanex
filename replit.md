@@ -25,3 +25,13 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+
+## Authentication
+
+- **Provider**: Clerk (whitelabel, auto-provisioned)
+- **Client**: `@clerk/react` in `artifacts/annunci`
+- **Server**: `@clerk/express` + `clerkProxyMiddleware` in `artifacts/api-server`
+- **Protected routes**: `/pubblica` requires sign-in (shows auth gate if not logged in)
+- **Navbar**: shows "Accedi" button when signed out, user avatar + logout when signed in
+- **Login pages**: `/sign-in` and `/sign-up` — branded to match RomaNex theme (violet/orange, Space Grotesk)
+- **User management**: use the Auth pane in the workspace toolbar

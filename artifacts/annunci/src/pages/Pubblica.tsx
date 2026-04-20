@@ -3,7 +3,7 @@ import { useCreateAnnuncio, useListCategorie, getListAnnunciQueryKey } from "@wo
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useLocation, useSearch } from "wouter";
+import { useLocation, useSearch, Link } from "wouter";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,10 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, BookOpen, Search } from "lucide-react";
+import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, BookOpen, Search, LogIn, ShieldCheck } from "lucide-react";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { useState, useMemo } from "react";
+import { useUser } from "@clerk/react";
 
 const formSchema = z.object({
   titolo: z.string().min(5, "Il titolo deve avere almeno 5 caratteri").max(100, "Il titolo non può superare i 100 caratteri"),
@@ -34,6 +35,7 @@ export default function Pubblica() {
   const searchString = useSearch();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { isSignedIn, isLoaded } = useUser();
   const [selectedCat, setSelectedCat] = useState<string>(() => {
     const params = new URLSearchParams(searchString);
     return params.get("categoria") || "";
@@ -62,6 +64,39 @@ export default function Pubblica() {
   const catConfig = getCategoryConfig(selectedCat);
   const showPrice = catConfig ? catConfig.hasPrice : true;
   const isAppartamenti = selectedCat === "appartamenti";
+
+  if (isLoaded && !isSignedIn) {
+    return (
+      <Layout>
+        <div className="min-h-[80vh] flex items-center justify-center bg-background px-4 py-16">
+          <div className="max-w-md w-full text-center">
+            <div className="bg-foreground text-background w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8 border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--primary))]">
+              <ShieldCheck className="w-10 h-10" strokeWidth={2.5} />
+            </div>
+            <h1 className="text-4xl font-black font-display uppercase tracking-tighter mb-4">
+              Accedi per <span className="text-primary">Pubblicare</span>
+            </h1>
+            <p className="text-foreground/60 font-medium text-lg mb-10 leading-relaxed">
+              Devi avere un account per pubblicare annunci su RomaNex. È gratis e richiede meno di un minuto.
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link href="/sign-up">
+                <Button className="w-full h-14 gap-3 rounded-2xl bg-primary text-primary-foreground border-4 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] hover:translate-y-[3px] hover:translate-x-[3px] transition-all font-black text-lg uppercase tracking-wide">
+                  Crea account gratis
+                </Button>
+              </Link>
+              <Link href="/sign-in">
+                <Button variant="outline" className="w-full h-12 gap-2 rounded-2xl border-2 border-foreground font-black text-base uppercase tracking-wide hover:bg-muted">
+                  <LogIn className="w-5 h-5" strokeWidth={2.5} />
+                  Ho già un account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   const getCustomLabels = () => {
     if (selectedCat === "appartamenti") {
