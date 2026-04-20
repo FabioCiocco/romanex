@@ -12,23 +12,71 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, BookOpen, Search, LogIn, ShieldCheck } from "lucide-react";
+import { ImagePlus, MapPin, Tag, Edit3, Loader2, Home, Search, LogIn, ShieldCheck } from "lucide-react";
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useUser } from "@clerk/react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import type { Lang } from "@/lib/i18n";
 
 const formSchema = z.object({
-  titolo: z.string().min(5, "Il titolo deve avere almeno 5 caratteri").max(100, "Il titolo non può superare i 100 caratteri"),
-  descrizione: z.string().min(20, "La descrizione deve avere almeno 20 caratteri").max(2000, "La descrizione è troppo lunga"),
-  prezzo: z.coerce.number().min(0, "Il prezzo non può essere negativo").nullable().optional(),
-  categoria: z.string().min(1, "Seleziona una categoria"),
-  citta: z.string().min(2, "Inserisci la tua città o polo universitario"),
-  contatto: z.string().min(5, "Inserisci un contatto valido (email universitaria o cellulare)"),
-  immagineUrl: z.string().url("Inserisci un URL immagine valido").nullable().optional().or(z.literal("")),
+  titolo: z.string().min(5).max(100),
+  descrizione: z.string().min(20).max(2000),
+  prezzo: z.coerce.number().min(0).nullable().optional(),
+  categoria: z.string().min(1),
+  citta: z.string().min(2),
+  contatto: z.string().min(5),
+  immagineUrl: z.string().url().nullable().optional().or(z.literal("")),
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+function getLabels(cat: string, tipo: "cerco" | "offro", lang: Lang) {
+  const s = (it: string, en: string, es: string) => (lang === "en" ? en : lang === "es" ? es : it);
+  if (cat === "appartamenti") {
+    if (tipo === "offro") return {
+      title: s("Descrivi lo spazio (es. Stanza singola in Bovisa)", "Describe the space (e.g. Single room in Bovisa)", "Describe el espacio (ej. Habitación individual en Bovisa)"),
+      desc: s("Racconta la casa: dimensioni, arredamento, spese incluse, coinquilini, regole...", "Describe the home: size, furnishing, bills, flatmates, rules...", "Describe el piso: tamaño, mobiliario, gastos, compañeros, normas..."),
+      pricePlaceholder: s("Affitto mensile €", "Monthly rent €", "Alquiler mensual €"),
+      priceLabel: s("Affitto mensile (€)", "Monthly rent (€)", "Alquiler mensual (€)"),
+    };
+    return {
+      title: s("Cosa cerchi? (es. Stanza singola a Milano)", "What are you looking for? (e.g. Single room in Milan)", "¿Qué buscas? (ej. Habitación individual en Milán)"),
+      desc: s("Zona preferita, budget, quando ti serve, quanti coinquilini...", "Preferred area, budget, when you need it, how many flatmates...", "Zona preferida, presupuesto, cuándo lo necesitas, compañeros..."),
+      pricePlaceholder: s("Budget massimo €", "Maximum budget €", "Presupuesto máximo €"),
+      priceLabel: s("Budget massimo (€)", "Maximum budget (€)", "Presupuesto máximo (€)"),
+    };
+  }
+  if (cat === "libri") return {
+    title: s("Titolo del libro e autore", "Book title and author", "Título del libro y autor"),
+    desc: s("Edizione, condizioni, sottolineature, anno di acquisto...", "Edition, condition, annotations, year of purchase...", "Edición, estado, anotaciones, año de compra..."),
+    pricePlaceholder: s("Prezzo richiesto €", "Asking price €", "Precio pedido €"),
+    priceLabel: s("Prezzo richiesto (€)", "Asking price (€)", "Precio pedido (€)"),
+  };
+  if (cat === "ripetizioni") return {
+    title: s("Materia e livello (es. Analisi 1 — Ingegneria)", "Subject and level (e.g. Calculus 1 — Engineering)", "Asignatura y nivel (ej. Cálculo 1 — Ingeniería)"),
+    desc: s("Le tue competenze, metodo, disponibilità, dove ti trovi...", "Your skills, method, availability, location...", "Tus conocimientos, método, disponibilidad, dónde estás..."),
+    pricePlaceholder: s("Tariffa oraria €", "Hourly rate €", "Tarifa por hora €"),
+    priceLabel: s("Tariffa oraria (€)", "Hourly rate (€)", "Tarifa por hora (€)"),
+  };
+  if (cat === "consigli") return {
+    title: s("L'argomento del tuo consiglio", "Topic of your advice", "Tema de tu consejo"),
+    desc: s("Condividi la tua esperienza, tips per gli esami, vita fuori sede...", "Share your experience, exam tips, life away from home...", "Comparte tu experiencia, consejos para exámenes, vida fuera de casa..."),
+    pricePlaceholder: "", priceLabel: "",
+  };
+  if (cat === "gruppi-studio") return {
+    title: s("Cosa studiate? (es. Gruppo Analisi — Politecnico)", "What are you studying? (e.g. Calculus group — Politecnico)", "¿Qué estudian? (ej. Grupo Cálculo — Politecnico)"),
+    desc: s("Quale esame, quando vi trovate, dove, quante persone cercate...", "Which exam, when and where you meet, how many people you need...", "Qué examen, cuándo y dónde os reunís, cuántas personas buscáis..."),
+    pricePlaceholder: "", priceLabel: "",
+  };
+  return {
+    title: s("Titolo dell'annuncio", "Listing title", "Título del anuncio"),
+    desc: s("Descrizione dettagliata", "Detailed description", "Descripción detallada"),
+    pricePlaceholder: s("Prezzo €", "Price €", "Precio €"),
+    priceLabel: s("Prezzo (€)", "Price (€)", "Precio (€)"),
+  };
+}
 
 export default function Pubblica() {
   const [, setLocation] = useLocation();
@@ -36,6 +84,9 @@ export default function Pubblica() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isSignedIn, isLoaded } = useUser();
+  const { t, lang } = useLanguage();
+  const tc = t.common;
+
   const [selectedCat, setSelectedCat] = useState<string>(() => {
     const params = new URLSearchParams(searchString);
     return params.get("categoria") || "";
@@ -48,22 +99,11 @@ export default function Pubblica() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      titolo: "",
-      descrizione: "",
-      prezzo: null,
-      categoria: (() => {
-        const params = new URLSearchParams(searchString);
-        return params.get("categoria") || "";
-      })(),
-      citta: "",
-      contatto: "",
-      immagineUrl: "",
+      titolo: "", descrizione: "", prezzo: null,
+      categoria: (() => { const p = new URLSearchParams(searchString); return p.get("categoria") || ""; })(),
+      citta: "", contatto: "", immagineUrl: "",
     },
   });
-
-  const catConfig = getCategoryConfig(selectedCat);
-  const showPrice = catConfig ? catConfig.hasPrice : true;
-  const isAppartamenti = selectedCat === "appartamenti";
 
   if (isLoaded && !isSignedIn) {
     return (
@@ -73,22 +113,18 @@ export default function Pubblica() {
             <div className="bg-foreground text-background w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-8 border-4 border-foreground shadow-[6px_6px_0_0_hsl(var(--primary))]">
               <ShieldCheck className="w-10 h-10" strokeWidth={2.5} />
             </div>
-            <h1 className="text-4xl font-black font-display uppercase tracking-tighter mb-4">
-              Accedi per <span className="text-primary">Pubblicare</span>
-            </h1>
-            <p className="text-foreground/60 font-medium text-lg mb-10 leading-relaxed">
-              Devi avere un account per pubblicare annunci su RomaNex. È gratis e richiede meno di un minuto.
-            </p>
+            <h1 className="text-4xl font-black font-display uppercase tracking-tighter mb-4">{tc.loginToPublish}</h1>
+            <p className="text-foreground/60 font-medium text-lg mb-10 leading-relaxed">{tc.loginToPublishDesc}</p>
             <div className="flex flex-col gap-3">
               <Link href="/sign-up">
                 <Button className="w-full h-14 gap-3 rounded-2xl bg-primary text-primary-foreground border-4 border-foreground shadow-[5px_5px_0_0_hsl(var(--foreground))] hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] hover:translate-y-[3px] hover:translate-x-[3px] transition-all font-black text-lg uppercase tracking-wide">
-                  Crea account gratis
+                  {tc.createAccount}
                 </Button>
               </Link>
               <Link href="/sign-in">
                 <Button variant="outline" className="w-full h-12 gap-2 rounded-2xl border-2 border-foreground font-black text-base uppercase tracking-wide hover:bg-muted">
                   <LogIn className="w-5 h-5" strokeWidth={2.5} />
-                  Ho già un account
+                  {tc.iHaveAccountAlready}
                 </Button>
               </Link>
             </div>
@@ -98,88 +134,28 @@ export default function Pubblica() {
     );
   }
 
-  const getCustomLabels = () => {
-    if (selectedCat === "appartamenti") {
-      if (tipoAppartamento === "offro") {
-        return {
-          title: "Descrivi lo spazio (es. Stanza singola in Bovisa, 10 min dal Politecnico)",
-          desc: "Racconta la casa: dimensioni, arredamento, spese incluse, chi sono i coinquilini, regole...",
-          pricePlaceholder: "Affitto mensile €",
-          priceLabel: "Affitto mensile (€)"
-        };
-      }
-      return {
-        title: "Cosa cerchi? (es. Stanza singola a Milano vicino Statale)",
-        desc: "Zona preferita, budget, quando ti serve, quanti coinquilini preferisci...",
-        pricePlaceholder: "Budget massimo €",
-        priceLabel: "Budget massimo (€)"
-      };
-    }
-    if (selectedCat === "libri") {
-      return {
-        title: "Titolo del libro e autore",
-        desc: "Edizione, condizioni, sottolineature presenti, anno di acquisto...",
-        pricePlaceholder: "Prezzo richiesto €",
-        priceLabel: "Prezzo richiesto (€)"
-      };
-    }
-    if (selectedCat === "ripetizioni") {
-      return {
-        title: "Materia e livello (es. Analisi Matematica 1 — Ingegneria)",
-        desc: "Le tue competenze, metodo, disponibilità oraria, dove ti trovi...",
-        pricePlaceholder: "Tariffa oraria €",
-        priceLabel: "Tariffa oraria (€)"
-      };
-    }
-    if (selectedCat === "consigli") {
-      return {
-        title: "L'argomento del tuo consiglio",
-        desc: "Condividi la tua esperienza, tips per gli esami, la vita fuori sede...",
-        pricePlaceholder: "",
-        priceLabel: ""
-      };
-    }
-    if (selectedCat === "gruppi-studio") {
-      return {
-        title: "Cosa studiate? (es. Gruppo Analisi — Politecnico Milano)",
-        desc: "Quale esame, quando vi trovate, dove, quante persone cercate...",
-        pricePlaceholder: "",
-        priceLabel: ""
-      };
-    }
-    return {
-      title: "Titolo dell'annuncio",
-      desc: "Descrizione dettagliata",
-      pricePlaceholder: "Prezzo €",
-      priceLabel: "Prezzo (€)"
-    };
-  };
+  const catConfig = getCategoryConfig(selectedCat);
+  const showPrice = catConfig ? catConfig.hasPrice : true;
+  const isAppartamenti = selectedCat === "appartamenti";
+  const labels = getLabels(selectedCat, tipoAppartamento, lang);
 
-  const labels = getCustomLabels();
+  const s = (it: string, en: string, es: string) => (lang === "en" ? en : lang === "es" ? es : it);
 
   const onSubmit = (data: FormValues) => {
     const payload = {
       ...data,
       prezzo: showPrice ? data.prezzo : null,
-      immagineUrl: data.immagineUrl === "" ? null : data.immagineUrl
+      immagineUrl: data.immagineUrl === "" ? null : data.immagineUrl,
     };
-
     createAnnuncio.mutate({ data: payload }, {
       onSuccess: (newAnnuncio) => {
         queryClient.invalidateQueries({ queryKey: getListAnnunciQueryKey() });
-        toast({
-          title: "Post pubblicato!",
-          description: "Visibile da subito in bacheca.",
-        });
+        toast({ title: tc.publishedSuccess, description: tc.publishedSuccessDesc });
         setLocation(`/annunci/${newAnnuncio.id}`);
       },
       onError: () => {
-        toast({
-          variant: "destructive",
-          title: "Errore",
-          description: "Si è verificato un errore durante la pubblicazione. Riprova.",
-        });
-      }
+        toast({ variant: "destructive", title: tc.publishError, description: tc.publishErrorDesc });
+      },
     });
   };
 
@@ -187,9 +163,11 @@ export default function Pubblica() {
     <Layout>
       <div className="container mx-auto px-4 md:px-6 py-12 max-w-4xl">
         <div className="mb-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">Crea un Post</h1>
+          <h1 className="text-4xl md:text-5xl font-bold font-display text-foreground mb-4">
+            {s("Crea un Post", "Create a Post", "Crear un anuncio")}
+          </h1>
           <p className="text-xl text-muted-foreground font-medium">
-            Scrivi sulla bacheca di RomaNex. Gratis, sempre.
+            {s("Scrivi sulla bacheca di RomaNex. Gratis, sempre.", "Write on the RomaNex board. Always free.", "Escribe en el tablón de RomaNex. Siempre gratis.")}
           </p>
         </div>
 
@@ -197,45 +175,51 @@ export default function Pubblica() {
           <CardHeader className="bg-muted/50 border-b pb-6 px-8 pt-8">
             <CardTitle className="text-2xl font-display flex items-center gap-3">
               <Edit3 className="w-6 h-6 text-primary" />
-              Cosa vuoi condividere?
+              {s("Cosa vuoi condividere?", "What do you want to share?", "¿Qué quieres compartir?")}
             </CardTitle>
             <CardDescription className="text-base font-medium">
-              Scegli la sezione giusta in modo che i tuoi colleghi possano trovarti facilmente.
+              {s(
+                "Scegli la sezione giusta in modo che i tuoi colleghi possano trovarti facilmente.",
+                "Choose the right section so your classmates can find you easily.",
+                "Elige la sección correcta para que tus compañeros puedan encontrarte fácilmente."
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent className="p-8">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
-                {/* Category Selection */}
+                {/* Category */}
                 <div className="p-6 bg-primary/5 rounded-2xl border border-primary/10">
                   <FormField
                     control={form.control}
                     name="categoria"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-bold text-foreground">Scegli la sezione *</FormLabel>
+                        <FormLabel className="text-base font-bold text-foreground">
+                          {s("Scegli la sezione *", "Choose the section *", "Elige la sección *")}
+                        </FormLabel>
                         <Select
-                          onValueChange={(val) => {
-                            field.onChange(val);
-                            setSelectedCat(val);
-                          }}
+                          onValueChange={(val) => { field.onChange(val); setSelectedCat(val); }}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="h-14 text-lg bg-background rounded-xl font-medium">
-                              <SelectValue placeholder="In quale bacheca vuoi pubblicare?" />
+                              <SelectValue placeholder={s("In quale bacheca vuoi pubblicare?", "Which board do you want to post in?", "¿En qué sección quieres publicar?")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent className="rounded-xl">
-                            {CATEGORIES.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.id} className="py-3 cursor-pointer">
-                                <div className="flex items-center gap-3 font-medium text-base">
-                                  <cat.icon className="w-5 h-5 text-primary" />
-                                  {cat.name}
-                                </div>
-                              </SelectItem>
-                            ))}
+                            {CATEGORIES.map((cat) => {
+                              const catT = (t.categories as Record<string, { name: string }>)[cat.id];
+                              return (
+                                <SelectItem key={cat.id} value={cat.id} className="py-3 cursor-pointer">
+                                  <div className="flex items-center gap-3 font-medium text-base">
+                                    <cat.icon className="w-5 h-5 text-primary" />
+                                    {catT?.name ?? cat.name}
+                                  </div>
+                                </SelectItem>
+                              );
+                            })}
                             {dbCategorie?.filter(dbCat => !CATEGORIES.find(c => c.id === dbCat.id)).map(cat => (
                               <SelectItem key={cat.id} value={cat.id} className="py-3 cursor-pointer">
                                 <div className="flex items-center gap-3 font-medium text-base">
@@ -252,45 +236,40 @@ export default function Pubblica() {
                   />
                 </div>
 
-                {/* Appartamenti: Cerco / Offro toggle */}
+                {/* Appartamenti toggle */}
                 {isAppartamenti && (
                   <div className="p-6 bg-muted/40 rounded-2xl border border-border space-y-3">
-                    <p className="text-base font-bold text-foreground">Stai cercando o hai qualcosa da affittare? *</p>
+                    <p className="text-base font-bold text-foreground">
+                      {s("Stai cercando o hai qualcosa da affittare? *", "Are you looking or do you have something to rent? *", "¿Buscas o tienes algo para alquilar? *")}
+                    </p>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setTipoAppartamento("cerco")}
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${
-                          tipoAppartamento === "cerco"
-                            ? "border-primary bg-primary/10 text-primary shadow-[2px_2px_0_0_hsl(var(--primary))]"
-                            : "border-border bg-background text-foreground/70 hover:border-foreground/30"
-                        }`}
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${tipoAppartamento === "cerco" ? "border-primary bg-primary/10 text-primary shadow-[2px_2px_0_0_hsl(var(--primary))]" : "border-border bg-background text-foreground/70 hover:border-foreground/30"}`}
                       >
                         <Search className="w-5 h-5 shrink-0" strokeWidth={2.5} />
                         <div className="text-left">
-                          <div className="text-base">Cerco casa</div>
-                          <div className="text-xs font-medium opacity-70">Stai cercando dove vivere</div>
+                          <div className="text-base">{s("Cerco casa", "Looking for housing", "Busco piso")}</div>
+                          <div className="text-xs font-medium opacity-70">{s("Stai cercando dove vivere", "You're looking for a place to live", "Estás buscando dónde vivir")}</div>
                         </div>
                       </button>
                       <button
                         type="button"
                         onClick={() => setTipoAppartamento("offro")}
-                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${
-                          tipoAppartamento === "offro"
-                            ? "border-accent bg-accent/10 text-accent shadow-[2px_2px_0_0_hsl(var(--accent))]"
-                            : "border-border bg-background text-foreground/70 hover:border-foreground/30"
-                        }`}
+                        className={`flex items-center gap-3 p-4 rounded-xl border-2 font-bold transition-all ${tipoAppartamento === "offro" ? "border-accent bg-accent/10 text-accent shadow-[2px_2px_0_0_hsl(var(--accent))]" : "border-border bg-background text-foreground/70 hover:border-foreground/30"}`}
                       >
                         <Home className="w-5 h-5 shrink-0" strokeWidth={2.5} />
                         <div className="text-left">
-                          <div className="text-base">Affitto il mio spazio</div>
-                          <div className="text-xs font-medium opacity-70">Hai una stanza o casa libera</div>
+                          <div className="text-base">{s("Affitto il mio spazio", "Renting my space", "Alquilo mi espacio")}</div>
+                          <div className="text-xs font-medium opacity-70">{s("Hai una stanza o casa libera", "You have a free room or flat", "Tienes una habitación o piso libre")}</div>
                         </div>
                       </button>
                     </div>
                   </div>
                 )}
 
+                {/* Title + Price */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <FormField
                     control={form.control}
@@ -299,20 +278,19 @@ export default function Pubblica() {
                       <FormItem className={showPrice ? "md:col-span-1" : "md:col-span-2"}>
                         <FormLabel className="text-base font-bold">{labels.title} *</FormLabel>
                         <FormControl>
-                          <Input placeholder="Scrivi qui..." className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
+                          <Input placeholder="..." className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   {showPrice && (
                     <FormField
                       control={form.control}
                       name="prezzo"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-base font-bold">{labels.priceLabel || "Prezzo (€)"}</FormLabel>
+                          <FormLabel className="text-base font-bold">{labels.priceLabel || tc.priceRange}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -325,7 +303,9 @@ export default function Pubblica() {
                               />
                             </div>
                           </FormControl>
-                          <FormDescription className="font-medium">Lascia vuoto = "Da concordare"</FormDescription>
+                          <FormDescription className="font-medium">
+                            {s('Lascia vuoto = "Da concordare"', 'Leave empty = "Negotiable"', 'Deja vacío = "A convenir"')}
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -333,6 +313,7 @@ export default function Pubblica() {
                   )}
                 </div>
 
+                {/* Description */}
                 <FormField
                   control={form.control}
                   name="descrizione"
@@ -341,7 +322,11 @@ export default function Pubblica() {
                       <FormLabel className="text-base font-bold">{labels.desc} *</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Più dettagli fornisci, più sarà utile agli altri studenti..."
+                          placeholder={s(
+                            "Più dettagli fornisci, più sarà utile agli altri studenti...",
+                            "The more details you give, the more useful it'll be for other students...",
+                            "Cuantos más detalles das, más útil será para los demás estudiantes..."
+                          )}
                           className="min-h-[160px] resize-y text-lg p-5 rounded-xl bg-muted/50 border-border focus-visible:bg-background leading-relaxed"
                           {...field}
                         />
@@ -351,47 +336,48 @@ export default function Pubblica() {
                   )}
                 />
 
+                {/* City + Contact */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-border">
                   <FormField
                     control={form.control}
                     name="citta"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-bold">Città / Polo *</FormLabel>
+                        <FormLabel className="text-base font-bold">{s("Città / Polo *", "City / Campus *", "Ciudad / Campus *")}</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                            <Input placeholder="Es. Milano Bovisa" className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
+                            <Input placeholder={s("Es. Milano Bovisa", "e.g. Milan Bovisa", "Ej. Milán Bovisa")} className="pl-12 h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="contatto"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-bold">Contatto *</FormLabel>
+                        <FormLabel className="text-base font-bold">{s("Contatto *", "Contact *", "Contacto *")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Email o Telefono" className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
+                          <Input placeholder={s("Email o Telefono", "Email or Phone", "Email o Teléfono")} className="h-14 text-lg rounded-xl bg-muted/50 border-border focus-visible:bg-background" {...field} />
                         </FormControl>
-                        <FormDescription className="font-medium">Come possono scriverti?</FormDescription>
+                        <FormDescription className="font-medium">{s("Come possono scriverti?", "How can people reach you?", "¿Cómo pueden escribirte?")}</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
 
+                {/* Image URL */}
                 <div className="pt-2">
                   <FormField
                     control={form.control}
                     name="immagineUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-base font-bold">Immagine (URL opzionale)</FormLabel>
+                        <FormLabel className="text-base font-bold">{s("Immagine (URL opzionale)", "Image (optional URL)", "Imagen (URL opcional)")}</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <ImagePlus className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -417,13 +403,8 @@ export default function Pubblica() {
                     disabled={createAnnuncio.isPending}
                   >
                     {createAnnuncio.isPending ? (
-                      <>
-                        <Loader2 className="mr-3 h-6 w-6 animate-spin" />
-                        Pubblicazione...
-                      </>
-                    ) : (
-                      "Appendi in Bacheca"
-                    )}
+                      <><Loader2 className="mr-3 h-6 w-6 animate-spin" />{tc.publishing}</>
+                    ) : tc.publishBtn}
                   </Button>
                 </div>
               </form>
