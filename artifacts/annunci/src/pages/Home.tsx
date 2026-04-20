@@ -272,7 +272,7 @@ export default function Home() {
           ) : boardItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {boardItems.slice(0, 4).map((annuncio) => (
-                <AnnuncioCard key={annuncio.id} annuncio={annuncio} compact />
+                <AnnuncioCard key={annuncio.id} annuncio={annuncio} mini />
               ))}
             </div>
           ) : (

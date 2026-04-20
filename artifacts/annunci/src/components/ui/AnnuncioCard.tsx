@@ -14,9 +14,10 @@ const DATE_LOCALES = { it, en: enUS, es };
 interface AnnuncioCardProps {
   annuncio: Annuncio;
   compact?: boolean;
+  mini?: boolean;
 }
 
-export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
+export function AnnuncioCard({ annuncio, compact = false, mini = false }: AnnuncioCardProps) {
   const { t, lang } = useLanguage();
   const tc = t.common;
   const locale = lang === 'it' ? 'it-IT' : lang === 'es' ? 'es-ES' : 'en-GB';
@@ -37,10 +38,10 @@ export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
         
         {/* Dynamic Category Color Top Border - only if no image */}
         {!hasImage && (
-          <div className="absolute top-0 left-0 right-0 h-2 z-10" style={{backgroundColor: `hsl(var(--cat-bg))`}} />
+          <div className={`absolute top-0 left-0 right-0 ${mini ? 'h-1' : 'h-2'} z-10`} style={{backgroundColor: `hsl(var(--cat-bg))`}} />
         )}
         
-        <div className={`relative ${hasImage ? (compact ? 'aspect-[16/9]' : 'aspect-[4/3]') : (compact ? 'h-28' : 'h-40')} overflow-hidden bg-muted/50 ${categoryConfig.colorClass}`}>
+        <div className={`relative ${hasImage ? (mini ? 'aspect-[2/1]' : compact ? 'aspect-[16/9]' : 'aspect-[4/3]') : (mini ? 'h-20' : compact ? 'h-28' : 'h-40')} overflow-hidden bg-muted/50 ${categoryConfig.colorClass}`}>
           {hasImage ? (
             <img 
               src={annuncio.immagineUrl!} 
@@ -62,8 +63,8 @@ export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
 
           {!hasImage && (
              <div className="absolute inset-0 flex items-center justify-center z-10">
-               <div className="w-20 h-20 rounded-2xl bg-[hsl(var(--cat-bg))] text-[hsl(var(--cat-fg))] flex items-center justify-center shadow-xl rotate-3 group-hover:rotate-6 transition-transform">
-                 <CategoryIcon name={annuncio.categoria} className="w-10 h-10" />
+               <div className={`${mini ? 'w-12 h-12' : 'w-20 h-20'} rounded-2xl bg-[hsl(var(--cat-bg))] text-[hsl(var(--cat-fg))] flex items-center justify-center shadow-xl rotate-3 group-hover:rotate-6 transition-transform`}>
+                 <CategoryIcon name={annuncio.categoria} className={mini ? 'w-6 h-6' : 'w-10 h-10'} />
                </div>
              </div>
           )}
@@ -79,35 +80,35 @@ export function AnnuncioCard({ annuncio, compact = false }: AnnuncioCardProps) {
           </Badge>
         </div>
         
-        <CardContent className={`flex-1 ${compact ? 'p-4 gap-2' : 'p-6 gap-4'} flex flex-col relative z-20 bg-card`}>
-          <h3 className={`font-display font-black ${compact ? 'text-base' : 'text-2xl'} line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight`}>
+        <CardContent className={`flex-1 ${mini ? 'p-3 gap-1.5' : compact ? 'p-4 gap-2' : 'p-6 gap-4'} flex flex-col relative z-20 bg-card`}>
+          <h3 className={`font-display font-black ${mini ? 'text-sm' : compact ? 'text-base' : 'text-2xl'} line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight`}>
             {annuncio.titolo}
           </h3>
           
-          {!compact && (
+          {!compact && !mini && (
             <p className="text-base font-medium text-muted-foreground line-clamp-2 leading-relaxed">
               {annuncio.descrizione}
             </p>
           )}
 
-          <div className={`mt-auto ${compact ? 'pt-2' : 'pt-4'} flex items-center justify-between`}>
+          <div className={`mt-auto ${mini ? 'pt-1.5' : compact ? 'pt-2' : 'pt-4'} flex items-center justify-between`}>
             {hasPrice ? (
-              <p className={`${compact ? 'text-lg' : 'text-3xl'} font-black font-display tracking-tight px-2.5 py-1 rounded-lg bg-accent/10 text-accent border border-accent/20`}>
+              <p className={`${mini ? 'text-sm' : compact ? 'text-lg' : 'text-3xl'} font-black font-display tracking-tight px-2 py-0.5 rounded-lg bg-accent/10 text-accent border border-accent/20`}>
                 {formattedPrice}
               </p>
             ) : (
-              <div className={`flex items-center gap-1.5 text-primary font-black font-display ${compact ? 'text-sm' : 'text-xl'} uppercase tracking-wide`}>
-                <MessageCircle className={compact ? 'w-4 h-4' : 'w-6 h-6'} strokeWidth={2.5} />
+              <div className={`flex items-center gap-1.5 text-primary font-black font-display ${mini ? 'text-xs' : compact ? 'text-sm' : 'text-xl'} uppercase tracking-wide`}>
+                <MessageCircle className={mini ? 'w-3 h-3' : compact ? 'w-4 h-4' : 'w-6 h-6'} strokeWidth={2.5} />
                 Partecipa
               </div>
             )}
-            <div className={`${compact ? 'w-7 h-7' : 'w-10 h-10'} rounded-full bg-foreground text-background flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300`}>
-              <ArrowUpRight className={compact ? 'w-3.5 h-3.5' : 'w-5 h-5'} strokeWidth={3} />
+            <div className={`${mini ? 'w-6 h-6' : compact ? 'w-7 h-7' : 'w-10 h-10'} rounded-full bg-foreground text-background flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300`}>
+              <ArrowUpRight className={mini ? 'w-3 h-3' : compact ? 'w-3.5 h-3.5' : 'w-5 h-5'} strokeWidth={3} />
             </div>
           </div>
         </CardContent>
         
-        <CardFooter className={`${compact ? 'px-4 py-3' : 'px-6 py-5'} border-t border-border bg-muted/20 flex items-center justify-end text-xs text-foreground/70 font-bold uppercase tracking-wider relative z-20`}>
+        <CardFooter className={`${mini ? 'px-3 py-2' : compact ? 'px-4 py-3' : 'px-6 py-5'} border-t border-border bg-muted/20 flex items-center justify-end text-xs text-foreground/70 font-bold uppercase tracking-wider relative z-20`}>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" strokeWidth={2.5} />
             <span>{formatDistanceToNow(new Date(annuncio.createdAt), { locale: dateLocale, addSuffix: true })}</span>
