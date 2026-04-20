@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, TrendingUp, AlertCircle, ArrowRight, GraduationCap, MessageCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CATEGORIES } from "@/lib/constants";
@@ -21,6 +21,13 @@ export default function Home() {
   const { data: recenti, isLoading: isLoadingRecenti, error: errorRecenti } = useGetAnnunciRecenti();
   const { data: inEvidenza, isLoading: isLoadingEvidenza } = useGetAnnunciInEvidenza();
   const { data: categorie } = useListCategorie();
+
+  const boardItems = useMemo(() => {
+    const ev = inEvidenza ?? [];
+    const evIds = new Set(ev.map(a => a.id));
+    const recentiOnly = (recenti ?? []).filter(a => !evIds.has(a.id));
+    return [...ev, ...recentiOnly];
+  }, [inEvidenza, recenti]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -235,41 +242,15 @@ export default function Home() {
       </section>
 
 
-      {/* IN EVIDENZA */}
-      {(!inEvidenza || inEvidenza.length > 0 || isLoadingEvidenza) && (
-        <section className="py-24 border-b-4 border-foreground relative bg-muted/20">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="flex items-end justify-between mb-12">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary text-secondary-foreground font-black text-sm uppercase tracking-wider border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">
-                  <TrendingUp className="w-5 h-5" strokeWidth={3} /> {h.topPostBadge}
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black font-display uppercase tracking-tighter">{h.featuredTitle}</h2>
-              </div>
-            </div>
-
-            {isLoadingEvidenza ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-[280px] rounded-2xl" />)}
-              </div>
-            ) : inEvidenza && inEvidenza.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {inEvidenza.map((annuncio) => (
-                  <AnnuncioCard key={annuncio.id} annuncio={annuncio} compact />
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </section>
-      )}
-
-
-      {/* RECENTI */}
+      {/* BACHECA — in evidenza + recenti unificati */}
       <section className="py-12 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between mb-6">
             <div className="space-y-1">
-              <h2 className="text-2xl md:text-3xl font-black font-display uppercase tracking-tighter">{h.recentTitle}</h2>
+              <div className="flex items-center gap-2.5">
+                <TrendingUp className="w-4 h-4 text-primary" strokeWidth={3} />
+                <h2 className="text-2xl md:text-3xl font-black font-display uppercase tracking-tighter">{h.recentTitle}</h2>
+              </div>
               <p className="text-foreground/60 text-sm font-bold">{h.recentSub}</p>
             </div>
             <Link href="/annunci" className="hidden md:inline-flex items-center text-primary font-black uppercase tracking-wider hover:text-accent group text-sm gap-1 transition-all">
@@ -284,13 +265,13 @@ export default function Home() {
               <AlertTitle className="font-black text-lg uppercase tracking-wider">{h.errorTitle}</AlertTitle>
               <AlertDescription className="font-bold">{h.errorDesc}</AlertDescription>
             </Alert>
-          ) : isLoadingRecenti ? (
+          ) : (isLoadingRecenti || isLoadingEvidenza) ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-52 rounded-2xl" />)}
             </div>
-          ) : recenti && recenti.length > 0 ? (
+          ) : boardItems.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {recenti.map((annuncio) => (
+              {boardItems.map((annuncio) => (
                 <AnnuncioCard key={annuncio.id} annuncio={annuncio} compact />
               ))}
             </div>
@@ -305,7 +286,7 @@ export default function Home() {
               </Link>
             </div>
           )}
-          
+
           <div className="mt-6 text-center md:hidden">
             <Link href="/annunci">
               <Button variant="outline" size="sm" className="w-full rounded-xl font-black uppercase tracking-wider border-2 border-foreground">{h.allBoardLink}</Button>
