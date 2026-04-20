@@ -28,10 +28,10 @@ export function Footer() {
                 <BookOpen className="h-4 w-4" strokeWidth={2.5} /> Studio
               </div>
               <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-background px-4 py-2 rounded-lg border-2 border-background/20 bg-background/5">
-                <Users className="h-4 w-4" strokeWidth={2.5} /> Community
+                <Users className="h-4 w-4" strokeWidth={2.5} /> Comunità
               </div>
               <div className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-background px-4 py-2 rounded-lg border-2 border-background/20 bg-background/5">
-                <MapPin className="h-4 w-4" strokeWidth={2.5} /> Campus
+                <MapPin className="h-4 w-4" strokeWidth={2.5} /> Ateneo
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@ export function Footer() {
             <ul className="space-y-4 text-base font-medium text-background/70">
               {CATEGORIES.map(c => (
                 <li key={c.id}>
-                  <Link href={`/annunci?categoria=${encodeURIComponent(c.id)}`} className="hover:text-primary transition-colors flex items-center group w-max">
+                  <Link href={`/${c.id}`} className="hover:text-primary transition-colors flex items-center group w-max">
                     <span className="group-hover:translate-x-2 transition-transform">{c.name}</span>
                   </Link>
                 </li>
@@ -55,7 +55,7 @@ export function Footer() {
           </div>
           
           <div className="md:col-span-4 space-y-6">
-            <h3 className="font-black text-xl text-background uppercase tracking-wider">Action</h3>
+            <h3 className="font-black text-xl text-background uppercase tracking-wider">Azioni</h3>
             <ul className="space-y-4 text-base font-medium text-background/70">
               <li>
                 <Link href="/pubblica" className="text-accent hover:text-accent/80 font-bold transition-colors flex items-center gap-2 group w-max">

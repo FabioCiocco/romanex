@@ -83,7 +83,7 @@ export default function Home() {
             </form>
             
             <div className="flex flex-wrap items-center gap-4 pt-6 text-sm font-bold uppercase tracking-wider text-foreground/60">
-              <span>Trending:</span>
+              <span>Di tendenza:</span>
               <Link href="/annunci?q=stanza+singola" className="px-4 py-2 rounded-lg bg-white border-2 border-foreground text-foreground hover:-translate-y-1 hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all">Stanza singola</Link>
               <Link href="/annunci?q=economia" className="px-4 py-2 rounded-lg bg-white border-2 border-foreground text-foreground hover:-translate-y-1 hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all">Economia</Link>
               <Link href="/annunci?q=ripetizioni" className="px-4 py-2 rounded-lg bg-white border-2 border-foreground text-foreground hover:-translate-y-1 hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all">Ripetizioni</Link>
@@ -134,7 +134,7 @@ export default function Home() {
                       </div>
                       {count > 0 && (
                         <span className="bg-white/20 border border-white/30 text-white font-black text-sm px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-sm">
-                          {count} post
+                          {count} annunci
                         </span>
                       )}
                     </div>
@@ -197,7 +197,7 @@ export default function Home() {
             <div className="flex items-end justify-between mb-12">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary text-secondary-foreground font-black text-sm uppercase tracking-wider border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">
-                  <TrendingUp className="w-5 h-5" strokeWidth={3} /> Top Post
+                  <TrendingUp className="w-5 h-5" strokeWidth={3} /> In Primo Piano
                 </div>
                 <h2 className="text-4xl md:text-6xl font-black font-display uppercase tracking-tighter">In Evidenza</h2>
               </div>

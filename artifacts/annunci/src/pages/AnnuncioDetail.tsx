@@ -191,7 +191,7 @@ export default function AnnuncioDetail() {
                   ) : (
                     <div className="flex items-center gap-2 text-secondary font-display font-bold text-2xl">
                       <MessageCircle className="w-6 h-6" />
-                      Post Community
+                      Post Comunità
                     </div>
                   )}
                 </div>
@@ -249,7 +249,7 @@ export default function AnnuncioDetail() {
                     ) : (
                       <div className="flex items-center gap-2 text-secondary font-display font-bold text-3xl">
                         <MessageCircle className="w-8 h-8" />
-                        Community
+                        Comunità
                       </div>
                     )}
                   </div>
@@ -306,7 +306,7 @@ export default function AnnuncioDetail() {
                     )}
 
                     <div className="pt-4 mt-2 border-t text-xs font-medium text-center text-muted-foreground">
-                      <p>ID Post: <span className="font-mono bg-muted px-1 py-0.5 rounded text-foreground">{annuncio.id}</span></p>
+                      <p>ID annuncio: <span className="font-mono bg-muted px-1 py-0.5 rounded text-foreground">{annuncio.id}</span></p>
                     </div>
                   </div>
                 </div>
@@ -315,7 +315,7 @@ export default function AnnuncioDetail() {
                 <div className="bg-accent/5 border border-accent/20 rounded-3xl p-6">
                   <div className="flex items-center gap-2 text-accent-foreground font-bold mb-4 font-display text-lg">
                     <AlertCircle className="w-5 h-5" />
-                    Consigli Campus
+                    Consigli di sicurezza
                   </div>
                   <ul className="text-sm text-foreground/80 font-medium space-y-3">
                     <li className="flex items-start gap-2">

@@ -86,7 +86,7 @@ const SECTION_CONFIG: Record<SectionKey, SectionConfig> = {
   },
   consigli: {
     heroTitle: "L'università\nspiegata\nda chi ci vive.",
-    heroSub: "Tips da studenti reali su esami, prof, vita fuori sede e tutto ciò che l'ateneo non ti dice.",
+    heroSub: "Consigli da studenti reali su esami, prof, vita fuori sede e tutto ciò che l'ateneo non ti dice.",
     quickTags: ["Esami", "Professori", "Vita fuori sede", "Borse studio", "Tirocini", "Erasmus", "Mensa"],
     publishLabel: "Condividi un consiglio",
     tips: [

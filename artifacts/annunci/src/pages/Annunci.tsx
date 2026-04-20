@@ -4,6 +4,7 @@ import { useLocation, useSearch } from "wouter";
 import { AnnuncioCard } from "@/components/ui/AnnuncioCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Filter, SlidersHorizontal, AlertCircle, X, MapPin } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";

@@ -64,7 +64,7 @@ export default function Categorie() {
             {filteredCategorie.map((cat) => {
               const Icon = cat.icon;
               return (
-                <Link key={cat.id} href={`/annunci?categoria=${encodeURIComponent(cat.id)}`} className={`group outline-none block ${cat.colorClass}`}>
+                <Link key={cat.id} href={`/${cat.id}`} className={`group outline-none block ${cat.colorClass}`}>
                   <div className="flex flex-col p-8 rounded-3xl border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))] hover:shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all duration-300 h-full group-hover:translate-y-1 group-hover:translate-x-1 relative overflow-hidden" style={{backgroundColor: `hsl(var(--cat-bg))`}}>
                     <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                     
@@ -73,7 +73,7 @@ export default function Categorie() {
                         <Icon className="w-10 h-10" strokeWidth={2.5} />
                       </div>
                       <div className="bg-foreground text-background px-4 py-2 rounded-xl text-sm font-black uppercase tracking-widest border-2 border-foreground shadow-[4px_4px_0_0_rgba(0,0,0,0.2)]">
-                        {cat.count.toLocaleString('it-IT')} post
+                        {cat.count.toLocaleString('it-IT')} annunci
                       </div>
                     </div>
                     <div className="relative z-10">
