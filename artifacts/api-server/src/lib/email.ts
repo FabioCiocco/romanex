@@ -1,15 +1,14 @@
-import { Resend } from "resend";
+import sgMail from "@sendgrid/mail";
 import { logger } from "./logger";
 
-const RESEND_API_KEY = process.env["RESEND_API_KEY"];
-const FROM_EMAIL = "RomaNex <noreply@romanex.it>";
+const SENDGRID_API_KEY = process.env["SENDGRID_API_KEY"];
+const FROM_EMAIL = "noreply@romanex.it";
+const FROM_NAME = "RomaNex";
 
-let resend: Resend | null = null;
-
-function getResend(): Resend | null {
-  if (!RESEND_API_KEY) return null;
-  if (!resend) resend = new Resend(RESEND_API_KEY);
-  return resend;
+function initSendGrid(): boolean {
+  if (!SENDGRID_API_KEY) return false;
+  sgMail.setApiKey(SENDGRID_API_KEY);
+  return true;
 }
 
 export interface WelcomeEmailData {
@@ -188,27 +187,21 @@ Vai alla bacheca: https://romanex.it
 }
 
 export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<void> {
-  const client = getResend();
-  if (!client) {
-    logger.warn("RESEND_API_KEY not set — skipping welcome email");
+  if (!initSendGrid()) {
+    logger.warn("SENDGRID_API_KEY not set — skipping welcome email");
     return;
   }
 
   try {
-    const { error } = await client.emails.send({
-      from: FROM_EMAIL,
+    await sgMail.send({
+      from: { email: FROM_EMAIL, name: FROM_NAME },
       to: data.to,
       subject: `Benvenuto su RomaNex, ${data.nome}! 🎓`,
       html: buildWelcomeHtml(data),
       text: buildWelcomePlainText(data),
     });
-
-    if (error) {
-      logger.error({ error }, "Failed to send welcome email");
-    } else {
-      logger.info({ to: data.to }, "Welcome email sent");
-    }
+    logger.info({ to: data.to }, "Welcome email sent via SendGrid");
   } catch (err) {
-    logger.error({ err }, "Exception sending welcome email");
+    logger.error({ err }, "Exception sending welcome email via SendGrid");
   }
 }
