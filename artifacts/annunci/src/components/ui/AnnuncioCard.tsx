@@ -57,7 +57,7 @@ export function AnnuncioCard({ annuncio, compact = false, mini = false }: Annunc
           
           {annuncio.inEvidenza && (
             <Badge className="absolute top-4 left-4 bg-secondary text-secondary-foreground border-2 border-foreground font-black shadow-[2px_2px_0_0_hsl(var(--foreground))] uppercase tracking-wider text-xs px-3 py-1 z-20">
-              In Evidenza
+              {tc.featured}
             </Badge>
           )}
 
@@ -99,7 +99,7 @@ export function AnnuncioCard({ annuncio, compact = false, mini = false }: Annunc
             ) : (
               <div className={`flex items-center gap-1.5 text-primary font-black font-display ${mini ? 'text-xs' : compact ? 'text-sm' : 'text-xl'} uppercase tracking-wide`}>
                 <MessageCircle className={mini ? 'w-3 h-3' : compact ? 'w-4 h-4' : 'w-6 h-6'} strokeWidth={2.5} />
-                Partecipa
+                {tc.participate}
               </div>
             )}
             <div className={`${mini ? 'w-6 h-6' : compact ? 'w-7 h-7' : 'w-10 h-10'} rounded-full bg-foreground text-background flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300`}>

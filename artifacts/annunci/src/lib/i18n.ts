@@ -231,6 +231,7 @@ const T = {
       error404: "Errore 404",
       error404Desc: "La pagina che stai cercando sembra non esistere. Forse il link è rotto o la pagina è stata rimossa.",
       goHome: "Torna alla Home",
+      featured: "In Evidenza",
     },
     forum: {
       title: "Forum Universitario",
@@ -537,6 +538,7 @@ const T = {
       error404: "Error 404",
       error404Desc: "The page you're looking for doesn't seem to exist. Perhaps the link is broken or the page has been removed.",
       goHome: "Back to Home",
+      featured: "Featured",
     },
     forum: {
       title: "University Forum",
@@ -843,6 +845,7 @@ const T = {
       error404: "Error 404",
       error404Desc: "La página que buscas parece no existir. Quizás el enlace está roto o la página ha sido eliminada.",
       goHome: "Volver al inicio",
+      featured: "Destacado",
     },
     forum: {
       title: "Foro Universitario",
