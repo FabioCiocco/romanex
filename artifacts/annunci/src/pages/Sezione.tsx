@@ -186,8 +186,8 @@ export default function Sezione({ catId }: SezioneProps) {
                 )}
               </div>
 
-              {/* Right — search + publish */}
-              <div className="w-full md:w-80 shrink-0 flex flex-col gap-3">
+              {/* Right — search + publish (hidden on mobile: Sheet handles search there) */}
+              <div className="w-full md:w-80 shrink-0 hidden md:flex flex-col gap-3">
                 {/* Search form */}
                 <form onSubmit={applyFilters} className="bg-background rounded-2xl border-4 border-white/30 p-4 shadow-xl space-y-3">
                   <p className="text-xs font-black uppercase tracking-widest text-foreground/50 pb-1">{tc.search}</p>
