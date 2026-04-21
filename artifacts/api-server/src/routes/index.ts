@@ -5,6 +5,7 @@ import { categorieRouter } from "./categorie";
 import { statsRouter } from "./stats";
 import { forumRouter } from "./forum";
 import { profiloRouter } from "./profilo";
+import { adminRouter } from "./admin";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use("/categorie", categorieRouter);
 router.use("/stats", statsRouter);
 router.use("/forum", forumRouter);
 router.use("/profilo", profiloRouter);
+router.use("/admin", adminRouter);
 
 export default router;
