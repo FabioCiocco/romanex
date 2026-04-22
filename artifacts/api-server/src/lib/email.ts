@@ -1,14 +1,19 @@
-import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 import { logger } from "./logger";
 
-const SENDGRID_API_KEY = process.env["SENDGRID_API_KEY"];
+const BREVO_SMTP_LOGIN = process.env["BREVO_SMTP_LOGIN"];
+const BREVO_SMTP_KEY   = process.env["BREVO_SMTP_KEY"];
 const FROM_EMAIL = "noreply@romanex.it";
-const FROM_NAME = "RomaNex";
+const FROM_NAME  = "RomaNex";
 
-function initSendGrid(): boolean {
-  if (!SENDGRID_API_KEY) return false;
-  sgMail.setApiKey(SENDGRID_API_KEY);
-  return true;
+function createTransporter() {
+  if (!BREVO_SMTP_LOGIN || !BREVO_SMTP_KEY) return null;
+  return nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: { user: BREVO_SMTP_LOGIN, pass: BREVO_SMTP_KEY },
+  });
 }
 
 export interface WelcomeEmailData {
@@ -187,21 +192,22 @@ Vai alla bacheca: https://romanex.it
 }
 
 export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<void> {
-  if (!initSendGrid()) {
-    logger.warn("SENDGRID_API_KEY not set — skipping welcome email");
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("BREVO_SMTP_LOGIN / BREVO_SMTP_KEY not set — skipping welcome email");
     return;
   }
 
   try {
-    await sgMail.send({
-      from: { email: FROM_EMAIL, name: FROM_NAME },
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
       to: data.to,
       subject: `Benvenuto su RomaNex, ${data.nome}! 🎓`,
       html: buildWelcomeHtml(data),
       text: buildWelcomePlainText(data),
     });
-    logger.info({ to: data.to }, "Welcome email sent via SendGrid");
+    logger.info({ to: data.to }, "Welcome email sent via Brevo");
   } catch (err) {
-    logger.error({ err }, "Exception sending welcome email via SendGrid");
+    logger.error({ err }, "Exception sending welcome email via Brevo");
   }
 }
