@@ -145,12 +145,6 @@ export function Navbar() {
               </div>
             </Show>
 
-            <Link href="/pubblica">
-              <Button className="h-10 gap-2 rounded-xl px-6 bg-accent hover:bg-accent/90 text-accent-foreground border-2 border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))] hover:shadow-[1px_1px_0_0_hsl(var(--foreground))] hover:translate-y-[2px] hover:translate-x-[2px] transition-all font-black text-sm uppercase tracking-wide">
-                <PlusCircle className="h-4 w-4" strokeWidth={2.5} />
-                {t.nav.publish}
-              </Button>
-            </Link>
           </div>
 
           <button
