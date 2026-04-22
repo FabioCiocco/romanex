@@ -36,13 +36,13 @@ function getLabels(cat: string, tipo: "cerco" | "offro", lang: Lang) {
   const s = (it: string, en: string, es: string) => (lang === "en" ? en : lang === "es" ? es : it);
   if (cat === "appartamenti") {
     if (tipo === "offro") return {
-      title: s("Descrivi lo spazio (es. Stanza singola in Bovisa)", "Describe the space (e.g. Single room in Bovisa)", "Describe el espacio (ej. Habitación individual en Bovisa)"),
+      title: s("Descrivi lo spazio (es. Stanza singola a Trastevere)", "Describe the space (e.g. Single room in Trastevere)", "Describe el espacio (ej. Habitación individual en Trastevere)"),
       desc: s("Racconta la casa: dimensioni, arredamento, spese incluse, coinquilini, regole...", "Describe the home: size, furnishing, bills, flatmates, rules...", "Describe el piso: tamaño, mobiliario, gastos, compañeros, normas..."),
       pricePlaceholder: s("Affitto mensile €", "Monthly rent €", "Alquiler mensual €"),
       priceLabel: s("Affitto mensile (€)", "Monthly rent (€)", "Alquiler mensual (€)"),
     };
     return {
-      title: s("Cosa cerchi? (es. Stanza singola a Milano)", "What are you looking for? (e.g. Single room in Milan)", "¿Qué buscas? (ej. Habitación individual en Milán)"),
+      title: s("Cosa cerchi? (es. Stanza singola a Prati)", "What are you looking for? (e.g. Single room in Prati, Rome)", "¿Qué buscas? (ej. Habitación individual en Prati, Roma)"),
       desc: s("Zona preferita, budget, quando ti serve, quanti coinquilini...", "Preferred area, budget, when you need it, how many flatmates...", "Zona preferida, presupuesto, cuándo lo necesitas, compañeros..."),
       pricePlaceholder: s("Budget massimo €", "Maximum budget €", "Presupuesto máximo €"),
       priceLabel: s("Budget massimo (€)", "Maximum budget (€)", "Presupuesto máximo (€)"),
@@ -66,7 +66,7 @@ function getLabels(cat: string, tipo: "cerco" | "offro", lang: Lang) {
     pricePlaceholder: "", priceLabel: "",
   };
   if (cat === "gruppi-studio") return {
-    title: s("Cosa studiate? (es. Gruppo Analisi — Politecnico)", "What are you studying? (e.g. Calculus group — Politecnico)", "¿Qué estudian? (ej. Grupo Cálculo — Politecnico)"),
+    title: s("Cosa studiate? (es. Gruppo Analisi — Sapienza)", "What are you studying? (e.g. Calculus group — Sapienza)", "¿Qué estudian? (ej. Grupo Cálculo — Sapienza)"),
     desc: s("Quale esame, quando vi trovate, dove, quante persone cercate...", "Which exam, when and where you meet, how many people you need...", "Qué examen, cuándo y dónde os reunís, cuántas personas buscáis..."),
     pricePlaceholder: "", priceLabel: "",
   };

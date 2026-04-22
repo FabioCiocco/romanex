@@ -226,7 +226,7 @@ const T = {
       free: "Gratis",
       onRequest: "Contatta",
       searchPlaceholder: "Es. Libro Analisi, Stanza...",
-      citySearchPlaceholder: "Es. Roma, Bovisa...",
+      citySearchPlaceholder: "Es. Pigneto, Trastevere...",
       listings: "annunci",
       error404: "Errore 404",
       error404Desc: "La pagina che stai cercando sembra non esistere. Forse il link è rotto o la pagina è stata rimossa.",
