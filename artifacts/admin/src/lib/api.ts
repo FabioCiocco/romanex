@@ -27,6 +27,10 @@ export function getAnnunci(params: { page?: number; q?: string; categoria?: stri
   return request<AnnunciPageResult>(`/annunci?${qs}`);
 }
 
+export function deleteAllAnnunci() {
+  return request<{ ok: boolean; message: string }>("/annunci-all", { method: "DELETE" });
+}
+
 export function deleteAnnuncio(id: number) {
   return request<void>(`/annunci/${id}`, { method: "DELETE" });
 }

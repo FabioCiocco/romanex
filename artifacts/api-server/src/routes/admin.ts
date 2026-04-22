@@ -280,4 +280,13 @@ router.delete("/forum/replies/:id", async (req, res) => {
   }
 });
 
+router.delete("/annunci-all", async (_req, res) => {
+  try {
+    await db.delete(annunciTable);
+    return res.json({ ok: true, message: "Tutti gli annunci eliminati" });
+  } catch (err) {
+    return res.status(500).json({ error: "Errore server" });
+  }
+});
+
 export { router as adminRouter };

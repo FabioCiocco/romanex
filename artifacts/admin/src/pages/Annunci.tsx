@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAnnunci, deleteAnnuncio, toggleInEvidenza, type Annuncio, type AnnunciPageResult } from "@/lib/api";
+import { getAnnunci, deleteAnnuncio, deleteAllAnnunci, toggleInEvidenza, type Annuncio, type AnnunciPageResult } from "@/lib/api";
 import { Trash2, Star, StarOff, Search, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 
 const CATEGORIE = [
@@ -21,6 +21,8 @@ export default function Annunci() {
   const [categoria, setCategoria] = useState("");
   const [busy, setBusy] = useState<number | null>(null);
   const [confirm, setConfirm] = useState<number | null>(null);
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -70,16 +72,54 @@ export default function Annunci() {
     }
   };
 
+  const handleDeleteAll = async () => {
+    if (!confirmDeleteAll) { setConfirmDeleteAll(true); return; }
+    setDeletingAll(true);
+    try {
+      await deleteAllAnnunci();
+      setConfirmDeleteAll(false);
+      load();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Errore");
+    } finally {
+      setDeletingAll(false);
+    }
+  };
+
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString("it-IT", { day: "2-digit", month: "short", year: "2-digit" });
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black text-white uppercase tracking-tight">Annunci</h1>
-        <p className="text-zinc-500 text-sm font-mono mt-1">
-          {result ? `${result.total} annunci totali` : "..."}
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black text-white uppercase tracking-tight">Annunci</h1>
+          <p className="text-zinc-500 text-sm font-mono mt-1">
+            {result ? `${result.total} annunci totali` : "..."}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {confirmDeleteAll && (
+            <button
+              onClick={() => setConfirmDeleteAll(false)}
+              className="text-xs font-mono text-zinc-400 border border-zinc-700 px-3 py-2 hover:border-zinc-500 transition-colors"
+            >
+              Annulla
+            </button>
+          )}
+          <button
+            onClick={handleDeleteAll}
+            disabled={deletingAll}
+            className={`text-xs font-black uppercase px-3 py-2 flex items-center gap-1.5 border-2 transition-colors ${
+              confirmDeleteAll
+                ? "bg-red-600 border-red-600 text-white hover:bg-red-700"
+                : "border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <Trash2 size={12} />
+            {deletingAll ? "Eliminazione..." : confirmDeleteAll ? "Conferma eliminazione" : "Svuota tutto"}
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
