@@ -264,32 +264,52 @@ export default function Sezione({ catId }: SezioneProps) {
           <div className="flex-1 w-full min-w-0 space-y-6">
 
             {/* Mobile filters */}
-            <div className="md:hidden flex items-center justify-between bg-card border-2 border-foreground rounded-2xl p-3 px-4 gap-2">
-              <span className="text-sm font-black uppercase tracking-wide shrink-0">
-                {data?.total !== undefined ? `${data.total} annunci` : tc.search}
-              </span>
-              <div className="flex items-center gap-2 shrink-0">
-                <Link href={`/pubblica?categoria=${catId}`}>
-                  <Button size="sm" className="gap-1.5 rounded-xl font-black text-xs uppercase tracking-wide" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
-                    <PlusCircle className="w-3.5 h-3.5" strokeWidth={2.5} />
-                    {sectionCfg.publishLabel}
+            <div className="md:hidden space-y-3">
+              {/* Search input */}
+              <form onSubmit={applyFilters} className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" />
+                <Input
+                  placeholder={tc.searchPlaceholder}
+                  className="pl-9 h-11 rounded-2xl bg-card border-2 border-foreground font-medium text-sm"
+                  value={q}
+                  onChange={e => setQ(e.target.value)}
+                />
+              </form>
+
+              {/* Actions row */}
+              <div className="flex gap-2">
+                <Link href={`/pubblica?categoria=${catId}`} className="flex-1">
+                  <Button
+                    className="w-full gap-1.5 rounded-2xl font-black text-xs uppercase tracking-wide h-10"
+                    style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}
+                  >
+                    <PlusCircle className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
+                    <span className="truncate">{tc.publish}</span>
                   </Button>
                 </Link>
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="secondary" size="sm" className="gap-2 rounded-xl font-black">
+                    <Button variant="outline" className="gap-2 rounded-2xl font-black h-10 border-2 border-foreground px-4 shrink-0">
                       <SlidersHorizontal className="w-4 h-4" />
                       {tc.postFilters}
+                      {hasActiveFilters && (
+                        <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                      )}
                     </Button>
                   </SheetTrigger>
-                <SheetContent side="right" className="w-full sm:w-96 overflow-y-auto">
-                  <SheetHeader className="mb-6 text-left">
-                    <SheetTitle className="font-display text-2xl font-black uppercase">{tc.filters}</SheetTitle>
-                  </SheetHeader>
-                  <FiltersForm showKeyword={true} />
-                </SheetContent>
-              </Sheet>
+                  <SheetContent side="bottom" className="rounded-t-3xl pb-8">
+                    <SheetHeader className="mb-6 text-left">
+                      <SheetTitle className="font-display text-2xl font-black uppercase">{tc.filters}</SheetTitle>
+                    </SheetHeader>
+                    <FiltersForm showKeyword={false} />
+                  </SheetContent>
+                </Sheet>
               </div>
+
+              {/* Count */}
+              <p className="text-xs text-foreground/50 font-bold uppercase tracking-wider px-1">
+                {isLoading ? tc.loading : data?.total !== undefined ? `${data.total} ${tc.announceAds}` : ""}
+              </p>
             </div>
 
             {/* Results count — desktop */}
