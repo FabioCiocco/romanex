@@ -77,4 +77,4 @@ channel = "stable-25_05"
 [userenv]
 
 [userenv.shared]
-ADMIN_CLERK_IDS = "user_3CcdQVJwjh5dDndRBp4sAvR5rRf"
+ADMIN_CLERK_IDS = "user_3ChzHDQvUPP9HH7Y5RBcsinEnqG"
