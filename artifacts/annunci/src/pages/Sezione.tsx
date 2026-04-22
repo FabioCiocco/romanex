@@ -186,34 +186,6 @@ export default function Sezione({ catId }: SezioneProps) {
                 )}
               </div>
 
-              {/* Right — search + publish (hidden on mobile: Sheet handles search there) */}
-              <div className="w-full md:w-80 shrink-0 hidden md:flex flex-col gap-3">
-                {/* Search form */}
-                <form onSubmit={applyFilters} className="bg-background rounded-2xl border-4 border-white/30 p-4 shadow-xl space-y-3">
-                  <p className="text-xs font-black uppercase tracking-widest text-foreground/50 pb-1">{tc.search}</p>
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-foreground/50 w-5 h-5" strokeWidth={2.5} />
-                    <Input
-                      placeholder={tc.searchPlaceholder}
-                      className="pl-12 h-12 rounded-xl border-2 focus-visible:border-foreground text-base font-bold"
-                      value={q}
-                      onChange={e => setQ(e.target.value)}
-                    />
-                  </div>
-                  <Button type="submit" className="w-full h-12 rounded-xl font-black uppercase tracking-wider text-base" style={{ backgroundColor: `hsl(var(--cat-bg))`, color: `hsl(var(--cat-fg))` }}>
-                    <Search className="w-4 h-4 mr-2" strokeWidth={3} />
-                    {tc.search}
-                  </Button>
-                </form>
-
-                {/* Publish CTA */}
-                <Link href={`/pubblica?categoria=${catId}`} className="block">
-                  <button className="w-full inline-flex items-center justify-center gap-3 bg-white text-foreground border-4 border-white/60 rounded-2xl px-6 py-4 font-black text-sm uppercase tracking-widest shadow-[4px_4px_0_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_0_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
-                    <PlusCircle className="w-5 h-5 shrink-0" strokeWidth={2.5} />
-                    {sectionCfg.publishLabel}
-                  </button>
-                </Link>
-              </div>
             </div>
           </div>
         </section>
@@ -248,15 +220,13 @@ export default function Sezione({ catId }: SezioneProps) {
           {/* Sidebar — desktop */}
           <aside className="hidden md:flex flex-col gap-4 w-72 shrink-0 sticky top-28">
 
-            {hasPrice && (
-              <div className="bg-card border-2 border-foreground rounded-3xl p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
-                <div className="flex items-center gap-2 mb-5 pb-4 border-b">
-                  <Filter className="w-5 h-5 text-primary" strokeWidth={2.5} />
-                  <h2 className="font-display font-black text-xl uppercase tracking-tight">{tc.filters}</h2>
-                </div>
-                <FiltersForm />
+            <div className="bg-card border-2 border-foreground rounded-3xl p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
+              <div className="flex items-center gap-2 mb-5 pb-4 border-b">
+                <Filter className="w-5 h-5 text-primary" strokeWidth={2.5} />
+                <h2 className="font-display font-black text-xl uppercase tracking-tight">{tc.filters}</h2>
               </div>
-            )}
+              <FiltersForm showKeyword={true} />
+            </div>
 
             {/* Tips card */}
             <div className={`${catConfig.colorClass} rounded-3xl border-4 border-white/20 overflow-hidden`} style={{ backgroundColor: `hsl(var(--cat-bg))` }}>
