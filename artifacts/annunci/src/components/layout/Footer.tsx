@@ -41,7 +41,19 @@ export function Footer() {
         
         <div className="border-t border-background/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/50 font-bold uppercase tracking-wider">
           <p>© {new Date().getFullYear()} RomaNex. {ft.rights}</p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-4 md:gap-6 justify-center md:justify-end">
+            <Link
+              href="/privacy"
+              className="hover:text-background/80 transition-colors underline underline-offset-4 decoration-background/30 hover:decoration-background/60"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/cookie-policy"
+              className="hover:text-background/80 transition-colors underline underline-offset-4 decoration-background/30 hover:decoration-background/60"
+            >
+              Cookie Policy
+            </Link>
             <Link
               href="/note-legali"
               className="hover:text-background/80 transition-colors underline underline-offset-4 decoration-background/30 hover:decoration-background/60"

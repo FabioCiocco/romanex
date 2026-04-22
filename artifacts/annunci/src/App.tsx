@@ -20,7 +20,10 @@ import Profilo from "@/pages/Profilo";
 import CompletaProfilo from "@/pages/CompletaProfilo";
 import NoteLegali from "@/pages/NoteLegali";
 import DiritiEInclusione from "@/pages/DiritiEInclusione";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import CookiePolicy from "@/pages/CookiePolicy";
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
+import { CookieBanner } from "@/components/layout/CookieBanner";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useGetMyProfile, getGetMyProfileQueryKey } from "@workspace/api-client-react";
 
@@ -182,6 +185,7 @@ function Router() {
       <ScrollToTop />
       <ProfileCompletionGuard />
       <WelcomeBanner />
+      <CookieBanner />
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/annunci" component={Annunci} />
@@ -199,6 +203,8 @@ function Router() {
         <Route path="/completa-profilo" component={CompletaProfilo} />
         <Route path="/note-legali" component={NoteLegali} />
         <Route path="/diritti-e-inclusione" component={DiritiEInclusione} />
+        <Route path="/privacy" component={PrivacyPolicy} />
+        <Route path="/cookie-policy" component={CookiePolicy} />
         <Route path="/sign-in/*?" component={SignInPage} />
         <Route path="/sign-up/*?" component={SignUpPage} />
         <Route component={NotFound} />
