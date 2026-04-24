@@ -1,9 +1,8 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { logger } from "./logger";
 import { db, settingsTable } from "@workspace/db";
 
-const BREVO_SMTP_LOGIN = process.env["BREVO_SMTP_LOGIN"];
-const BREVO_SMTP_KEY   = process.env["BREVO_SMTP_KEY"];
+const RESEND_API_KEY = process.env["RESEND_API_KEY"];
 const FROM_EMAIL = "noreply@romanex.it";
 const FROM_NAME  = "RomaNex";
 
@@ -25,14 +24,9 @@ async function getSettings(): Promise<Record<string, string>> {
   }
 }
 
-function createTransporter() {
-  if (!BREVO_SMTP_LOGIN || !BREVO_SMTP_KEY) return null;
-  return nodemailer.createTransport({
-    host: "smtp-relay.brevo.com",
-    port: 587,
-    secure: false,
-    auth: { user: BREVO_SMTP_LOGIN, pass: BREVO_SMTP_KEY },
-  });
+function getResend(): Resend | null {
+  if (!RESEND_API_KEY) return null;
+  return new Resend(RESEND_API_KEY);
 }
 
 export interface WelcomeEmailData {
@@ -159,7 +153,7 @@ Su RomaNex puoi:
 👥 Gruppi Studio – trova compagni di studio
 💬 Forum – partecipa alle discussioni della community
 
-${settings.welcome_email_cta_text}: https://romanex.it
+Vai su RomaNex: https://romanex.it
 
 Hai ricevuto questa email perché hai creato un account su RomaNex con ${email}.
 © ${new Date().getFullYear()} RomaNex
@@ -167,25 +161,29 @@ Hai ricevuto questa email perché hai creato un account su RomaNex con ${email}.
 }
 
 export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("BREVO_SMTP_LOGIN / BREVO_SMTP_KEY not set — skipping welcome email");
+  const resend = getResend();
+  if (!resend) {
+    logger.warn("RESEND_API_KEY not set — skipping welcome email");
     return;
   }
 
   const settings = await getSettings();
 
   try {
-    await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+    const { error } = await resend.emails.send({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.to,
       subject: settings.welcome_email_subject,
       html: buildWelcomeHtml(data.to, settings),
       text: buildWelcomePlainText(data.to, settings),
     });
-    logger.info({ to: data.to }, "Welcome email sent via Brevo");
+    if (error) {
+      logger.error({ error }, "Resend error sending welcome email");
+    } else {
+      logger.info({ to: data.to }, "Welcome email sent via Resend");
+    }
   } catch (err) {
-    logger.error({ err }, "Exception sending welcome email via Brevo");
+    logger.error({ err }, "Exception sending welcome email via Resend");
   }
 }
 
@@ -339,42 +337,50 @@ function buildContactNotificationHtml(data: ContactNotificationData): string {
 }
 
 export async function sendContactNotificationEmail(data: ContactNotificationData): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("SMTP not configured — skipping contact notification email");
+  const resend = getResend();
+  if (!resend) {
+    logger.warn("RESEND_API_KEY not set — skipping contact notification email");
     return;
   }
   try {
-    await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+    const { error } = await resend.emails.send({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.ownerEmail,
       replyTo: data.richiedenteEmail,
       subject: `Qualcuno è interessato al tuo annuncio: "${data.annuncioTitolo}"`,
       html: buildContactNotificationHtml(data),
       text: `Qualcuno ha visualizzato il contatto del tuo annuncio "${data.annuncioTitolo}" su RomaNex.\n\nChi è interessato:\nNome: ${data.richiedenteName}\nEmail: ${data.richiedenteEmail}\n\nVedi il tuo annuncio: ${process.env.APP_BASE_URL || "https://romanex.it"}/annunci/${data.annuncioId}`,
     });
-    logger.info({ to: data.ownerEmail, annuncioId: data.annuncioId }, "Contact notification email sent");
+    if (error) {
+      logger.error({ error }, "Resend error sending contact notification email");
+    } else {
+      logger.info({ to: data.ownerEmail, annuncioId: data.annuncioId }, "Contact notification email sent via Resend");
+    }
   } catch (err) {
-    logger.error({ err }, "Exception sending contact notification email");
+    logger.error({ err }, "Exception sending contact notification email via Resend");
   }
 }
 
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
-  const transporter = createTransporter();
-  if (!transporter) {
-    logger.warn("Email transporter not configured — reset email not sent");
+  const resend = getResend();
+  if (!resend) {
+    logger.warn("RESEND_API_KEY not set — reset email not sent");
     return;
   }
   try {
-    await transporter.sendMail({
-      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+    const { error } = await resend.emails.send({
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
       to: data.to,
       subject: "Reset password RomaNex",
       html: buildResetHtml(data),
       text: `Reimposta la tua password: ${process.env.APP_BASE_URL || "https://romanex.it"}/reset-password?token=${data.token}`,
     });
-    logger.info({ to: data.to }, "Password reset email sent");
+    if (error) {
+      logger.error({ error }, "Resend error sending password reset email");
+    } else {
+      logger.info({ to: data.to }, "Password reset email sent via Resend");
+    }
   } catch (err) {
-    logger.error({ err }, "Exception sending password reset email");
+    logger.error({ err }, "Exception sending password reset email via Resend");
   }
 }
