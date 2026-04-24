@@ -5,6 +5,7 @@ import Dashboard from "@/pages/Dashboard";
 import Annunci from "@/pages/Annunci";
 import Utenti from "@/pages/Utenti";
 import Forum from "@/pages/Forum";
+import Impostazioni from "@/pages/Impostazioni";
 import { useEffect, useState } from "react";
 import { checkAdmin } from "@/lib/api";
 
@@ -197,6 +198,7 @@ function AdminGate() {
         <Route path="/annunci" component={Annunci} />
         <Route path="/utenti" component={Utenti} />
         <Route path="/forum" component={Forum} />
+        <Route path="/impostazioni" component={Impostazioni} />
       </Switch>
     </Layout>
   );

@@ -2,7 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
-import { sendPasswordResetEmail } from "../lib/email";
+import { sendPasswordResetEmail, sendWelcomeEmail } from "../lib/email";
 import crypto from "crypto";
 
 const router = Router();
@@ -38,6 +38,8 @@ router.post("/register", async (req, res) => {
     const isAdmin = ADMIN_EMAILS().includes(user.email.toLowerCase());
     req.session.userId = user.id;
     req.session.isAdmin = isAdmin;
+
+    sendWelcomeEmail({ to: user.email }).catch(() => {});
 
     return res.status(201).json({ id: user.id, email: user.email, isAdmin });
   } catch (err) {

@@ -7,6 +7,7 @@ import { forumRouter } from "./forum";
 import { profiloRouter } from "./profilo";
 import { adminRouter } from "./admin";
 import { authRouter } from "./auth";
+import { settingsRouter } from "./settings";
 
 const router: IRouter = Router();
 
@@ -18,5 +19,6 @@ router.use("/stats", statsRouter);
 router.use("/forum", forumRouter);
 router.use("/profilo", profiloRouter);
 router.use("/admin", adminRouter);
+router.use("/settings", settingsRouter);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, FileText, Users, MessageSquare, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, FileText, Users, MessageSquare, Settings, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const NAV = [
@@ -7,6 +7,7 @@ const NAV = [
   { href: "/annunci", label: "Annunci", icon: FileText },
   { href: "/utenti", label: "Utenti", icon: Users },
   { href: "/forum", label: "Forum", icon: MessageSquare },
+  { href: "/impostazioni", label: "Impostazioni", icon: Settings },
 ];
 
 interface LayoutProps {
