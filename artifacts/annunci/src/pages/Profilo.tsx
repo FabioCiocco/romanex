@@ -117,7 +117,7 @@ export default function Profilo() {
   const completeness = Math.round((filled / completenessFields.length) * 100);
   const isComplete = completeness === 100;
 
-  const initials = `${nome?.[0] ?? ""}${cognome?.[0] ?? ""}`.toUpperCase() || user.email[0].toUpperCase();
+  const initials = `${nome?.[0] ?? ""}${cognome?.[0] ?? ""}`.toUpperCase() || user?.email?.[0]?.toUpperCase() || "?";
 
   const inputClass = "w-full border-2 border-foreground rounded-xl px-3 py-2.5 text-sm font-medium bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-shadow";
   const labelClass = "block text-xs font-black uppercase tracking-wider mb-1.5 flex items-center gap-1";

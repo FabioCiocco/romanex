@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
       db.select({ total: count() }).from(forumThreadsTable).where(where),
     ]);
 
-    res.json({
+    return res.json({
       threads,
       total: Number(total),
       page,
@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 
@@ -60,10 +60,10 @@ router.get("/:id", async (req, res) => {
       .where(eq(forumRepliesTable.threadId, id))
       .orderBy(forumRepliesTable.createdAt);
 
-    res.json({ thread, replies });
+    return res.json({ thread, replies });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 
@@ -73,10 +73,10 @@ router.post("/", async (req, res) => {
     if (!parsed.success) return res.status(400).json({ error: "Dati non validi", details: parsed.error.issues });
 
     const [thread] = await db.insert(forumThreadsTable).values(parsed.data).returning();
-    res.status(201).json(thread);
+    return res.status(201).json(thread);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 
@@ -98,10 +98,10 @@ router.post("/:id/risposte", async (req, res) => {
       .set({ risposteCount: sql`${forumThreadsTable.risposteCount} + 1`, updatedAt: new Date() })
       .where(eq(forumThreadsTable.id, threadId));
 
-    res.status(201).json(reply);
+    return res.status(201).json(reply);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 
@@ -118,10 +118,10 @@ router.delete("/:id", async (req, res) => {
     }
 
     await db.delete(forumThreadsTable).where(eq(forumThreadsTable.id, id));
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 
@@ -144,10 +144,10 @@ router.delete("/:threadId/risposte/:replyId", async (req, res) => {
       .set({ risposteCount: sql`GREATEST(${forumThreadsTable.risposteCount} - 1, 0)` })
       .where(eq(forumThreadsTable.id, threadId));
 
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Errore del server" });
+    return res.status(500).json({ error: "Errore del server" });
   }
 });
 

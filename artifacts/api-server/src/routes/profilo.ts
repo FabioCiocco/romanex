@@ -82,7 +82,7 @@ router.put("/", requireAuth, async (req, res) => {
     .returning();
 
   if (isNewProfile && email) {
-    sendWelcomeEmail({ to: email, nome, universita, corsoDiLaurea }).catch(() => {});
+    sendWelcomeEmail({ to: email }).catch(() => {});
   }
 
   return res.json(profile);

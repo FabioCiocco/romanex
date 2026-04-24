@@ -190,12 +190,12 @@ router.get("/utenti", async (req, res) => {
   }
 });
 
-router.delete("/utenti/:clerkId", async (req, res) => {
+router.delete("/utenti/:userId", async (req, res) => {
   try {
-    const clerkId = req.params.clerkId;
+    const userId = req.params.userId;
     await db
       .delete(userProfilesTable)
-      .where(eq(userProfilesTable.clerkId, clerkId));
+      .where(eq(userProfilesTable.userId, userId));
     return res.status(204).send();
   } catch (err) {
     return res.status(500).json({ error: "Errore server" });

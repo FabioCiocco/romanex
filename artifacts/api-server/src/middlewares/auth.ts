@@ -7,19 +7,22 @@ declare module "express-session" {
   }
 }
 
-export function requireAuth(req: Request, res: Response, next: NextFunction) {
+export function requireAuth(req: Request, res: Response, next: NextFunction): void {
   if (!req.session?.userId) {
-    return res.status(401).json({ error: "Non autenticato" });
+    res.status(401).json({ error: "Non autenticato" });
+    return;
   }
   next();
 }
 
-export function requireAdmin(req: Request, res: Response, next: NextFunction) {
+export function requireAdmin(req: Request, res: Response, next: NextFunction): void {
   if (!req.session?.userId) {
-    return res.status(401).json({ error: "Non autenticato" });
+    res.status(401).json({ error: "Non autenticato" });
+    return;
   }
   if (!req.session?.isAdmin) {
-    return res.status(403).json({ error: "Accesso negato" });
+    res.status(403).json({ error: "Accesso negato" });
+    return;
   }
   next();
 }
