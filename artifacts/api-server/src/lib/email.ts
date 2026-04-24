@@ -224,6 +224,141 @@ function buildResetHtml(data: PasswordResetEmailData): string {
 </html>`;
 }
 
+export interface ContactNotificationData {
+  ownerEmail: string;
+  richiedenteName: string;
+  richiedenteEmail: string;
+  annuncioTitolo: string;
+  annuncioId: number;
+  categoria: string;
+}
+
+function buildContactNotificationHtml(data: ContactNotificationData): string {
+  const baseUrl = process.env.APP_BASE_URL || "https://romanex.it";
+  const link = `${baseUrl}/annunci/${data.annuncioId}`;
+  const categoriaIcon: Record<string, string> = {
+    appartamenti: "🏠",
+    libri: "📖",
+    ripetizioni: "🧑‍🏫",
+    consigli: "💡",
+    "gruppi-studio": "👥",
+  };
+  const icon = categoriaIcon[data.categoria] ?? "📣";
+  const year = new Date().getFullYear();
+
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Richiesta per il tuo annuncio — RomaNex</title>
+</head>
+<body style="background:#f0eff8; padding:32px 16px; font-family:Arial,sans-serif; color:#0d0f1a; margin:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto;">
+    <tr>
+      <td>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0f1a; border:3px solid #0d0f1a; border-bottom:none;">
+          <tr>
+            <td style="padding:24px 32px;">
+              <span style="font-size:28px; font-weight:900; color:#ffffff; letter-spacing:-1px; text-transform:uppercase;">
+                Roma<span style="color:#f59e0b;">Nex</span>
+              </span>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#6d28d9; border-left:3px solid #0d0f1a; border-right:3px solid #0d0f1a;">
+          <tr>
+            <td style="padding:32px;">
+              <p style="font-size:13px; font-weight:700; color:#e9d5ff; text-transform:uppercase; letter-spacing:2px; margin:0 0 10px 0;">
+                ${icon} Nuovo interesse al tuo annuncio
+              </p>
+              <h1 style="font-size:28px; font-weight:900; color:#ffffff; letter-spacing:-1px; text-transform:uppercase; line-height:1.15; margin:0;">
+                Qualcuno è interessato!
+              </h1>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff; border:3px solid #0d0f1a; border-top:none; border-bottom:none;">
+          <tr>
+            <td style="padding:32px;">
+              <p style="font-size:16px; font-weight:600; line-height:1.7; color:#0d0f1a; margin:0 0 24px 0;">
+                Un utente ha visualizzato il contatto del tuo annuncio su <strong>RomaNex</strong> e potrebbe contattarti presto.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f7ff; border:2px solid #0d0f1a; margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="font-size:11px; font-weight:800; color:#6d28d9; text-transform:uppercase; letter-spacing:2px; margin:0 0 6px 0;">Il tuo annuncio</p>
+                    <p style="font-size:16px; font-weight:800; color:#0d0f1a; margin:0 0 4px 0;">${data.annuncioTitolo}</p>
+                    <p style="font-size:12px; color:#6b7280; margin:0;">${icon} ${data.categoria}</p>
+                  </td>
+                </tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f7ff; border:2px solid #0d0f1a; margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="font-size:11px; font-weight:800; color:#6d28d9; text-transform:uppercase; letter-spacing:2px; margin:0 0 12px 0;">Chi è interessato</p>
+                    <table cellpadding="0" cellspacing="0"><tr>
+                      <td style="font-size:13px; font-weight:700; color:#374151; width:90px;">Nome:</td>
+                      <td style="font-size:13px; font-weight:600; color:#0d0f1a;">${data.richiedenteName}</td>
+                    </tr><tr>
+                      <td style="font-size:13px; font-weight:700; color:#374151; padding-top:6px;">Email:</td>
+                      <td style="font-size:13px; font-weight:600; color:#0d0f1a; padding-top:6px;">
+                        <a href="mailto:${data.richiedenteEmail}" style="color:#6d28d9; text-decoration:underline;">${data.richiedenteEmail}</a>
+                      </td>
+                    </tr></table>
+                  </td>
+                </tr>
+              </table>
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:#6d28d9; border:3px solid #0d0f1a; box-shadow:4px 4px 0 0 #0d0f1a;">
+                    <a href="${link}" style="display:inline-block; padding:14px 32px; font-size:14px; font-weight:900; color:#ffffff; text-decoration:none; text-transform:uppercase; letter-spacing:1px;">
+                      Vedi il tuo annuncio →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0d0f1a; border:3px solid #0d0f1a; border-top:none;">
+          <tr>
+            <td style="padding:20px 32px; text-align:center;">
+              <p style="font-size:11px; font-weight:600; color:#6b7280; line-height:1.6; margin:0;">
+                Hai ricevuto questa email perché hai pubblicato un annuncio su RomaNex.<br/>
+                © ${year} RomaNex — La bacheca degli universitari romani.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendContactNotificationEmail(data: ContactNotificationData): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("SMTP not configured — skipping contact notification email");
+    return;
+  }
+  try {
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      to: data.ownerEmail,
+      replyTo: data.richiedenteEmail,
+      subject: `Qualcuno è interessato al tuo annuncio: "${data.annuncioTitolo}"`,
+      html: buildContactNotificationHtml(data),
+      text: `Qualcuno ha visualizzato il contatto del tuo annuncio "${data.annuncioTitolo}" su RomaNex.\n\nChi è interessato:\nNome: ${data.richiedenteName}\nEmail: ${data.richiedenteEmail}\n\nVedi il tuo annuncio: ${process.env.APP_BASE_URL || "https://romanex.it"}/annunci/${data.annuncioId}`,
+    });
+    logger.info({ to: data.ownerEmail, annuncioId: data.annuncioId }, "Contact notification email sent");
+  } catch (err) {
+    logger.error({ err }, "Exception sending contact notification email");
+  }
+}
+
 export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
   const transporter = createTransporter();
   if (!transporter) {

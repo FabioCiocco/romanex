@@ -10,6 +10,7 @@ export const annunciTable = pgTable("annunci", {
   categoria: text("categoria").notNull(),
   citta: text("citta").notNull(),
   contatto: text("contatto").notNull(),
+  autoreEmail: text("autore_email"),
   immagineUrl: text("immagine_url"),
   inEvidenza: boolean("in_evidenza").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

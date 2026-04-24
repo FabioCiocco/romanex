@@ -25,6 +25,7 @@ export default function AnnuncioDetail() {
   const { isSignedIn } = useUser();
   const [isFavorite, setIsFavorite] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
   const { t, lang } = useLanguage();
   const tc = t.common;
   const dateLocale = DATE_LOCALE[lang];
@@ -50,6 +51,18 @@ export default function AnnuncioDetail() {
       if (normalized.includes(key)) return value;
     }
     return "https://images.unsplash.com/photo-1519452310189-dd9e772186df?auto=format&fit=crop&w=1200&q=80";
+  };
+
+  const handleShowContact = async () => {
+    if (showContact) return;
+    setContactLoading(true);
+    try {
+      await fetch(`/api/annunci/${id}/richiesta`, { method: "POST", credentials: "include" });
+    } catch {
+    } finally {
+      setContactLoading(false);
+      setShowContact(true);
+    }
   };
 
   const handleShare = () => {
@@ -260,9 +273,9 @@ export default function AnnuncioDetail() {
                             {tc.writeMessage}
                           </Button>
                           {!showContact ? (
-                            <Button variant="outline" className="w-full h-14 text-base font-bold gap-3 rounded-xl border-2 border-foreground hover:bg-muted transition-colors" onClick={() => setShowContact(true)}>
+                            <Button variant="outline" className="w-full h-14 text-base font-bold gap-3 rounded-xl border-2 border-foreground hover:bg-muted transition-colors" onClick={handleShowContact} disabled={contactLoading}>
                               <Phone className="w-5 h-5" />
-                              {tc.showContact}
+                              {contactLoading ? "..." : tc.showContact}
                             </Button>
                           ) : (
                             <div className="w-full p-4 rounded-xl border-2 border-foreground bg-muted/50 text-center">

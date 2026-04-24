@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { db, annunciTable } from "@workspace/db";
+import { db, annunciTable, usersTable, userProfilesTable } from "@workspace/db";
 import { eq, like, gte, lte, desc, and, count, sql, ilike } from "drizzle-orm";
 import {
   ListAnnunciQueryParams,
   CreateAnnuncioBody,
   UpdateAnnuncioBody,
 } from "@workspace/api-zod";
+import { requireAuth } from "../middlewares/auth";
+import { sendContactNotificationEmail } from "../lib/email";
 
 const router = Router();
 
@@ -109,6 +111,12 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Dati non validi", details: parsed.error.issues });
   }
 
+  let autoreEmail: string | null = null;
+  if (req.session?.userId) {
+    const [user] = await db.select({ email: usersTable.email }).from(usersTable).where(eq(usersTable.id, req.session.userId));
+    autoreEmail = user?.email ?? null;
+  }
+
   const [annuncio] = await db
     .insert(annunciTable)
     .values({
@@ -118,12 +126,40 @@ router.post("/", async (req, res) => {
       categoria: parsed.data.categoria,
       citta: parsed.data.citta,
       contatto: parsed.data.contatto,
+      autoreEmail,
       immagineUrl: parsed.data.immagineUrl ?? null,
       inEvidenza: false,
     })
     .returning();
 
   return res.status(201).json(annuncio);
+});
+
+router.post("/:id/richiesta", requireAuth, async (req, res) => {
+  const id = parseInt(req.params.id as string);
+  if (isNaN(id)) return res.status(400).json({ error: "ID non valido" });
+
+  const [annuncio] = await db.select().from(annunciTable).where(eq(annunciTable.id, id));
+  if (!annuncio) return res.status(404).json({ error: "Annuncio non trovato" });
+  if (!annuncio.autoreEmail) return res.status(200).json({ ok: true, notified: false });
+
+  const userId = req.session!.userId!;
+  const [user] = await db.select({ email: usersTable.email }).from(usersTable).where(eq(usersTable.id, userId));
+  const [profile] = await db.select({ nome: userProfilesTable.nome, cognome: userProfilesTable.cognome }).from(userProfilesTable).where(eq(userProfilesTable.userId, userId));
+
+  const richiedenteEmail = user?.email ?? "Utente RomaNex";
+  const nome = [profile?.nome, profile?.cognome].filter(Boolean).join(" ") || richiedenteEmail;
+
+  sendContactNotificationEmail({
+    ownerEmail: annuncio.autoreEmail,
+    richiedenteName: nome,
+    richiedenteEmail,
+    annuncioTitolo: annuncio.titolo,
+    annuncioId: annuncio.id,
+    categoria: annuncio.categoria,
+  }).catch(() => {});
+
+  return res.status(200).json({ ok: true, notified: true });
 });
 
 router.patch("/:id", async (req, res) => {
