@@ -84,11 +84,13 @@ export function Navbar() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex h-16 items-center justify-between gap-4">
           <Link href="/" className="flex items-center outline-none shrink-0">
-            <img
-              src="/logo-romanex.jpg"
-              alt="RomaNex"
-              className="h-11 w-auto object-contain"
-            />
+            <div className="bg-white rounded-xl border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] px-2 py-1">
+              <img
+                src="/logo-romanex.jpg"
+                alt="RomaNex"
+                className="h-9 w-auto object-contain"
+              />
+            </div>
           </Link>
 
           {/* Desktop nav links */}
