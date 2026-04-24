@@ -83,7 +83,7 @@ export function Navbar() {
       {/* Main bar */}
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="flex items-center outline-none shrink-0">
+          <Link href="/" className="flex items-center gap-3 outline-none shrink-0">
             <div className="bg-white rounded-xl border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] px-2 py-1">
               <img
                 src="/logo-romanex.jpg"
@@ -91,6 +91,9 @@ export function Navbar() {
                 className="h-9 w-auto object-contain"
               />
             </div>
+            <span className="font-display text-2xl font-black tracking-tighter uppercase" style={{ color: "#1a2744" }}>
+              Roma<span style={{ color: "#c07a3a" }}>Nex</span>
+            </span>
           </Link>
 
           {/* Desktop nav links */}
