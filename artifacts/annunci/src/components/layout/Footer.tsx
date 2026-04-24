@@ -1,4 +1,4 @@
-import { GraduationCap, Heart, BookOpen, Users, MapPin } from "lucide-react";
+import { GraduationCap, Heart, BookOpen, Users, MapPin, Instagram } from "lucide-react";
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -36,6 +36,15 @@ export function Footer() {
                 <MapPin className="h-3.5 w-3.5" strokeWidth={2.5} /> {ft.campus}
               </div>
             </div>
+            <a
+              href="https://www.instagram.com/romanex2026"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border-2 border-background/30 bg-background/10 hover:bg-background/20 hover:border-background/50 transition-all font-black text-sm uppercase tracking-wide text-background w-max"
+            >
+              <Instagram className="h-4 w-4" strokeWidth={2.5} />
+              @romanex2026
+            </a>
           </div>
         </div>
         
