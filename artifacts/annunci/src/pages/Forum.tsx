@@ -7,7 +7,7 @@ import {
   useCreateForumThread,
 } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useUser } from "@clerk/react";
+import { useUser } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -71,7 +71,7 @@ export default function Forum() {
   const [newBody, setNewBody] = useState("");
   const [newCat, setNewCat] = useState(categories?.[0] ?? "");
   const [newAuthor, setNewAuthor] = useState(
-    user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] || ""
+    user?.email?.split("@")[0] || ""
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -118,7 +118,7 @@ export default function Forum() {
               <Dialog open={dialogOpen} onOpenChange={(o) => {
                 setDialogOpen(o);
                 if (o) {
-                  setNewAuthor(user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] || "");
+                  setNewAuthor(user?.email?.split("@")[0] || "");
                   setNewCat(categories?.[0] ?? "");
                   setNewTitle("");
                   setNewBody("");

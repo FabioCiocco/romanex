@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { useUser } from "@clerk/react";
+import { useUser } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { BackBanner } from "@/components/layout/BackBanner";
 

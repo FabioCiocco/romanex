@@ -1,5 +1,4 @@
 import { Link, useLocation } from "wouter";
-import { useClerk, UserButton } from "@clerk/react";
 import { LayoutDashboard, FileText, Users, MessageSquare, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 
@@ -10,9 +9,14 @@ const NAV = [
   { href: "/forum", label: "Forum", icon: MessageSquare },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+interface LayoutProps {
+  children: React.ReactNode;
+  onLogout?: () => void;
+  userEmail?: string;
+}
+
+export function Layout({ children, onLogout, userEmail }: LayoutProps) {
   const [loc] = useLocation();
-  const { signOut } = useClerk();
   const [open, setOpen] = useState(false);
 
   return (
@@ -48,12 +52,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className="p-4 border-t-2 border-zinc-800 space-y-3">
-          <div className="flex items-center gap-3">
-            <UserButton />
-            <span className="text-xs text-zinc-500 font-mono">Profilo</span>
-          </div>
+          {userEmail && (
+            <div className="text-xs text-zinc-500 font-mono truncate px-1">{userEmail}</div>
+          )}
           <button
-            onClick={() => signOut()}
+            onClick={onLogout}
             className="flex items-center gap-2 text-xs text-zinc-500 hover:text-red-400 transition-colors w-full"
           >
             <LogOut size={14} />

@@ -211,3 +211,58 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<void> {
     logger.error({ err }, "Exception sending welcome email via Brevo");
   }
 }
+
+export interface PasswordResetEmailData {
+  to: string;
+  token: string;
+}
+
+function buildResetHtml(data: PasswordResetEmailData): string {
+  const baseUrl = process.env.APP_BASE_URL || "https://romanex.it";
+  const link = `${baseUrl}/reset-password?token=${data.token}`;
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reset Password RomaNex</title>
+</head>
+<body style="background:#f0eff8; padding:32px 16px; font-family:Arial,sans-serif; color:#0d0f1a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto;">
+    <tr>
+      <td style="background:#0d0f1a; padding:24px 32px; border:3px solid #0d0f1a;">
+        <span style="color:#6d28d9; font-size:24px; font-weight:900; letter-spacing:-1px;">Roma</span><span style="color:#c07a3a; font-size:24px; font-weight:900;">Nex</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="background:#fff; border:3px solid #0d0f1a; border-top:none; padding:32px;">
+        <h1 style="font-size:22px; font-weight:700; margin-bottom:16px;">Reset della tua password</h1>
+        <p style="margin-bottom:24px; line-height:1.6;">Hai richiesto il reset della password. Clicca il bottone qui sotto per impostarne una nuova. Il link scade tra 1 ora.</p>
+        <a href="${link}" style="display:inline-block; background:#6d28d9; color:#fff; padding:14px 28px; text-decoration:none; font-weight:700; font-size:16px; border:2px solid #0d0f1a;">REIMPOSTA PASSWORD</a>
+        <p style="margin-top:24px; font-size:13px; color:#666;">Se non hai richiesto il reset, ignora questa email.</p>
+        <p style="margin-top:8px; font-size:12px; color:#999; word-break:break-all;">Link: ${link}</p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+export async function sendPasswordResetEmail(data: PasswordResetEmailData): Promise<void> {
+  const transporter = createTransporter();
+  if (!transporter) {
+    logger.warn("Email transporter not configured — reset email not sent");
+    return;
+  }
+  try {
+    await transporter.sendMail({
+      from: `"${FROM_NAME}" <${FROM_EMAIL}>`,
+      to: data.to,
+      subject: "Reset password RomaNex",
+      html: buildResetHtml(data),
+      text: `Reimposta la tua password: ${process.env.APP_BASE_URL || "https://romanex.it"}/reset-password?token=${data.token}`,
+    });
+    logger.info({ to: data.to }, "Password reset email sent");
+  } catch (err) {
+    logger.error({ err }, "Exception sending password reset email");
+  }
+}

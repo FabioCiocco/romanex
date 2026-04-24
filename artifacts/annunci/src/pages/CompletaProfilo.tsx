@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
 import { useUpsertMyProfile } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,7 +17,7 @@ const USERNAME_REGEX = /^[a-z0-9_]{3,30}$/;
 export default function CompletaProfilo() {
   const { t } = useLanguage();
   const tp = t.profilo;
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -33,10 +33,7 @@ export default function CompletaProfilo() {
 
   useEffect(() => {
     if (user && isLoaded) {
-      setNome(user.firstName || "");
-      setCognome(user.lastName || "");
-      setEmail(user.primaryEmailAddress?.emailAddress || "");
-      if (user.username) setUsername(user.username);
+      setEmail(user.email || "");
     }
   }, [user, isLoaded]);
 
@@ -52,12 +49,7 @@ export default function CompletaProfilo() {
 
   const mutation = useUpsertMyProfile({
     mutation: {
-      onSuccess: async (data) => {
-        try {
-          await user?.update({ username: data.username });
-        } catch {
-          // Clerk username sync not enabled — ignored
-        }
+      onSuccess: () => {
         toast({ title: tp.savedOk, description: tp.savedOkDesc });
         setLocation("/");
       },
@@ -74,7 +66,11 @@ export default function CompletaProfilo() {
     },
   });
 
-  if (!isLoaded || !user) return null;
+  if (!isLoaded) return null;
+  if (!isSignedIn) {
+    setLocation("/sign-in");
+    return null;
+  }
 
   const anni: string[] = Array.isArray(tp.anni) ? [...tp.anni] : ANNI_OPTIONS_FALLBACK;
 
@@ -116,7 +112,7 @@ export default function CompletaProfilo() {
         <div className="border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))] bg-card p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* Username — obbligatorio */}
+            {/* Username */}
             <div>
               <label className="block text-xs font-black uppercase tracking-wider mb-1 flex items-center gap-1">
                 <AtSign className="w-3 h-3" /> {tp.username} <span className="text-destructive">*</span>
@@ -168,6 +164,16 @@ export default function CompletaProfilo() {
                   required
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-black uppercase tracking-wider mb-1">Email</label>
+              <input
+                className="w-full border-2 border-foreground/30 rounded-xl px-3 py-2.5 text-sm font-medium bg-muted text-muted-foreground cursor-not-allowed"
+                value={email}
+                readOnly
+                tabIndex={-1}
+              />
             </div>
 
             <div>

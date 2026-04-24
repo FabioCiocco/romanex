@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useUser, useClerk } from "@clerk/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "wouter";
 import { useGetMyProfile, useUpsertMyProfile, getGetMyProfileQueryKey } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -11,6 +11,7 @@ import {
   User, GraduationCap, Phone, Mail, BookOpen, CheckCircle2,
   AtSign, AlertCircle, LogOut, Loader2, Check,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ANNI_OPTIONS_FALLBACK = [
   "1° Anno", "2° Anno", "3° Anno", "4° Anno", "5° Anno",
@@ -24,10 +25,10 @@ type SaveStatus = "idle" | "saving" | "saved" | "error";
 export default function Profilo() {
   const { t } = useLanguage();
   const tp = t.profilo;
-  const { user, isLoaded } = useUser();
-  const { signOut } = useClerk();
+  const { user, isLoaded, isSignedIn, logout } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const qc = useQueryClient();
 
   const [username, setUsername] = useState("");
   const [usernameError, setUsernameError] = useState("");
@@ -42,13 +43,12 @@ export default function Profilo() {
   const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { data: profile } = useGetMyProfile({
-    query: { queryKey: getGetMyProfileQueryKey(), enabled: !!user && isLoaded, retry: false },
+    query: { queryKey: getGetMyProfileQueryKey(), enabled: isSignedIn && isLoaded, retry: false },
   });
 
   const mutation = useUpsertMyProfile({
     mutation: {
-      onSuccess: async (data) => {
-        try { await user?.update({ username: data.username }); } catch { /* ignored */ }
+      onSuccess: () => {
         setSaveStatus("saved");
         if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
         savedTimerRef.current = setTimeout(() => setSaveStatus("idle"), 3000);
@@ -78,14 +78,12 @@ export default function Profilo() {
       setCorsoDiLaurea(profile.corsoDiLaurea || "");
       setTelefono(profile.telefono || "");
     } else if (user && isLoaded) {
-      setNome(user.firstName || "");
-      setCognome(user.lastName || "");
-      setEmail(user.primaryEmailAddress?.emailAddress || "");
-      if (user.username) setUsername(user.username);
+      setEmail(user.email || "");
     }
   }, [profile, user, isLoaded]);
 
-  if (!isLoaded || !user) {
+  if (!isLoaded) return null;
+  if (!isSignedIn) {
     setLocation("/sign-in");
     return null;
   }
@@ -119,10 +117,16 @@ export default function Profilo() {
   const completeness = Math.round((filled / completenessFields.length) * 100);
   const isComplete = completeness === 100;
 
-  const initials = `${nome?.[0] ?? ""}${cognome?.[0] ?? ""}`.toUpperCase() || "?";
+  const initials = `${nome?.[0] ?? ""}${cognome?.[0] ?? ""}`.toUpperCase() || user.email[0].toUpperCase();
 
   const inputClass = "w-full border-2 border-foreground rounded-xl px-3 py-2.5 text-sm font-medium bg-background focus:outline-none focus:ring-2 focus:ring-primary transition-shadow";
   const labelClass = "block text-xs font-black uppercase tracking-wider mb-1.5 flex items-center gap-1";
+
+  const handleSignOut = async () => {
+    await logout();
+    qc.clear();
+    setLocation("/");
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -139,11 +143,7 @@ export default function Profilo() {
                 {/* Avatar */}
                 <div className="relative shrink-0">
                   <div className="w-20 h-20 rounded-full border-4 border-white/30 bg-white/20 flex items-center justify-center overflow-hidden">
-                    {user.imageUrl ? (
-                      <img src={user.imageUrl} alt={nome} className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-2xl font-black text-white font-display">{initials}</span>
-                    )}
+                    <span className="text-2xl font-black text-white font-display">{initials}</span>
                   </div>
                   {isComplete && (
                     <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-green-400 border-2 border-white flex items-center justify-center">
@@ -373,7 +373,7 @@ export default function Profilo() {
           {/* Logout */}
           <button
             type="button"
-            onClick={() => signOut(() => setLocation("/"))}
+            onClick={handleSignOut}
             className={cn(
               "w-full flex items-center justify-center gap-2.5 border-4 border-destructive shadow-[4px_4px_0_0_hsl(var(--destructive))]",
               "font-black uppercase tracking-wider py-3.5 text-base transition-all rounded-xl",

@@ -1,21 +1,18 @@
 import { Router } from "express";
-import { getAuth } from "@clerk/express";
 import { db, userProfilesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { sendWelcomeEmail } from "../lib/email";
+import { requireAuth } from "../middlewares/auth";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) {
-    return res.status(401).json({ error: "Non autorizzato" });
-  }
+router.get("/", requireAuth, async (req, res) => {
+  const userId = req.session.userId!;
 
   const profiles = await db
     .select()
     .from(userProfilesTable)
-    .where(eq(userProfilesTable.clerkId, userId))
+    .where(eq(userProfilesTable.userId, userId))
     .limit(1);
 
   if (profiles.length === 0) {
@@ -25,11 +22,8 @@ router.get("/", async (req, res) => {
   return res.json(profiles[0]);
 });
 
-router.put("/", async (req, res) => {
-  const { userId } = getAuth(req);
-  if (!userId) {
-    return res.status(401).json({ error: "Non autorizzato" });
-  }
+router.put("/", requireAuth, async (req, res) => {
+  const userId = req.session.userId!;
 
   const { username, nome, cognome, email, universita, annoCorso, corsoDiLaurea, telefono } = req.body;
 
@@ -43,25 +37,25 @@ router.put("/", async (req, res) => {
   }
 
   const existing = await db
-    .select({ clerkId: userProfilesTable.clerkId })
+    .select({ userId: userProfilesTable.userId })
     .from(userProfilesTable)
     .where(eq(userProfilesTable.username, username))
     .limit(1);
-  if (existing.length > 0 && existing[0].clerkId !== userId) {
+  if (existing.length > 0 && existing[0].userId !== userId) {
     return res.status(409).json({ error: "USERNAME_TAKEN" });
   }
 
   const existingProfile = await db
-    .select({ clerkId: userProfilesTable.clerkId })
+    .select({ userId: userProfilesTable.userId })
     .from(userProfilesTable)
-    .where(eq(userProfilesTable.clerkId, userId))
+    .where(eq(userProfilesTable.userId, userId))
     .limit(1);
   const isNewProfile = existingProfile.length === 0;
 
   const [profile] = await db
     .insert(userProfilesTable)
     .values({
-      clerkId: userId,
+      userId,
       username,
       nome,
       cognome,
@@ -72,7 +66,7 @@ router.put("/", async (req, res) => {
       telefono: telefono || null,
     })
     .onConflictDoUpdate({
-      target: userProfilesTable.clerkId,
+      target: userProfilesTable.userId,
       set: {
         username,
         nome,

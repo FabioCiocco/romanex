@@ -16,7 +16,7 @@ import { ImagePlus, Tag, Edit3, Loader2, Home, Search, LogIn, ShieldCheck } from
 import { CATEGORIES, getCategoryConfig } from "@/lib/constants";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { useState } from "react";
-import { useUser } from "@clerk/react";
+import { useUser } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Lang } from "@/lib/i18n";
 

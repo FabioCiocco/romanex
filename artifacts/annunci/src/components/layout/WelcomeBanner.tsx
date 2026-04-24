@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "wouter";
 import { GraduationCap, LogIn, UserPlus, Eye, ShieldAlert, ArrowRight, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,7 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const STORAGE_KEY = "romanex-visit-mode";
 
 export function WelcomeBanner() {
-  const { isSignedIn, isLoaded } = useUser();
+  const { isSignedIn, isLoaded } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showGuestNotice, setShowGuestNotice] = useState(false);
   const { t } = useLanguage();

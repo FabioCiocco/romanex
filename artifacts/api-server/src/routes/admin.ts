@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { getAuth } from "@clerk/express";
 import {
   db,
   annunciTable,
@@ -8,25 +7,11 @@ import {
   forumRepliesTable,
 } from "@workspace/db";
 import { eq, desc, ilike, sql, count, or, and } from "drizzle-orm";
+import { requireAdmin } from "../middlewares/auth";
 
 const router = Router();
 
-function getAdminIds(): string[] {
-  return (process.env.ADMIN_CLERK_IDS || "")
-    .split(",")
-    .map((id) => id.trim())
-    .filter(Boolean);
-}
-
-router.use((req, res, next) => {
-  const { userId } = getAuth(req);
-  if (!userId) return res.status(401).json({ error: "Non autenticato" });
-  const adminIds = getAdminIds();
-  if (!adminIds.includes(userId)) {
-    return res.status(403).json({ error: "Accesso negato" });
-  }
-  next();
-});
+router.use(requireAdmin);
 
 router.get("/check", (_req, res) => {
   return res.json({ isAdmin: true });

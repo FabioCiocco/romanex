@@ -1,9 +1,8 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod/v4";
+import { usersTable } from "./users";
 
 export const userProfilesTable = pgTable("user_profiles", {
-  clerkId: text("clerk_id").primaryKey(),
+  userId: text("user_id").primaryKey().references(() => usersTable.id, { onDelete: "cascade" }),
   username: text("username").notNull().unique(),
   nome: text("nome").notNull(),
   cognome: text("cognome").notNull(),
@@ -16,13 +15,4 @@ export const userProfilesTable = pgTable("user_profiles", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
 
-export const insertUserProfileSchema = createInsertSchema(userProfilesTable).omit({
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const updateUserProfileSchema = insertUserProfileSchema.partial().omit({ clerkId: true });
-
-export type InsertUserProfile = z.infer<typeof insertUserProfileSchema>;
-export type UpdateUserProfile = z.infer<typeof updateUserProfileSchema>;
 export type UserProfile = typeof userProfilesTable.$inferSelect;

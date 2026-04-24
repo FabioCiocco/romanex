@@ -9,7 +9,7 @@ import {
   useDeleteForumReply,
 } from "@workspace/api-client-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useUser } from "@clerk/react";
+import { useUser } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,7 @@ export default function ForumThread() {
 
   const [replyBody, setReplyBody] = useState("");
   const [replyAuthor, setReplyAuthor] = useState(
-    user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] || ""
+    user?.email?.split("@")[0] || ""
   );
 
   const handleReply = (e: React.FormEvent) => {

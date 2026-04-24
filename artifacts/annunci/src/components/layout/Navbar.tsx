@@ -3,9 +3,10 @@ import { PlusCircle, Menu, X, LogIn, LogOut, User, MessageCircle, ChevronDown, L
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/lib/constants";
-import { useUser, useClerk, Show } from "@clerk/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useQueryClient } from "@tanstack/react-query";
 
 function CategorieDropdown() {
   const [open, setOpen] = useState(false);
@@ -73,9 +74,17 @@ function CategorieDropdown() {
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
-  const { user, isLoaded } = useUser();
-  const { signOut } = useClerk();
+  const { user, isLoaded, isSignedIn, logout } = useAuth();
   const { t } = useLanguage();
+  const qc = useQueryClient();
+
+  const handleSignOut = async () => {
+    await logout();
+    qc.clear();
+    setIsOpen(false);
+  };
+
+  void location;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-[3px] border-foreground bg-background/95 backdrop-blur shadow-[0_4px_0_0_hsl(var(--foreground))]">
@@ -112,28 +121,24 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-2 ml-auto">
             <LanguageSwitcher />
 
-            <Show when="signed-out">
+            {isLoaded && !isSignedIn && (
               <Link href="/sign-in">
                 <Button variant="ghost" className="h-10 gap-2 rounded-xl px-5 border-2 border-foreground hover:bg-muted font-black text-sm uppercase tracking-wide transition-all">
                   <LogIn className="h-4 w-4" strokeWidth={2.5} />
                   {t.nav.signIn}
                 </Button>
               </Link>
-            </Show>
+            )}
 
-            <Show when="signed-in">
+            {isLoaded && isSignedIn && user && (
               <div className="flex items-center gap-2">
                 <Link href="/profilo">
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border-2 border-foreground bg-muted/50 hover:bg-muted cursor-pointer transition-colors">
-                    {user?.imageUrl ? (
-                      <img src={user.imageUrl} alt={user.firstName || "User"} className="w-7 h-7 rounded-full border border-foreground object-cover" />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center border border-foreground">
-                        <User className="w-4 h-4 text-white" strokeWidth={2.5} />
-                      </div>
-                    )}
+                    <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center border border-foreground">
+                      <User className="w-4 h-4 text-white" strokeWidth={2.5} />
+                    </div>
                     <span className="font-black text-sm text-foreground max-w-[100px] truncate">
-                      {user?.firstName || user?.emailAddresses?.[0]?.emailAddress?.split("@")[0]}
+                      {user.email.split("@")[0]}
                     </span>
                   </div>
                 </Link>
@@ -141,14 +146,13 @@ export function Navbar() {
                   variant="ghost"
                   size="icon"
                   className="w-10 h-10 rounded-xl border-2 border-foreground hover:bg-destructive/10 hover:border-destructive hover:text-destructive transition-all"
-                  onClick={() => signOut()}
+                  onClick={handleSignOut}
                   title={t.nav.signOut}
                 >
                   <LogOut className="h-4 w-4" strokeWidth={2.5} />
                 </Button>
               </div>
-            </Show>
-
+            )}
           </div>
 
           <button
@@ -165,23 +169,19 @@ export function Navbar() {
       {isOpen && (
         <div className="md:hidden border-t-2 border-foreground p-5 space-y-4 bg-background shadow-xl absolute w-full left-0 animate-in slide-in-from-top-2 overflow-y-auto max-h-[80dvh]">
 
-          <Show when="signed-in">
+          {isLoaded && isSignedIn && user && (
             <Link href="/profilo" onClick={() => setIsOpen(false)}>
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-muted border-2 border-foreground hover:bg-muted/80 transition-colors">
-                {user?.imageUrl ? (
-                  <img src={user.imageUrl} alt={user.firstName || "User"} className="w-10 h-10 rounded-full border-2 border-foreground object-cover" />
-                ) : (
-                  <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
-                    <User className="w-5 h-5 text-white" strokeWidth={2.5} />
-                  </div>
-                )}
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-foreground">
+                  <User className="w-5 h-5 text-white" strokeWidth={2.5} />
+                </div>
                 <div>
-                  <p className="font-black text-sm uppercase tracking-wide">{user?.firstName || t.nav.user}</p>
-                  <p className="text-xs text-foreground/50 font-medium truncate">{user?.emailAddresses?.[0]?.emailAddress}</p>
+                  <p className="font-black text-sm uppercase tracking-wide">{user.email.split("@")[0]}</p>
+                  <p className="text-xs text-foreground/50 font-medium truncate">{user.email}</p>
                 </div>
               </div>
             </Link>
-          </Show>
+          )}
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -218,21 +218,21 @@ export function Navbar() {
                 {t.nav.publish}
               </Button>
             </Link>
-            <Show when="signed-out">
+            {isLoaded && !isSignedIn && (
               <Link href="/sign-in" onClick={() => setIsOpen(false)}>
                 <Button variant="outline" className="w-full h-11 gap-2 rounded-xl border-2 border-foreground font-black text-base uppercase tracking-wide">
                   <LogIn className="h-4 w-4" strokeWidth={2.5} />
                   {t.nav.signIn}
                 </Button>
               </Link>
-            </Show>
-            <Show when="signed-in">
+            )}
+            {isLoaded && isSignedIn && (
               <Button variant="ghost" className="w-full h-11 gap-2 rounded-xl border-2 border-foreground font-black text-sm uppercase tracking-wide text-destructive hover:bg-destructive/10"
-                onClick={() => { signOut(); setIsOpen(false); }}>
+                onClick={handleSignOut}>
                 <LogOut className="h-4 w-4" strokeWidth={2.5} />
                 {t.nav.signOut}
               </Button>
-            </Show>
+            )}
           </div>
         </div>
       )}

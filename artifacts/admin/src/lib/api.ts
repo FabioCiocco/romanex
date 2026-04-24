@@ -3,6 +3,7 @@ const BASE = "/api/admin";
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     ...options,
   });
   if (res.status === 204) return undefined as T;

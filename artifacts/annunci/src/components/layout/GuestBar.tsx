@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/react";
+import { useUser } from "@/contexts/AuthContext";
 import { Link } from "wouter";
 import { ShieldAlert, X, LogIn, UserPlus } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
