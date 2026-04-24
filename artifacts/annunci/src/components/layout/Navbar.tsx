@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { PlusCircle, Menu, X, GraduationCap, LogIn, LogOut, User, MessageCircle, ChevronDown, LayoutGrid } from "lucide-react";
+import { PlusCircle, Menu, X, LogIn, LogOut, User, MessageCircle, ChevronDown, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { CATEGORIES } from "@/lib/constants";
@@ -83,13 +83,12 @@ export function Navbar() {
       {/* Main bar */}
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="flex items-center space-x-2.5 group outline-none shrink-0">
-            <div className="bg-primary text-primary-foreground p-1.5 rounded-xl rotate-3 group-hover:rotate-0 transition-transform duration-300 border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]">
-              <GraduationCap className="h-6 w-6" strokeWidth={2.5} />
-            </div>
-            <span className="font-display text-2xl font-black text-foreground tracking-tighter uppercase">
-              Roma<span className="text-accent">Nex</span>
-            </span>
+          <Link href="/" className="flex items-center outline-none shrink-0">
+            <img
+              src="/logo-romanex.jpg"
+              alt="RomaNex"
+              className="h-11 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop nav links */}
