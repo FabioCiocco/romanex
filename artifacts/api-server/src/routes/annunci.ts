@@ -7,7 +7,7 @@ import {
   UpdateAnnuncioBody,
 } from "@workspace/api-zod";
 import { requireAuth } from "../middlewares/auth";
-import { sendContactNotificationEmail } from "../lib/email";
+import { sendContactNotificationEmail, sendAnnuncioPublishedEmail } from "../lib/email";
 
 const router = Router();
 
@@ -131,6 +131,15 @@ router.post("/", async (req, res) => {
       inEvidenza: false,
     })
     .returning();
+
+  if (autoreEmail) {
+    sendAnnuncioPublishedEmail({
+      to: autoreEmail,
+      annuncioTitolo: annuncio.titolo,
+      annuncioId: annuncio.id,
+      categoria: annuncio.categoria,
+    }).catch(() => {});
+  }
 
   return res.status(201).json(annuncio);
 });
