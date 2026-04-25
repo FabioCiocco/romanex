@@ -10,7 +10,7 @@ export default function Utenti() {
   const [q, setQ] = useState("");
   const [inputQ, setInputQ] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
-  const [confirm, setConfirm] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -31,15 +31,15 @@ export default function Utenti() {
     setPage(1);
   };
 
-  const handleDelete = async (clerkId: string) => {
-    if (confirm !== clerkId) {
-      setConfirm(clerkId);
+  const handleDelete = async (userId: string) => {
+    if (confirmId !== userId) {
+      setConfirmId(userId);
       return;
     }
-    setBusy(clerkId);
+    setBusy(userId);
     try {
-      await deleteUtente(clerkId);
-      setConfirm(null);
+      await deleteUtente(userId);
+      setConfirmId(null);
       load();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Errore");
@@ -129,13 +129,13 @@ export default function Utenti() {
             {!loading &&
               result?.utenti.map((u) => (
                 <tr
-                  key={u.clerkId}
+                  key={u.userId}
                   className="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors"
                 >
                   <td className="px-4 py-3">
                     <div className="font-semibold text-zinc-200 font-mono">@{u.username}</div>
                     <div className="text-xs text-zinc-600 font-mono truncate max-w-[120px]">
-                      {u.clerkId.slice(0, 16)}...
+                      {u.userId.slice(0, 16)}...
                     </div>
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell text-zinc-300">
@@ -152,19 +152,19 @@ export default function Utenti() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <button
-                      onClick={() => handleDelete(u.clerkId)}
-                      disabled={busy === u.clerkId}
+                      onClick={() => handleDelete(u.userId)}
+                      disabled={busy === u.userId}
                       className={`text-sm font-mono px-2 py-1 border transition-colors disabled:opacity-50 ${
-                        confirm === u.clerkId
+                        confirmId === u.userId
                           ? "text-white bg-red-500 border-red-500 hover:bg-red-600"
                           : "text-zinc-500 border-zinc-700 hover:text-red-400 hover:border-red-400"
                       }`}
                     >
-                      {confirm === u.clerkId ? "Conferma" : <Trash2 size={14} />}
+                      {confirmId === u.userId ? "Conferma" : <Trash2 size={14} />}
                     </button>
-                    {confirm === u.clerkId && (
+                    {confirmId === u.userId && (
                       <button
-                        onClick={() => setConfirm(null)}
+                        onClick={() => setConfirmId(null)}
                         className="ml-1 text-xs font-mono text-zinc-600 hover:text-zinc-400"
                       >
                         ✕

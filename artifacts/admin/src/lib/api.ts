@@ -50,8 +50,8 @@ export function getUtenti(params: { page?: number; q?: string }) {
   return request<UtentiPageResult>(`/utenti?${qs}`);
 }
 
-export function deleteUtente(clerkId: string) {
-  return request<void>(`/utenti/${clerkId}`, { method: "DELETE" });
+export function deleteUtente(userId: string) {
+  return request<void>(`/utenti/${userId}`, { method: "DELETE" });
 }
 
 export function getForumThreads(params: { page?: number; q?: string }) {
@@ -95,7 +95,7 @@ export interface Annuncio {
 }
 
 export interface UserProfile {
-  clerkId: string;
+  userId: string;
   username: string;
   nome: string;
   cognome: string;
