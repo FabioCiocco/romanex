@@ -33,10 +33,18 @@ async function ensureSessionTable(): Promise<void> {
 }
 
 async function ensureAdminUser(): Promise<void> {
-  const adminEmails = (process.env.ADMIN_EMAILS || "")
+  const rawEnv = process.env.ADMIN_EMAILS || "";
+  const adminEmails = rawEnv
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
+
+  logger.info({ count: adminEmails.length, configured: rawEnv.length > 0 }, "Admin emails config");
+
+  if (adminEmails.length === 0) {
+    logger.warn("ADMIN_EMAILS not configured — no admin user will be created");
+    return;
+  }
 
   for (const email of adminEmails) {
     try {
@@ -54,6 +62,8 @@ async function ensureAdminUser(): Promise<void> {
           passwordHash,
         });
         logger.info({ email }, "Admin user created at startup");
+      } else {
+        logger.info({ email }, "Admin user already exists");
       }
     } catch (err) {
       logger.error({ err, email }, "Failed to ensure admin user");
