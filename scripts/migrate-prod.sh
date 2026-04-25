@@ -39,6 +39,26 @@ try {
     CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session" ("expire");
   `);
   console.log('Migration 2: session table ensured.');
+
+  // Migration 3: ensure admin user exists
+  const adminEmail = (process.env.ADMIN_EMAILS || '').split(',')[0].trim().toLowerCase();
+  if (adminEmail) {
+    const { rows: existing } = await client.query(
+      `SELECT id FROM users WHERE email = $1`, [adminEmail]
+    );
+    if (existing.length === 0) {
+      const { randomUUID } = await import('crypto');
+      // Default password: RomaNex2025! — user should change after first login
+      const hash = '$2b$12$OLRSlzvJDv/g.VEipALereEUrfSK40FxDjtCIPnxZdNJcgz29tLrq';
+      await client.query(
+        `INSERT INTO users (id, email, password_hash, created_at) VALUES ($1, $2, $3, NOW())`,
+        [randomUUID(), adminEmail, hash]
+      );
+      console.log('Migration 3: admin user created for', adminEmail);
+    } else {
+      console.log('Migration 3: admin user already exists for', adminEmail);
+    }
+  }
 } finally {
   client.release();
   await pool.end();
