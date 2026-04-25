@@ -8,6 +8,7 @@ import router from "./routes";
 import { logger } from "./lib/logger";
 
 const app: Express = express();
+app.set("trust proxy", 1); // Replit/produzione usa un reverse proxy HTTPS
 const PgSession = connectPgSimple(session);
 
 app.use(
