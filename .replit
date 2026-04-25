@@ -78,3 +78,4 @@ channel = "stable-25_05"
 
 [userenv.shared]
 ADMIN_EMAILS = "info@romanex.it"
+ADMIN_SETUP_TOKEN = "7zro2ce21cfjnlum3yhnqm"

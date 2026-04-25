@@ -160,4 +160,49 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
+router.get("/bootstrap", async (req, res) => {
+  const setupToken = process.env.ADMIN_SETUP_TOKEN;
+  if (!setupToken || req.query.token !== setupToken) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  const adminEmails = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (adminEmails.length === 0) {
+    return res.status(400).json({ error: "ADMIN_EMAILS non configurato" });
+  }
+
+  const defaultPassword = "RomaNex2025!";
+  const passwordHash = await bcrypt.hash(defaultPassword, 12);
+  const results: { email: string; action: string }[] = [];
+
+  for (const email of adminEmails) {
+    const [existing] = await db
+      .select({ id: usersTable.id })
+      .from(usersTable)
+      .where(eq(usersTable.email, email))
+      .limit(1);
+
+    if (existing) {
+      await db
+        .update(usersTable)
+        .set({ passwordHash })
+        .where(eq(usersTable.id, existing.id));
+      results.push({ email, action: "password_reset" });
+    } else {
+      await db.insert(usersTable).values({
+        id: crypto.randomUUID(),
+        email,
+        passwordHash,
+      });
+      results.push({ email, action: "created" });
+    }
+  }
+
+  return res.json({ ok: true, results, password: defaultPassword });
+});
+
 export { router as authRouter };
