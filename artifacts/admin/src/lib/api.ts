@@ -96,16 +96,14 @@ export interface Annuncio {
 
 export interface UserProfile {
   userId: string;
-  username: string;
-  nome: string;
-  cognome: string;
   email: string;
-  universita: string;
-  annoCorso: string;
-  corsoDiLaurea: string;
-  telefono: string | null;
   createdAt: string;
-  updatedAt: string;
+  username: string | null;
+  nome: string | null;
+  cognome: string | null;
+  universita: string | null;
+  annoCorso: string | null;
+  corsoDiLaurea: string | null;
 }
 
 export interface ForumThread {

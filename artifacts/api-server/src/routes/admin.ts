@@ -3,6 +3,7 @@ import {
   db,
   annunciTable,
   userProfilesTable,
+  usersTable,
   forumThreadsTable,
   forumRepliesTable,
 } from "@workspace/db";
@@ -29,11 +30,11 @@ router.get("/stats", async (_req, res) => {
           .select({ annunciOggi: count() })
           .from(annunciTable)
           .where(sql`${annunciTable.createdAt} >= ${today}`),
-        db.select({ totaleUtenti: count() }).from(userProfilesTable),
+        db.select({ totaleUtenti: count() }).from(usersTable),
         db
           .select({ utentiOggi: count() })
-          .from(userProfilesTable)
-          .where(sql`${userProfilesTable.createdAt} >= ${today}`),
+          .from(usersTable)
+          .where(sql`${usersTable.createdAt} >= ${today}`),
         db.select({ totaleThread: count() }).from(forumThreadsTable),
         db.select({ totaleRisposte: count() }).from(forumRepliesTable),
       ]);
@@ -158,8 +159,8 @@ router.get("/utenti", async (req, res) => {
     if (q)
       conditions.push(
         or(
+          ilike(usersTable.email, `%${q}%`),
           ilike(userProfilesTable.username, `%${q}%`),
-          ilike(userProfilesTable.email, `%${q}%`),
           ilike(userProfilesTable.nome, `%${q}%`),
           ilike(userProfilesTable.cognome, `%${q}%`)
         )
@@ -167,19 +168,34 @@ router.get("/utenti", async (req, res) => {
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [utenti, [{ total }]] = await Promise.all([
+    const [rows, [{ total }]] = await Promise.all([
       db
-        .select()
-        .from(userProfilesTable)
+        .select({
+          userId: usersTable.id,
+          email: usersTable.email,
+          createdAt: usersTable.createdAt,
+          username: userProfilesTable.username,
+          nome: userProfilesTable.nome,
+          cognome: userProfilesTable.cognome,
+          universita: userProfilesTable.universita,
+          annoCorso: userProfilesTable.annoCorso,
+          corsoDiLaurea: userProfilesTable.corsoDiLaurea,
+        })
+        .from(usersTable)
+        .leftJoin(userProfilesTable, eq(usersTable.id, userProfilesTable.userId))
         .where(whereClause)
-        .orderBy(desc(userProfilesTable.createdAt))
+        .orderBy(desc(usersTable.createdAt))
         .limit(limit)
         .offset(offset),
-      db.select({ total: count() }).from(userProfilesTable).where(whereClause),
+      db
+        .select({ total: count() })
+        .from(usersTable)
+        .leftJoin(userProfilesTable, eq(usersTable.id, userProfilesTable.userId))
+        .where(whereClause),
     ]);
 
     return res.json({
-      utenti,
+      utenti: rows,
       total,
       page,
       limit,

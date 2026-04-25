@@ -133,19 +133,23 @@ export default function Utenti() {
                   className="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors"
                 >
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-zinc-200 font-mono">@{u.username}</div>
+                    {u.username ? (
+                      <div className="font-semibold text-zinc-200 font-mono">@{u.username}</div>
+                    ) : (
+                      <div className="text-zinc-600 font-mono text-xs italic">profilo incompleto</div>
+                    )}
                     <div className="text-xs text-zinc-600 font-mono truncate max-w-[120px]">
                       {u.userId.slice(0, 16)}...
                     </div>
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell text-zinc-300">
-                    {u.nome} {u.cognome}
+                    {u.nome || u.cognome ? `${u.nome ?? ""} ${u.cognome ?? ""}`.trim() : <span className="text-zinc-600 text-xs">—</span>}
                   </td>
                   <td className="px-4 py-3 hidden md:table-cell text-zinc-400 text-xs font-mono">
                     {u.email}
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell text-zinc-400 text-xs">
-                    {u.universita}
+                    {u.universita ?? <span className="text-zinc-600">—</span>}
                   </td>
                   <td className="px-4 py-3 hidden lg:table-cell text-zinc-500 text-xs font-mono">
                     {formatDate(u.createdAt)}
