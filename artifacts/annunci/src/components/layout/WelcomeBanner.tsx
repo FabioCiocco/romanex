@@ -16,7 +16,10 @@ export function WelcomeBanner() {
     if (!isLoaded) return;
     if (isSignedIn) return;
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) setVisible(true);
+    if (!stored) {
+      const timer = setTimeout(() => setVisible(true), 10000);
+      return () => clearTimeout(timer);
+    }
   }, [isLoaded, isSignedIn]);
 
   const handleGuest = () => {
