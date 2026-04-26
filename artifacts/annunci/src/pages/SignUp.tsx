@@ -53,7 +53,7 @@ export default function SignUp() {
       <div className="w-full max-w-md">
         <button
           onClick={() => window.history.length > 1 ? window.history.back() : setLocation("/")}
-          className="flex items-center gap-2 text-foreground/50 hover:text-foreground font-bold text-sm mb-4 transition-colors group"
+          className="flex items-center gap-2 text-foreground/70 hover:text-foreground font-bold text-sm mb-4 transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" strokeWidth={2.5} />
           Torna indietro
@@ -77,7 +77,7 @@ export default function SignUp() {
             <h2 className="font-display text-2xl font-black uppercase tracking-tighter mb-1">
               {t.auth?.signUpTitle ?? "Crea account"}
             </h2>
-            <p className="text-foreground/50 text-sm font-medium mb-6">
+            <p className="text-foreground/70 text-sm font-medium mb-6">
               {t.auth?.signUpSub ?? "Unisciti alla community di studenti romani"}
             </p>
 
@@ -103,7 +103,7 @@ export default function SignUp() {
 
               <div>
                 <label className="block text-xs font-black uppercase tracking-wider mb-1.5">
-                  {t.auth?.password ?? "Password"} <span className="text-foreground/40 normal-case font-medium">(min. 8 caratteri)</span>
+                  {t.auth?.password ?? "Password"} <span className="text-foreground/60 normal-case font-medium">(min. 8 caratteri)</span>
                 </label>
                 <div className="relative">
                   <input
@@ -150,7 +150,7 @@ export default function SignUp() {
               </button>
             </form>
 
-            <p className="text-center text-sm text-foreground/50 font-medium mt-6">
+            <p className="text-center text-sm text-foreground/70 font-medium mt-6">
               {t.auth?.hasAccount ?? "Hai già un account?"}{" "}
               <Link href="/sign-in" className="text-primary font-black hover:underline">
                 {t.auth?.loginLink ?? "Accedi"}

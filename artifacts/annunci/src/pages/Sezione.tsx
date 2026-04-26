@@ -307,7 +307,7 @@ export default function Sezione({ catId }: SezioneProps) {
               </div>
 
               {/* Count */}
-              <p className="text-xs text-foreground/50 font-bold uppercase tracking-wider px-1">
+              <p className="text-xs text-foreground/70 font-bold uppercase tracking-wider px-1">
                 {isLoading ? tc.loading : data?.total !== undefined ? `${data.total} ${tc.announceAds}` : ""}
               </p>
             </div>

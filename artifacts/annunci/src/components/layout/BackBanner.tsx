@@ -32,29 +32,29 @@ export function BackBanner({ crumbs, backHref }: BackBannerProps) {
           {/* Back button */}
           <button
             onClick={handleBack}
-            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-foreground/50 hover:text-foreground transition-colors group shrink-0"
+            className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-foreground/70 hover:text-foreground transition-colors group shrink-0"
           >
             <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
             {tc.back}
           </button>
 
           {/* Divider */}
-          <span className="text-foreground/20 font-light">|</span>
+          <span className="text-foreground/40 font-light">|</span>
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-1 overflow-hidden min-w-0">
-            <Link href="/" className="flex items-center gap-1 text-xs font-black uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors shrink-0">
+            <Link href="/" className="flex items-center gap-1 text-xs font-black uppercase tracking-wider text-foreground/70 hover:text-primary transition-colors shrink-0">
               <Home className="h-3 w-3" strokeWidth={2.5} />
               <span className="hidden sm:inline">{tc.backHome}</span>
             </Link>
 
             {crumbs.map((crumb, i) => (
               <span key={i} className="flex items-center gap-1 min-w-0">
-                <ChevronRight className="h-3 w-3 text-foreground/25 shrink-0" strokeWidth={2.5} />
+                <ChevronRight className="h-3 w-3 text-foreground/40 shrink-0" strokeWidth={2.5} />
                 {crumb.href ? (
                   <Link
                     href={crumb.href}
-                    className="text-xs font-black uppercase tracking-wider text-foreground/50 hover:text-primary transition-colors truncate"
+                    className="text-xs font-black uppercase tracking-wider text-foreground/70 hover:text-primary transition-colors truncate"
                   >
                     {crumb.label}
                   </Link>

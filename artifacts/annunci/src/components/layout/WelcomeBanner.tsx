@@ -73,9 +73,9 @@ export function WelcomeBanner() {
                   </div>
                   <div className="flex-1">
                     <p className="font-black text-sm group-hover:text-white transition-colors">{wt.signIn}</p>
-                    <p className="text-xs text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.signInSub}</p>
+                    <p className="text-xs text-foreground/70 group-hover:text-white/70 font-medium transition-colors">{wt.signInSub}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4 text-foreground/50 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
                 </div>
               </Link>
 
@@ -87,22 +87,22 @@ export function WelcomeBanner() {
                   </div>
                   <div className="flex-1">
                     <p className="font-black text-sm group-hover:text-white transition-colors">{wt.register}</p>
-                    <p className="text-xs text-foreground/50 group-hover:text-white/70 font-medium transition-colors">{wt.registerSub}</p>
+                    <p className="text-xs text-foreground/70 group-hover:text-white/70 font-medium transition-colors">{wt.registerSub}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-foreground/30 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
+                  <ArrowRight className="w-4 h-4 text-foreground/50 group-hover:text-white group-hover:translate-x-1 transition-all" strokeWidth={2.5} />
                 </div>
               </Link>
 
               {/* Guest */}
               <button onClick={handleGuest} className="group w-full flex items-center gap-3 p-3 rounded-xl border-2 border-dashed border-foreground/20 hover:border-foreground/40 bg-muted/30 hover:bg-muted/60 transition-all duration-200 text-left">
                 <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center border-2 border-foreground/10 shrink-0">
-                  <Eye className="w-4 h-4 text-foreground/40" strokeWidth={2} />
+                  <Eye className="w-4 h-4 text-foreground/60" strokeWidth={2} />
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-sm text-foreground/60">{wt.guest}</p>
-                  <p className="text-xs text-foreground/40 font-medium">{wt.guestSub}</p>
+                  <p className="font-black text-sm text-foreground/70">{wt.guest}</p>
+                  <p className="text-xs text-foreground/60 font-medium">{wt.guestSub}</p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-foreground/20 group-hover:text-foreground/40 group-hover:translate-x-1 transition-all" strokeWidth={2} />
+                <ArrowRight className="w-4 h-4 text-foreground/40 group-hover:text-foreground/60 group-hover:translate-x-1 transition-all" strokeWidth={2} />
               </button>
             </div>
           </div>
@@ -134,7 +134,7 @@ export function WelcomeBanner() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-foreground/40 font-medium pt-2">{wt.entering}</p>
+            <p className="text-xs text-foreground/60 font-medium pt-2">{wt.entering}</p>
           </div>
         </div>
       )}

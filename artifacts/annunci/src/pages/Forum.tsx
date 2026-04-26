@@ -236,9 +236,9 @@ export default function Forum() {
           </div>
         ) : threads.length === 0 ? (
           <div className="text-center py-20 border-2 border-dashed border-foreground/20 rounded-2xl">
-            <MessageCircle className="h-12 w-12 mx-auto text-foreground/20 mb-4" strokeWidth={1.5} />
-            <p className="font-black text-lg uppercase text-foreground/40">{tf.noThreads}</p>
-            <p className="text-sm text-foreground/30 mt-1">{tf.beFirst}</p>
+            <MessageCircle className="h-12 w-12 mx-auto text-foreground/30 mb-4" strokeWidth={1.5} />
+            <p className="font-black text-lg uppercase text-foreground/60">{tf.noThreads}</p>
+            <p className="text-sm text-foreground/50 mt-1">{tf.beFirst}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -259,12 +259,12 @@ export default function Forum() {
                       <h3 className="font-black text-base text-foreground leading-tight line-clamp-1 group-hover:text-primary transition-colors">
                         {thread.titolo}
                       </h3>
-                      <div className="flex items-center gap-3 mt-1.5 text-xs text-foreground/50 font-medium">
+                      <div className="flex items-center gap-3 mt-1.5 text-xs text-foreground/65 font-medium">
                         <span className="font-bold">{thread.autore}</span>
                         <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{timeAgo}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5 shrink-0 text-foreground/40 group-hover:text-primary transition-colors">
+                    <div className="flex items-center gap-1.5 shrink-0 text-foreground/60 group-hover:text-primary transition-colors">
                       <MessageCircle className="h-4 w-4" strokeWidth={2} />
                       <span className="text-sm font-black">{replyCount}</span>
                       <ChevronRight className="h-4 w-4 ml-1" strokeWidth={2.5} />

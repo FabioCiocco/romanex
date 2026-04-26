@@ -58,7 +58,7 @@ export default function SignIn() {
             <h2 className="font-display text-2xl font-black uppercase tracking-tighter mb-1">
               {t.auth?.signInTitle ?? "Accedi"}
             </h2>
-            <p className="text-foreground/50 text-sm font-medium mb-6">
+            <p className="text-foreground/70 text-sm font-medium mb-6">
               {t.auth?.signInSub ?? "Bentornato nella community"}
             </p>
 
@@ -121,7 +121,7 @@ export default function SignIn() {
               </button>
             </form>
 
-            <p className="text-center text-sm text-foreground/50 font-medium mt-6">
+            <p className="text-center text-sm text-foreground/70 font-medium mt-6">
               {t.auth?.noAccount ?? "Non hai un account?"}{" "}
               <Link href="/sign-up" className="text-primary font-black hover:underline">
                 {t.auth?.registerLink ?? "Registrati"}
