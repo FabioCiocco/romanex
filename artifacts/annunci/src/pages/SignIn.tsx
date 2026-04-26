@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { GraduationCap, Eye, EyeOff, Loader2 } from "lucide-react";
+import { GraduationCap, Eye, EyeOff, Loader2, ArrowLeft } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function SignIn() {
@@ -40,6 +40,14 @@ export default function SignIn() {
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-md">
+        <button
+          onClick={() => window.history.length > 1 ? window.history.back() : setLocation("/")}
+          className="flex items-center gap-2 text-foreground/70 hover:text-foreground font-bold text-sm mb-4 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" strokeWidth={2.5} />
+          Torna indietro
+        </button>
+
         <div className="rounded-2xl border-4 border-foreground shadow-[8px_8px_0_0_hsl(var(--foreground))] overflow-hidden">
 
           <div className="bg-foreground px-6 py-5 flex items-center gap-3">
