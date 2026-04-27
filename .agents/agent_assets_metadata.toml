@@ -6,3 +6,9 @@ id = "VnyaVWLFFUe6rN3UIIzZH"
 uri = "file://romanex-qr.png"
 type = "image"
 title = "QR Code — romanex.it"
+
+[[outputs]]
+id = "uj9TO1cGPoh9bGD0J8ib_"
+uri = "file://romanex-sito-completo.tar.gz"
+type = "unspecified"
+title = "RomaNex — Codice Sorgente Completo"
