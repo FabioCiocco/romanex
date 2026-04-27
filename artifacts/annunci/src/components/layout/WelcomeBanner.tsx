@@ -66,7 +66,7 @@ export function WelcomeBanner() {
 
             <div className="space-y-2">
               {/* Sign In */}
-              <Link href="/sign-in" onClick={() => setVisible(false)}>
+              <Link href="/sign-in" onClick={() => { localStorage.setItem(STORAGE_KEY, "auth"); setVisible(false); }}>
                 <div className="group flex items-center gap-3 p-3 rounded-xl border-2 border-foreground bg-primary/5 hover:bg-primary hover:border-primary transition-all duration-200 cursor-pointer">
                   <div className="w-9 h-9 rounded-lg bg-primary/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-primary/20 group-hover:border-white/30 shrink-0 transition-colors">
                     <LogIn className="w-4 h-4 text-primary group-hover:text-white" strokeWidth={2.5} />
@@ -80,7 +80,7 @@ export function WelcomeBanner() {
               </Link>
 
               {/* Register */}
-              <Link href="/sign-up" onClick={() => setVisible(false)}>
+              <Link href="/sign-up" onClick={() => { localStorage.setItem(STORAGE_KEY, "auth"); setVisible(false); }}>
                 <div className="group flex items-center gap-3 p-3 rounded-xl border-2 border-foreground bg-accent/5 hover:bg-accent hover:border-accent transition-all duration-200 cursor-pointer">
                   <div className="w-9 h-9 rounded-lg bg-accent/10 group-hover:bg-white/20 flex items-center justify-center border-2 border-accent/20 group-hover:border-white/30 shrink-0 transition-colors">
                     <UserPlus className="w-4 h-4 text-accent group-hover:text-white" strokeWidth={2.5} />
