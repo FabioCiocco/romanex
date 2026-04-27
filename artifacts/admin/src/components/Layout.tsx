@@ -35,18 +35,18 @@ export function Layout({ children, onLogout, userEmail }: LayoutProps) {
           {NAV.map(({ href, label, icon: Icon }) => {
             const active = href === "/" ? loc === "/" : loc.startsWith(href);
             return (
-              <Link key={href} href={href}>
-                <a
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded font-semibold text-sm transition-colors border
-                    ${active
-                      ? "bg-yellow-400 text-black border-yellow-400"
-                      : "text-zinc-400 border-transparent hover:text-white hover:bg-zinc-800 hover:border-zinc-700"
-                    }`}
-                >
-                  <Icon size={16} />
-                  {label}
-                </a>
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded font-semibold text-sm transition-colors border
+                  ${active
+                    ? "bg-yellow-400 text-black border-yellow-400"
+                    : "text-zinc-400 border-transparent hover:text-white hover:bg-zinc-800 hover:border-zinc-700"
+                  }`}
+              >
+                <Icon size={16} />
+                {label}
               </Link>
             );
           })}
