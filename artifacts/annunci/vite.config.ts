@@ -5,10 +5,9 @@ import path from "path";
 
 const isReplit = process.env.REPL_ID !== undefined;
 const port = Number(process.env.PORT ?? "3000");
-const basePath = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
-  base: basePath,
+  base: "/",
   plugins: [
     react(),
     tailwindcss(),
