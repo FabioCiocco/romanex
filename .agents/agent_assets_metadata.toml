@@ -12,3 +12,9 @@ id = "uj9TO1cGPoh9bGD0J8ib_"
 uri = "file://romanex-sito-completo.tar.gz"
 type = "unspecified"
 title = "RomaNex — Codice Sorgente Completo"
+
+[[outputs]]
+id = "lYgG8ciGsox8d8wdzOVUm"
+uri = "file://romanex_source.tar.gz"
+type = "unspecified"
+title = "romanex_source.tar.gz — Codice sorgente completo"
