@@ -20,6 +20,7 @@ export function WelcomeBanner() {
       const timer = setTimeout(() => setVisible(true), 10000);
       return () => clearTimeout(timer);
     }
+    return;
   }, [isLoaded, isSignedIn]);
 
   const handleGuest = () => {
