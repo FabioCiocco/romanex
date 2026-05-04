@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @workspace/annunci run build",
+  "buildCommand": "pnpm --filter @workspace/annunci run build && pnpm --filter @workspace/admin run build",
   "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "rewrites": [
@@ -8,7 +8,11 @@
       "destination": "https://romanex.onrender.com/api/:path*"
     },
     {
-      "source": "/((?!api).*)",
+      "source": "/admin/:path*",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/((?!api|admin).*)",
       "destination": "/index.html"
     }
   ]
