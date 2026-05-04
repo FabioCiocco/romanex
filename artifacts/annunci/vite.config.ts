@@ -36,6 +36,16 @@ export default defineConfig({
       ? path.resolve(import.meta.dirname, "dist")
       : path.resolve(import.meta.dirname, "../../dist"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-query": ["@tanstack/react-query"],
+          "vendor-router": ["wouter"],
+          "vendor-ui": ["lucide-react"],
+        },
+      },
+    },
   },
   server: {
     port,
