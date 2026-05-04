@@ -1,28 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Switch, Route, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-import Annunci from "@/pages/Annunci";
-import AnnuncioDetail from "@/pages/AnnuncioDetail";
-import Pubblica from "@/pages/Pubblica";
-import Categorie from "@/pages/Categorie";
-import Sezione from "@/pages/Sezione";
-import Forum from "@/pages/Forum";
-import ForumThread from "@/pages/ForumThread";
-import Profilo from "@/pages/Profilo";
-import CompletaProfilo from "@/pages/CompletaProfilo";
-import NoteLegali from "@/pages/NoteLegali";
-import DiritiEInclusione from "@/pages/DiritiEInclusione";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import CookiePolicy from "@/pages/CookiePolicy";
-import SignIn from "@/pages/SignIn";
-import SignUp from "@/pages/SignUp";
-import ForgotPassword from "@/pages/ForgotPassword";
-import ResetPassword from "@/pages/ResetPassword";
+
+const NotFound = lazy(() => import("@/pages/not-found"));
+const Annunci = lazy(() => import("@/pages/Annunci"));
+const AnnuncioDetail = lazy(() => import("@/pages/AnnuncioDetail"));
+const Pubblica = lazy(() => import("@/pages/Pubblica"));
+const Categorie = lazy(() => import("@/pages/Categorie"));
+const Sezione = lazy(() => import("@/pages/Sezione"));
+const Forum = lazy(() => import("@/pages/Forum"));
+const ForumThread = lazy(() => import("@/pages/ForumThread"));
+const Profilo = lazy(() => import("@/pages/Profilo"));
+const CompletaProfilo = lazy(() => import("@/pages/CompletaProfilo"));
+const NoteLegali = lazy(() => import("@/pages/NoteLegali"));
+const DiritiEInclusione = lazy(() => import("@/pages/DiritiEInclusione"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const CookiePolicy = lazy(() => import("@/pages/CookiePolicy"));
+const SignIn = lazy(() => import("@/pages/SignIn"));
+const SignUp = lazy(() => import("@/pages/SignUp"));
+const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 import { WelcomeBanner } from "@/components/layout/WelcomeBanner";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { LanguageProvider } from "@/contexts/LanguageContext";
@@ -85,6 +86,7 @@ function Router() {
       <AuthCacheSync />
       <WelcomeBanner />
       <CookieBanner />
+      <Suspense fallback={null}>
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/annunci" component={Annunci} />
@@ -110,6 +112,7 @@ function Router() {
         <Route path="/reset-password" component={ResetPassword} />
         <Route component={NotFound} />
       </Switch>
+      </Suspense>
     </>
   );
 }
