@@ -97,6 +97,8 @@ export function Navbar() {
               <img
                 src="/logo-romanex.jpg"
                 alt="RomaNex"
+                width="120"
+                height="36"
                 className="h-9 w-auto object-contain"
               />
             </div>
